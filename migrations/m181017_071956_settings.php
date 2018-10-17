@@ -10,7 +10,7 @@ class m181017_071956_settings extends Migration
     /**
      * {@inheritdoc}
      */
-    public function safeUp()
+    public function up()
     {
         $this->createTable('units', [
             'id' => $this->primaryKey(),
@@ -31,26 +31,23 @@ class m181017_071956_settings extends Migration
             'id' => $this->primaryKey(),
             'frequency_name' => $this->string(100)->notNull(),
             'frequency_value' => $this->string()->notNull(),
-            'frequency_groups_id' => $this->integer()->unsigned()->notNull(),
+            'frequency_groups_id' => $this->integer()->notNull(),
             'persec' => $this->string(100)->notNull(),
             'created_at' => $this->datetime()->notNull(),
             'updated_at' => $this->datetime(),
         ]);
 
-        $this->createIndex(
-            'idx-frequency_datas-frequency_groups_id',
-            'frequency_datas',
-            'frequency_groups_id'
-        );
+        $this->createTable('static_costs', [
+            'id' => $this->primaryKey(),
+            'cost_name' => $this->string(100)->notNull(),
+            'short_name' => $this->string(100)->notNull(),
+            'cost_section' => $this->string(100)->notNull(),
+            'frequency_datas_id' => $this->integer()->notNull(),
+            'units_id' => $this->integer()->notNull(),
+            'created_at' => $this->datetime()->notNull(),
+            'updated_at' => $this->datetime(),
+        ]);
 
-        $this->addForeignKey(
-            'fk-frequency_datas-frequency_groups_id',
-            'frequency_datas',
-            'frequency_groups_id',
-            'frequency_groups',
-            'id',
-            'CASCADE'
-        );
     }
 
     /**
@@ -58,13 +55,10 @@ class m181017_071956_settings extends Migration
      */
     public function safeDown()
     {
-        $this->dropForeignKey(
-            'fk-frequency_datas-frequency_groups_id',
-            'frequency_datas'
-        );
         $this->dropTable('units');
         $this->dropTable('frequency_groups');
         $this->dropTable('frequency_datas');
+        $this->dropTable('static_costs');
     }
 
     /*
