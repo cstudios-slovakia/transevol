@@ -60,6 +60,12 @@ class Addresses extends AppBasedActiveRecord
         ];
     }
 
+    /**
+     * Simple implementation for concatination our address.
+     *
+     * @param array $order
+     * @return string
+     */
     public function getFullAddress(array $order = []) : string
     {
         if(!empty($order)){
