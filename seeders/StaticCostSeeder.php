@@ -24,15 +24,20 @@ class StaticCostSeeder extends Seeder
             return $q->one()->id;
         };
 
-        $array =
+        $records =
             [
                 [1,'luncheon_voucher','lnch','driver',call_user_func($periodFreq,'daily'),call_user_func($unitId,'eur')],
                 [2,'wage_for_km','wgfr','driver',call_user_func($periodFreq,'km'),call_user_func($unitId,'eur')],
+                [3,'loadings','ldng','driver',call_user_func($periodFreq,'daily'),call_user_func($unitId,'eur')],
+                [4,'constant_salary','cslr','driver',call_user_func($periodFreq,'monthly'),call_user_func($unitId,'eur')],
+                [5,'luncheon_voucher_dual','lnch_dual','driver',call_user_func($periodFreq,'daily'),call_user_func($unitId,'eur')],
+                [6,'wage_for_km_dual','wgfr_dual','driver',call_user_func($periodFreq,'km'),call_user_func($unitId,'eur')],
+                [7,'loadings_dual','ldng_dual','driver',call_user_func($periodFreq,'daily'),call_user_func($unitId,'eur')],
 
             ];
         $columnConfig = [false,'cost_name','short_name','cost_section','frequency_datas_id','units_id'];
 
-        $this->table('static_costs')->data($array, $columnConfig)->rowQuantity(2);
+        $this->table('static_costs')->data($records, $columnConfig)->rowQuantity(count($records));
 
 
     }

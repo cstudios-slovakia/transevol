@@ -16,10 +16,10 @@ class FrequencyDataSeeder extends Seeder
         };
 
         $frequencies    = [
-            [1, 'daily', 24, call_user_func($freqGroup,'time'), 60],
-            [2, 'monthly', 720, call_user_func($freqGroup,'time'), 60],
-            [3, 'yearly', 8000, call_user_func($freqGroup,'time'), 60],
-            [4, 'km', 8000, call_user_func($freqGroup,'length'), 60],
+            [1, 'daily', 24 * 60, call_user_func($freqGroup,'time'), 'i'],
+            [2, 'monthly', 43829, call_user_func($freqGroup,'time'), 'i'],
+            [3, 'yearly', 525949, call_user_func($freqGroup,'time'), 'i'],
+            [4, 'km', 1, call_user_func($freqGroup,'length'), 'km'],
         ];
 
         $columnConfig   = [
