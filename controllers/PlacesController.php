@@ -86,9 +86,14 @@ class PlacesController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate(string $type = '')
     {
+
+
         $placesModel        = new Places();
+        if (!empty($type)) {
+            $placesModel->setScenario($type);
+        }
         $addressesModel     = new Addresses();
 
         $request   = \Yii::$app->request;

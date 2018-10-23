@@ -27,6 +27,11 @@ use Yii;
  */
 class Places extends AppBasedActiveRecord
 {
+    const SCENARIO_LOADING  = 'loading';
+    const SCENARIO_SERVICE  = 'services';
+    const SCENARIO_CLIENT   = 'clients';
+    const SCENARIO_TOLL     = 'toll';
+
     /**
      * {@inheritdoc}
      */
@@ -41,7 +46,11 @@ class Places extends AppBasedActiveRecord
     public function rules()
     {
         return [
-            [['place_name', 'position', 'email', 'phone', 'place_types_id'], 'required'],
+            [['place_name', 'place_types_id'], 'required'],
+            [['position'], 'required', 'on' => [self::SCENARIO_LOADING,self::SCENARIO_TOLL]],
+            [['phone'], 'required', 'on' => [self::SCENARIO_CLIENT,self::SCENARIO_SERVICE]],
+            [['email'], 'required', 'on' => self::SCENARIO_CLIENT],
+
             [['companies_id', 'countries_id', 'addresses_id', 'place_types_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['place_name', 'position', 'email'], 'string', 'max' => 255],
