@@ -41,7 +41,10 @@ AppAsset::register($this);
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
-            ['label' => 'Places', 'url' => ['places/index']],
+            ['label' => 'Zakaznici', 'url' => ['places/index?type=clients']],
+            ['label' => 'Vykladky/Nakladky', 'url' => ['places/index?type=loading']],
+            ['label' => 'Servis', 'url' => ['places/index?type=services']],
+            ['label' => 'Colnice', 'url' => ['places/index?type=toll']],
             ['label' => 'PlaceTypes', 'url' => ['place-types/index']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]

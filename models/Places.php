@@ -41,7 +41,7 @@ class Places extends AppBasedActiveRecord
     public function rules()
     {
         return [
-            [['place_name', 'position', 'email', 'phone', 'place_types_id','countries_id'], 'required'],
+            [['place_name', 'position', 'email', 'phone', 'place_types_id'], 'required'],
             [['companies_id', 'countries_id', 'addresses_id', 'place_types_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['place_name', 'position', 'email'], 'string', 'max' => 255],

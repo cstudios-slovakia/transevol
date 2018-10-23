@@ -59,15 +59,4 @@ class PlaceTypes extends AppBasedActiveRecord
         return $this->hasMany(Places::className(), ['place_types_id' => 'id']);
     }
 
-//    public function behaviors()
-//    {
-//        return [
-//            [
-//                'class' => TimestampBehavior::className(),
-//                'createdAtAttribute' => 'created_at',
-//                'updatedAtAttribute' => 'updated_at',
-//                'value' => new Expression('NOW()'),
-//            ],
-//        ];
-//    }
 }

@@ -6,6 +6,7 @@ use app\models\Addresses;
 use app\models\Companies;
 use app\models\Countries;
 use app\models\PlaceTypes;
+use app\Support\Helpers\AppParams;
 use Yii;
 use app\models\Places;
 use yii\base\Model;
@@ -36,14 +37,30 @@ class PlacesController extends Controller
         ];
     }
 
+
     /**
-     * Lists all Places models.
-     * @return mixed
+     * @param string $type
+     * @return string
      */
-    public function actionIndex()
+    public function actionIndex(string $type = '')
     {
+        // we have defined places in params, lets reuse them
+        $placeCollections   = AppParams::coreParam('place_collections');
+
+        $query  = Places::find();
+
+        // check type is defined, if not simple use default
+        if(in_array($type, $placeCollections)){
+
+            // building query, make attention that this query replaces query above,
+            // and search for places for needed type
+            $query  = $query->leftJoin('place_types','`places`.`place_types_id` = `place_types`.`id`')
+                ->where(['place_types.place_section' => $type]);
+
+        }
+
         $dataProvider = new ActiveDataProvider([
-            'query' => Places::find(),
+            'query' => $query,
         ]);
 
         return $this->render('index', [
@@ -74,7 +91,7 @@ class PlacesController extends Controller
         $placesModel        = new Places();
         $addressesModel     = new Addresses();
 
-        $request   = Yii::$app->request;
+        $request   = \Yii::$app->request;
 
         if ($placesModel->load($request->post()) && $addressesModel->load($request->post()) &&
             Model::validateMultiple([$placesModel,$addressesModel])) {
