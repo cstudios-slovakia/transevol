@@ -65,6 +65,7 @@ class PlacesController extends Controller
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'type'  => $type
         ]);
     }
 
@@ -134,7 +135,7 @@ class PlacesController extends Controller
             'related'   => [
                 'countries' => ArrayHelper::map($countries,'id','country_name'),
                 'placetypes' => ArrayHelper::map($placeTypes,'id','placetype_name'),
-            ]
+            ],
         ]);
     }
 

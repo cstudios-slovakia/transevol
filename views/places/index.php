@@ -6,15 +6,16 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Places';
+$this->title = 'Client list';
 $this->params['breadcrumbs'][] = $this->title;
+$actionType     = isset($type) && !empty($type) ? '?type='.$type : '';
 ?>
 <div class="places-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Places', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Places', ['create'.$actionType], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -22,7 +23,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-//            'id',
             'place_name',
 //            'email:email',
             [
@@ -33,10 +33,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'position',
             ['label' => 'Country' , 'value' => 'countries.country_name'],
-            //'addresses_id',
-            //'place_types_id',
-            //'created_at',
-            //'updated_at',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
