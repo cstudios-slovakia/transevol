@@ -231,3 +231,12 @@ vendor/bin/codecept run functional,unit -- --coverage-html --coverage-xml
 ```
 
 You can see code coverage output under the `tests/_output` directory.
+
+##### Statically defined attributes (for future headache)
+
+1. PlaceTypes
+
+[1,'Colnica'] => toll,
+[2,'Nakládka'] => loading,
+[3,'Vykládka'] => unloading,
+

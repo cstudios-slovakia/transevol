@@ -10,9 +10,9 @@ class PlaceTypeSeeder extends Seeder
     {
         $options =
             [
-                [1,'Colnica'],
-                [2,'Nakládka'],
-                [3,'Vykládka'],
+                [1,'toll'],
+                [2,'loading'],
+                [3,'unloading'],
             ];
         $columnConfig = [false,'placetype_name'];
 

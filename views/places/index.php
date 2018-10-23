@@ -22,13 +22,17 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+//            'id',
             'place_name',
+//            'email:email',
+            [
+                'label' => 'fullAddress',
+                'value' => function ($model) {
+                    return $model->addresses->getFullAddress();
+                }
+            ],
             'position',
-            'companies_id',
-            'email:email',
-            //'phone',
-            //'countries_id',
+            ['label' => 'Country' , 'value' => 'countries.country_name'],
             //'addresses_id',
             //'place_types_id',
             //'created_at',

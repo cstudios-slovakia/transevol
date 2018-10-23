@@ -60,6 +60,19 @@ class Addresses extends AppBasedActiveRecord
         ];
     }
 
+    public function getFullAddress(array $order = []) : string
+    {
+        if(!empty($order)){
+            $address    = [];
+            foreach ($order as $column){
+                $address[] = $this->{$column};
+            }
+            return implode(', ',$address);
+        }
+
+        return $this->street .', '.$this->zip . ' ' . $this->city;
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

@@ -3,11 +3,14 @@
 namespace app\controllers;
 
 use app\models\Addresses;
+use app\models\Companies;
 use app\models\Countries;
+use app\models\PlaceTypes;
 use Yii;
 use app\models\Places;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use yii\db\Expression;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -68,44 +71,47 @@ class PlacesController extends Controller
      */
     public function actionCreate()
     {
-        $placesModel    = new Places();
+        $placesModel        = new Places();
         $addressesModel     = new Addresses();
 
-        $postData   = Yii::$app->request->post();
+        $request   = Yii::$app->request;
 
-
-        if ($placesModel->load($postData) && $addressesModel->load($postData) &&
+        if ($placesModel->load($request->post()) && $addressesModel->load($request->post()) &&
             Model::validateMultiple([$placesModel,$addressesModel])) {
 
-            $countries  = Countries::find(['id' => 'countries_id'])->one();
+            $countries_id   = (int) $request->post('Addresses')['countries_id'];
 
+            $countries  = Countries::find()->where(['id' => $countries_id])->one();
 
             $addressesModel->link('countries',$countries);
             $addressesModel->save();
 
-//            $countries   = $addressesModel->getCountries()->one();
-//            var_dump($countries);
-//            exit();
-
             $placesModel->countries_id  = $countries->id;
+            // TODO implement real company owner, which is defined by a logged one user
+            // now simple random finding is enough
+            $company        = Companies::find()
+                ->orderBy(new Expression('rand()'))
+                ->limit(1)
+                ->one();
+            $placesModel->companies_id  = $company->id;
 
             $placesModel->link('addresses',$addressesModel);
-            $placesModel->link('countries',$countries);
 
             $placesModel->save();
-
-
 
             return $this->redirect(['view', 'id' => $placesModel->id]);
         }
 
-        $countries  = Countries::find()->all();
+        // add relations and populate dropdowns
+        $countries      = Countries::find()->all();
+        $placeTypes     = PlaceTypes::find()->all();
 
         return $this->render('create', [
             'placesModel'       => $placesModel,
             'addressesModel'    => $addressesModel,
             'related'   => [
-                'countries' => ArrayHelper::map($countries,'id','country_name')
+                'countries' => ArrayHelper::map($countries,'id','country_name'),
+                'placetypes' => ArrayHelper::map($placeTypes,'id','placetype_name'),
             ]
         ]);
     }

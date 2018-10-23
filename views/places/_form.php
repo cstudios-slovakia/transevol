@@ -19,8 +19,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($placesModel, 'position')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($placesModel, 'companies_id')->textInput() ?>
-
     <?= $form->field($placesModel, 'email')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($placesModel, 'phone')->textInput(['maxlength' => true]) ?>
@@ -31,7 +29,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($addressesModel, 'zip')->textInput() ?>
 
     <?= $form->field($addressesModel, 'countries_id')->dropDownList($related['countries']) ?>
-    <?= $form->field($placesModel, 'place_types_id')->textInput() ?>
+    <?= $form->field($placesModel, 'place_types_id')->dropDownList($related['placetypes']) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
