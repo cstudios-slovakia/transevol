@@ -49,6 +49,17 @@ class StaticCost extends \yii\db\ActiveRecord
         ];
     }
 
+    public static function instantiate($row)
+    {
+        switch ($row['cost_section']) {
+            case DriverStaticCost::SECTION:
+                return new DriverStaticCost();
+
+            default:
+                return new self;
+        }
+    }
+
     /**
      * {@inheritdoc}
      */

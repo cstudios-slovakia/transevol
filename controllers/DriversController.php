@@ -2,8 +2,14 @@
 
 namespace app\controllers;
 
+use app\models\Companies;
+use app\models\DriverCostDatas;
+use app\models\DriverForm;
+use app\models\DriverStaticCost;
+use app\models\StaticCost;
 use Yii;
 use app\Models\Drivers;
+use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -65,13 +71,28 @@ class DriversController extends Controller
     public function actionCreate()
     {
         $model = new Drivers();
+        $driverForm = new DriverForm();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post(),'Drivers') && $driverForm->load(Yii::$app->request->post(),'StaticCosts') &&
+        Model::validateMultiple([$model, $driverForm])
+        ) {
+
+            $model->link('companies',Companies::findOne(['id' => 1]));
+            $model->save();
+            foreach (Yii::$app->request->post('StaticCosts') as $shortName => $staticCostValue){
+                $staticCost     = StaticCost::findOne(['short_name' => $shortName]);
+
+                $model->link('staticCosts',$staticCost,['value' => $staticCostValue]);
+            }
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
+        $driverStaticCosts = DriverStaticCost::find()->all();
+
 
         return $this->render('create', [
             'model' => $model,
+            'costs'     => collect($driverStaticCosts)
         ]);
     }
 
@@ -119,6 +140,9 @@ class DriversController extends Controller
     protected function findModel($id)
     {
         if (($model = Drivers::findOne($id)) !== null) {
+
+            var_dump($model->staticCosts);
+            die();
             return $model;
         }
 

@@ -6,6 +6,9 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model app\Models\Drivers */
 /* @var $form yii\widgets\ActiveForm */
+/* @var $singles \Illuminate\Support\Collection */
+/* @var $duals \Illuminate\Support\Collection */
+/* @var $costDatas \Illuminate\Support\Collection */
 ?>
 
 <div class="drivers-form">
@@ -14,15 +17,35 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'driver_name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'companies_id')->textInput() ?>
-
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'created_at')->textInput() ?>
+    <?php
+    $singles->each(function ($single) {
+        ?>
+        <div class="form-group field-static-costs-<?= $single->short_name ?> required">
+            <label class="control-label" for="static-costs-<?= $single->short_name ?>"><?= $single->short_name ?></label>
+            <input type="number" id="static-costs-<?= $single->short_name ?>" class="form-control" name="StaticCosts[<?= $single->short_name ?>]" aria-required="true">
 
-    <?= $form->field($model, 'updated_at')->textInput() ?>
+            <div class="help-block"></div>
+        </div>
+    <?php
+    });
+    ?>
+
+    <?php
+    $duals->each(function ($dual) {
+        ?>
+        <div class="form-group field-static-costs-<?= $dual->short_name ?> required">
+            <label class="control-label" for="static-costs-<?= $dual->short_name ?>"><?= $dual->short_name ?></label>
+            <input type="number" id="static-costs-<?= $dual->short_name ?>" class="form-control" name="StaticCosts[<?= $dual->short_name ?>]" aria-required="true">
+
+            <div class="help-block"></div>
+        </div>
+        <?php
+    });
+    ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
