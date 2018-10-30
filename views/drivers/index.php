@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'driver_name',
-            'companies_id',
+//            'companies_id',
             'email:email',
             'phone',
             //'created_at',
