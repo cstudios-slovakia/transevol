@@ -30,12 +30,19 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'driver_name',
-            'companies_id',
+//            'companies_id',
             'email:email',
             'phone',
             'created_at',
             'updated_at',
         ],
     ]) ?>
+
+    <?=
+        \yii\widgets\ListView::widget([
+            'dataProvider'  => $staticCostDataProvider,
+            'itemView'  => 'partials/_static_cost_record'
+        ])
+    ?>
 
 </div>

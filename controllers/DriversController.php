@@ -58,8 +58,16 @@ class DriversController extends Controller
      */
     public function actionView($id)
     {
+        $model  = $this->findModel($id);
+
+        $staticCostDataProvider     = new ActiveDataProvider([
+            'query'     => $model->getDriverCostDatas(),
+        ]);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'staticCostDataProvider'    => $staticCostDataProvider
+
         ]);
     }
 
@@ -139,10 +147,8 @@ class DriversController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Drivers::findOne($id)) !== null) {
+        if (($model = Drivers::find()->with(['staticCosts'])->where(['id' => $id])->one()) !== null) {
 
-            var_dump($model->staticCosts);
-            die();
             return $model;
         }
 

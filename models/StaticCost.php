@@ -98,7 +98,7 @@ class StaticCost extends \yii\db\ActiveRecord
      */
     public function getFrequencyDatas()
     {
-        return $this->hasOne(FrequencyDatas::className(), ['id' => 'frequency_datas_id']);
+        return $this->hasOne(FrequencyData::className(), ['id' => 'frequency_datas_id']);
     }
 
     /**
