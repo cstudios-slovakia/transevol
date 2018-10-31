@@ -115,12 +115,39 @@ class DriversController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        $driverForm = new DriverForm();
+
+        // make a costdata collection defined by costdata's type shortname
+        $driverCostData = collect($model->driverCostDatas)->keyBy(function($costData){
+            return $costData->staticCosts->short_name;
+        });
+
+        if ($model->load(Yii::$app->request->post(),'Drivers') && $driverForm->load(Yii::$app->request->post(),'StaticCosts') &&
+            Model::validateMultiple([$model, $driverForm])
+        ) {
+
+            $model->link('companies',Companies::findOne(['id' => 1]));
+            $model->update();
+
+            foreach (Yii::$app->request->post('StaticCosts') as $shortName => $staticCostValue){
+                $staticCost     = $driverCostData->get($shortName,null);
+
+                // if cost data does not exists link one
+                if(!$staticCost){
+                    $staticCost     = StaticCost::findOne(['short_name' => $shortName]);
+                    $model->link('staticCosts',$staticCost,['value' => $staticCostValue]);
+                    continue;
+                }
+                $staticCost->value = $staticCostValue;
+                $staticCost->update(false);
+            }
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'costs'     => collect($driverCostData)
         ]);
     }
 

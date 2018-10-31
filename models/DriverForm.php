@@ -13,12 +13,11 @@ class DriverForm extends Model
     public $lnch_dual;
     public $wgfr_dual;
     public $ldng_dual;
-    public $cslr_dual;
 
     public function rules()
     {
         return [
-            [['lnch','wgfr','ldng','cslr','lnch_dual','wgfr_dual','ldng_dual','cslr_dual'], 'required']
+            [['lnch','wgfr','ldng','cslr','lnch_dual','wgfr_dual','ldng_dual' ], 'required']
         ];
 
     }
