@@ -21,6 +21,10 @@ return [
                 ['private_time_cost_a','privtma'],
                 ['private_time_cost_b','privtmb'],
                 ['private_time_cost_c','privtmc'],
+                // liquid statics :S
+                ['main_vehicle','mnvhcl'],
+                ['main_with_trailer_is_empty','mnvhcl_trlr_empty'],
+                ['main_with_trailer_by_weight','mnvhcl_trlr_weight'],
             ]
         ]
     ]

@@ -49,6 +49,6 @@ class VehicleSeeder extends Seeder
             'weight'    => $this->faker->numberBetween(40000,90000),
             'shaft'     => $this->faker->numberBetween(6,9),
             'created_at' => Carbon::now()->format('Y-m-d H:i:s')
-        ])->rowQuantity(20);
+        ])->rowQuantity(50);
     }
 }
