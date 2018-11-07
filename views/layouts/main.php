@@ -43,6 +43,7 @@ AppAsset::register($this);
             ['label' => 'Contact', 'url' => ['/site/contact']],
             ['label' => 'Zakaznici', 'url' => ['places/index?type=clients']],
             ['label' => 'Drivers', 'url' => ['drivers/index']],
+            ['label' => 'Vozidlo', 'url' => ['vehicles/index']],
             ['label' => 'Vykladky/Nakladky', 'url' => ['places/index?type=loading']],
             ['label' => 'Servis', 'url' => ['places/index?type=services']],
             ['label' => 'Colnice', 'url' => ['places/index?type=toll']],
