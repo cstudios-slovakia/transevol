@@ -37,7 +37,7 @@ class StaticCostSeeder extends Seeder
 
             ];
 
-        $staticCosts   = AppParams::staticCosts()['vehicle'];
+        $staticCosts   = AppParams::staticCost('vehicle');
 
         $vehicleCosts = collect($staticCosts)->transform(function ($vCost) use($periodFreq, $unitId){
             return [
