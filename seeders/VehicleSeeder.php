@@ -40,7 +40,7 @@ class VehicleSeeder extends Seeder
         };
 
 
-        $this->table('vehicles')->columns([
+        $d = $this->table('vehicles')->columns([
             'id',
             'ecv'   => call_user_func($generateEcv),
             'companies_id'  => $associateRandomCompany->id,
@@ -49,6 +49,8 @@ class VehicleSeeder extends Seeder
             'weight'    => $this->faker->numberBetween(40000,90000),
             'shaft'     => $this->faker->numberBetween(6,9),
             'created_at' => Carbon::now()->format('Y-m-d H:i:s')
-        ])->rowQuantity(50);
+        ])->rowQuantity(2);
+
+        dd($d);
     }
 }
