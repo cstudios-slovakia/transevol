@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\support\Vehicles\Relations\RelationAssistance;
+use app\support\Vehicles\Relations\VehicleRelationAssistance;
 use Yii;
 use app\models\Vehicles;
 use yii\data\ActiveDataProvider;

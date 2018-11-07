@@ -40,7 +40,7 @@ class Vehicles extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ecv', 'companies_id', 'vehicle_types_id', 'emission_classes_id', 'weight', 'shaft'], 'required'],
+            [['ecv', 'vehicle_types_id', 'emission_classes_id', 'weight', 'shaft'], 'required'],
             [['companies_id', 'vehicle_types_id', 'emission_classes_id', 'weight', 'shaft'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['ecv'], 'string', 'max' => 100],
