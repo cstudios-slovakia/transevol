@@ -2,11 +2,13 @@
 
 namespace app\controllers;
 
+use app\models\Companies;
 use app\support\Vehicles\Relations\RelationAssistance;
 use app\support\Vehicles\Relations\VehicleRelationAssistance;
 use Yii;
 use app\models\Vehicles;
 use yii\data\ActiveDataProvider;
+use yii\db\Expression;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -68,7 +70,16 @@ class VehiclesController extends Controller
     {
         $model = new Vehicles();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        $request = Yii::$app->request;
+
+        if ($model->load($request->post()) ) {
+            // TODO company should be linked from logged in user
+            $company    = Companies::find()->orderBy(new Expression('rand()'))->one();
+
+            $model->link('companies', $company);
+
+            $model->save();
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
