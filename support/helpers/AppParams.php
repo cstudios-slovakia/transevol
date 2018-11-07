@@ -31,6 +31,11 @@ class AppParams extends ArrayHelper {
         return self::getValue($self::getData(),'core.'.$paramName);
     }
 
+    public static function staticCosts() : array
+    {
+        return self::coreParam('static_costs');
+    }
+
     /**
      * @return array
      */
