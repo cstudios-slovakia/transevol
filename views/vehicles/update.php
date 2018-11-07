@@ -4,6 +4,9 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Vehicles */
+/* @var $vehicleStaticCostFormModel \app\models\VehicleStaticCostsForm */
+/* @var $staticCostsCollection \Illuminate\Support\Collection */
+
 
 $this->title = 'Update Vehicles: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Vehicles', 'url' => ['index']];
@@ -16,6 +19,8 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <?= $this->render('_form', [
         'model' => $model,
+        'vehicleStaticCostFormModel' => $vehicleStaticCostFormModel,
+        'staticCostsCollection'    => $staticCostsCollection
     ]) ?>
 
 </div>

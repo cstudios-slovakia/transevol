@@ -6,6 +6,8 @@ use app\support\Vehicles\Relations\VehicleRelationAssistance;
 /* @var $this yii\web\View */
 /* @var $model app\models\Vehicles */
 /* @var $form yii\widgets\ActiveForm */
+/* @var $vehicleStaticCostFormModel \app\models\VehicleStaticCostsForm */
+/* @var $staticCostsCollection \Illuminate\Support\Collection */
 ?>
 
 <div class="vehicles-form">
@@ -22,6 +24,12 @@ use app\support\Vehicles\Relations\VehicleRelationAssistance;
     <?= $form->field($model, 'weight')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'shaft')->textInput(['maxlength' => true]) ?>
+
+    <?php foreach($staticCostsCollection as $costShortName => $staticCost): ?>
+
+        <?= $form->field($vehicleStaticCostFormModel, $costShortName)->textInput(['maxlength' => true]) ?>
+
+    <?php endforeach; ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

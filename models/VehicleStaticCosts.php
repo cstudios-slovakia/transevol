@@ -33,11 +33,11 @@ class VehicleStaticCosts extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['value', 'static_costs_id', 'vehicles_id', 'created_at'], 'required'],
+            [['value', 'static_costs_id', 'vehicles_id' ], 'required'],
             [['value'], 'number'],
             [['static_costs_id', 'vehicles_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
-            [['static_costs_id'], 'exist', 'skipOnError' => true, 'targetClass' => StaticCosts::className(), 'targetAttribute' => ['static_costs_id' => 'id']],
+            [['static_costs_id'], 'exist', 'skipOnError' => true, 'targetClass' => StaticCost::className(), 'targetAttribute' => ['static_costs_id' => 'id']],
             [['vehicles_id'], 'exist', 'skipOnError' => true, 'targetClass' => Vehicles::className(), 'targetAttribute' => ['vehicles_id' => 'id']],
         ];
     }
