@@ -60,8 +60,21 @@ class VehiclesController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $vehicleStaticCostFormModel  = new VehicleStaticCostsForm();
+        $associatedStaticCosts  = collect($model->vehicleStaticCosts)->keyBy(function ($vehicleStaticCost){
+            return $vehicleStaticCost->staticCosts->short_name;
+        });
+
+        $loadable = $associatedStaticCosts->transform(function($vehicleStaticCosts){
+            return $vehicleStaticCosts->value;
+        })->toArray();
+
+        $vehicleStaticCostFormModel->load($loadable,'');
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'vehicleStaticCostFormModel'    => $vehicleStaticCostFormModel
         ]);
     }
 
