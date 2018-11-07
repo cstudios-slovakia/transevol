@@ -23,7 +23,6 @@ use app\support\Vehicles\Relations\VehicleRelationAssistance;
 
     <?= $form->field($model, 'shaft')->textInput(['maxlength' => true]) ?>
 
-
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>
