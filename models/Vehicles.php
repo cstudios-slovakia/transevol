@@ -1,0 +1,118 @@
+<?php
+
+namespace app\models;
+
+use Yii;
+
+/**
+ * This is the model class for table "vehicles".
+ *
+ * @property int $id
+ * @property string $ecv
+ * @property int $companies_id
+ * @property int $vehicle_types_id
+ * @property int $emission_classes_id
+ * @property string $weight
+ * @property string $shaft
+ * @property string $created_at
+ * @property string $updated_at
+ *
+ * @property TransportVehicle[] $transportVehicles
+ * @property VehicleConsumptions[] $vehicleConsumptions
+ * @property VehicleStaticCosts[] $vehicleStaticCosts
+ * @property Companies $companies
+ * @property EmissionClasses $emissionClasses
+ * @property VehicleTypes $vehicleTypes
+ */
+class Vehicles extends \yii\db\ActiveRecord
+{
+    /**
+     * {@inheritdoc}
+     */
+    public static function tableName()
+    {
+        return 'vehicles';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rules()
+    {
+        return [
+            [['ecv', 'companies_id', 'vehicle_types_id', 'emission_classes_id', 'weight', 'shaft'], 'required'],
+            [['companies_id', 'vehicle_types_id', 'emission_classes_id', 'weight', 'shaft'], 'integer'],
+            [['created_at', 'updated_at'], 'safe'],
+            [['ecv'], 'string', 'max' => 100],
+            [['companies_id'], 'exist', 'skipOnError' => true, 'targetClass' => Companies::className(), 'targetAttribute' => ['companies_id' => 'id']],
+            [['emission_classes_id'], 'exist', 'skipOnError' => true, 'targetClass' => EmissionClasses::className(), 'targetAttribute' => ['emission_classes_id' => 'id']],
+            [['vehicle_types_id'], 'exist', 'skipOnError' => true, 'targetClass' => VehicleTypes::className(), 'targetAttribute' => ['vehicle_types_id' => 'id']],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'ecv' => 'Ecv',
+            'companies_id' => 'Companies ID',
+            'vehicle_types_id' => 'Vehicle Types ID',
+            'emission_classes_id' => 'Emission Classes ID',
+            'weight' => 'Weight',
+            'shaft' => 'Shaft',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+        ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTransportVehicles()
+    {
+        return $this->hasMany(TransportVehicle::className(), ['vehicles_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVehicleConsumptions()
+    {
+        return $this->hasMany(VehicleConsumptions::className(), ['vehicles_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVehicleStaticCosts()
+    {
+        return $this->hasMany(VehicleStaticCosts::className(), ['vehicles_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCompanies()
+    {
+        return $this->hasOne(Companies::className(), ['id' => 'companies_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEmissionClasses()
+    {
+        return $this->hasOne(EmissionClasses::className(), ['id' => 'emission_classes_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVehicleTypes()
+    {
+        return $this->hasOne(VehicleTypes::className(), ['id' => 'vehicle_types_id']);
+    }
+}
