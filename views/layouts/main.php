@@ -40,7 +40,7 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
+            ['label' => 'Companies', 'url' => ['companies/index']],
             ['label' => 'Zakaznici', 'url' => ['places/index?type=clients']],
             ['label' => 'Drivers', 'url' => ['drivers/index']],
             ['label' => 'Vozidlo', 'url' => ['vehicles/index']],

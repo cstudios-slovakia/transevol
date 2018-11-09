@@ -2,9 +2,9 @@
 
 namespace app\models;
 
-class VehicleStaticCost extends StaticCost
+class CompanyStaticCostQuery extends StaticCost
 {
-    const SECTION = 'vehicle';
+    const SECTION = 'company';
 
     public static function find()
     {

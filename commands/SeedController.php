@@ -34,9 +34,12 @@ class SeedController extends Controller
         return ['class' => 'resolvable'];
     }
 
+
     /**
      * This command echoes what you have entered as the message.
-     * @return int Exit code
+     *
+     * @return int
+     * @throws \Exception
      */
     public function actionMake()
     {
@@ -44,15 +47,16 @@ class SeedController extends Controller
         $seederBuildHelper  = new SeederBuildHelper();
         $resolvable = $seederBuildHelper->buildResolvablePath($this->resolvable);
 
-        if (class_exists($resolvable)) {
-            $seeder     = $seederBuildHelper->makeSeeder($resolvable);
-
-            $seeder->seeding();
-
-            return ExitCode::OK;
+        if (! class_exists($resolvable)){
+            ExitCode::DATAERR;
+            throw new \Exception('This seeder class does not exists.');
         }
 
-        return ExitCode::DATAERR;
+        $seeder     = $seederBuildHelper->makeSeeder($resolvable);
+
+        $seeder->seeding();
+
+        return ExitCode::OK;
     }
 
 }

@@ -4,16 +4,16 @@ namespace app\seeders;
 
 
 
-use app\models\Vehicles;
-use app\models\VehicleStaticCost;
+use app\models\Companies;
+use app\models\CompanyStaticCostQuery;
 use Carbon\Carbon;
 use Faker\Factory;
 
-class VehicleStaticCostsSeeder extends Seeder
+class CompanyStaticCostsSeeder extends Seeder
 {
     public function run()
     {
-        $vehicleStaticCosts     = VehicleStaticCost::find()->all();
+        $companyStaticCosts     = CompanyStaticCostQuery::find()->all();
 
         $faker = Factory::create();
 
@@ -21,20 +21,20 @@ class VehicleStaticCostsSeeder extends Seeder
             return $faker->randomFloat(2,5,3333);
         };
 
-        $vehicles = Vehicles::find()->all();
-        $columnConfig   = [false, 'value', 'static_costs_id', 'vehicles_id', 'created_at'];
+        $companies = Companies::find()->all();
+        $columnConfig   = [false, 'value', 'static_costs_id', 'companies_id', 'created_at'];
         $records    = [];
-        foreach ($vehicles as $vehicle){
+        foreach ($companies as $company){
 
-            foreach ($vehicleStaticCosts as $vehicleStaticCost){
+            foreach ($companyStaticCosts as $companyStaticCost){
                 $records[]  = [
-                    false,call_user_func($valueGenerator), $vehicleStaticCost->id, $vehicle->id, Carbon::now()->format('Y-m-d H:i:s')
+                    false,call_user_func($valueGenerator), $companyStaticCost->id, $company->id, Carbon::now()->format('Y-m-d H:i:s')
                 ];
             }
 
         }
 
-        $this->table('vehicle_static_costs')->data($records,$columnConfig)->rowQuantity(count($records));
+        $this->table('company_cost_datas')->data($records,$columnConfig)->rowQuantity(count($records));
 
     }
 

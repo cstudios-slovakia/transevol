@@ -2,8 +2,12 @@
 
 namespace app\controllers;
 
+use app\models\CompanyCostDatas;
+use app\models\CompanyStaticCostQuery;
+use app\models\CompanyStaticCostsForm;
 use Yii;
 use app\models\Companies;
+use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -12,7 +16,7 @@ use yii\filters\VerbFilter;
 /**
  * CompaniesController implements the CRUD actions for Companies model.
  */
-class CompaniesController extends Controller
+class CompaniesController extends BaseController
 {
     /**
      * {@inheritdoc}
@@ -64,14 +68,32 @@ class CompaniesController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Companies();
+        $company = new Companies();
+        $companyStaticCostsForm     = new CompanyStaticCostsForm();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $companyStaticCosts = collect(CompanyStaticCostQuery::find()->all())->keyBy('short_name');
+
+        if ($company->load($this->request()->post()) && $companyStaticCostsForm->load($this->request()->post()) &&
+        Model::validateMultiple([$company, $companyStaticCostsForm])) {
+//dd($companyStaticCostsForm->toArray());
+
+            $company->save();
+
+            $companyStaticCosts->each(function($companyStaticCost,$shortName) use ($companyStaticCostsForm, $company){
+                $companyStaticCostData  = new CompanyCostDatas();
+                $companyStaticCostData->value   = $companyStaticCostsForm->{$shortName};
+                $companyStaticCostData->static_costs_id     = $companyStaticCost->id;
+                $companyStaticCostData->link('companies',$company);
+                $companyStaticCostData->save();
+            });
+
+            return $this->redirect(['view', 'id' => $company->id]);
         }
 
         return $this->render('create', [
-            'model' => $model,
+            'model' => $company,
+            'companyStaticCosts'    => $companyStaticCosts->toArray(),
+            'companyStaticCostsForm'   => $companyStaticCostsForm
         ]);
     }
 
@@ -84,14 +106,38 @@ class CompaniesController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $company = $this->findModel($id);
+        $companyStaticCostsForm     = new CompanyStaticCostsForm();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $companyStaticCosts     = collect($company->companyCostDatas)->keyBy(function ($companyCostData){
+            return $companyCostData->staticCosts->short_name;
+        });
+
+        if ($company->load($this->request()->post()) && $companyStaticCostsForm->load($this->request()->post()) &&
+        Model::validateMultiple([$company, $companyStaticCostsForm])) {
+
+            $staticCostsInput = $this->request()->post()['CompanyStaticCostsForm'];
+
+            foreach ($companyStaticCosts as $staticCostShortName => $companyStaticCost) {
+                $companyStaticCost->value   = $staticCostsInput[$staticCostShortName];
+                $companyStaticCost->update();
+            }
+
+            return $this->redirect(['view', 'id' => $company->id]);
         }
 
+
+        $loadable = $companyStaticCosts->transform(function($companyStaticCost){
+            return $companyStaticCost->value;
+        })->toArray();
+
+        $companyStaticCostsForm->load($loadable,'');
+
         return $this->render('update', [
-            'model' => $model,
+            'model' => $company,
+            'companyStaticCosts'    => $companyStaticCosts->toArray(),
+            'companyStaticCostsForm'   => $companyStaticCostsForm
+
         ]);
     }
 
