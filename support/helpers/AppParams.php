@@ -30,11 +30,23 @@ class AppParams extends ArrayHelper {
 
     }
 
+    /**
+     * Get staticCosts from params
+     *
+     * @return array
+     */
     public static function staticCosts() : array
     {
         return self::coreParam('static_costs');
     }
 
+    /**
+     * Get named staticCosts
+     * ex. 'vehicle'|'company'
+     *
+     * @param string $section
+     * @return array
+     */
     public static function staticCost(string $section) : array
     {
         return self::staticCosts()[$section];

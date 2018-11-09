@@ -25,6 +25,17 @@ return [
                 ['main_vehicle','mnvhcl'],
                 ['main_with_trailer_is_empty','mnvhcl_trlr_empty'],
                 ['main_with_trailer_by_weight','mnvhcl_trlr_weight'],
+            ],
+            'company' => [
+                ['mass_required_insurance','mass_req_ins'],
+                ['mass_collision_insurance','mass_cls_ins'],
+                ['mass_cmr_insurance','mass_cmr_ins'],
+                ['mass_accountable_insurance','mass_acc_ins'],
+                ['adm_rental','adm_rntl'],
+                ['adm_prev','adm_prev'],
+                ['adm_buy_technic','adm_buy_thnc'],
+                ['adm_disposal_rubbish','adm_disp_rbsh'],
+
             ]
         ]
     ]
