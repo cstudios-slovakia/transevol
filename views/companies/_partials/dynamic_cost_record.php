@@ -1,21 +1,21 @@
 <?php
 /* @var $this yii\web\View */
 /* @var $model \app\models\CompanyDynamicCostsForm */
-/* @var $companyDynamicCost \app\models\CompanyDynamicCosts */
+/* @var $dynamicCost \app\models\CompanyDynamicCosts */
 ?>
-<tr>
-    <td>
-        <?= $companyDynamicCost->cost_name ?>
+<tr data-dynamic-record-id="<?= $dynamicCost->id ?>">
+    <td class="dynamic-cost_name" data-dynamic-cost_name="<?= $dynamicCost->cost_name ?>">
+        <?= $dynamicCost->cost_name ?>
     </td>
-    <td>
-        <?= $companyDynamicCost->value ?>
+    <td class="dynamic-value" data-dynamic-value="<?= $dynamicCost->value ?>">
+        <?= $dynamicCost->value ?>
     </td>
-    <td>
-        <?= $companyDynamicCost->frequencyDatas->frequency_name ?>
+    <td >
+        <?= $dynamicCost->frequencyDatas->frequency_name ?>
     </td>
     <td>
         <div class="btn-group" role="group" aria-label="Basic example">
-            <button type="button" class="btn-edit btn btn-secondary">EDIT</button>
+            <button type="button" class="btn-edit btn btn-secondary" data-dynamics-type="<?= $dynamicCost->cost_type ?>">EDIT</button>
             <button type="button" class="btn-remove btn btn-secondary">REMOVE</button>
         </div>
     </td>

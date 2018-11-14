@@ -21,6 +21,9 @@ use Yii;
  */
 class CompanyDynamicCosts extends \yii\db\ActiveRecord
 {
+    const DYNAMIC_PERSONAL = 'perso';
+    const DYNAMIC_OTHER = 'other';
+
     /**
      * {@inheritdoc}
      */

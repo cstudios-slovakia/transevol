@@ -5,6 +5,8 @@ namespace app\controllers;
 use app\models\CompanyCostDatas;
 use app\models\CompanyDynamicCosts;
 use app\models\CompanyDynamicCostsForm;
+use app\models\CompanyDynamicOtherCosts;
+use app\models\CompanyDynamicPersonalCosts;
 use app\models\CompanyStaticCostQuery;
 use app\models\CompanyStaticCostsForm;
 use app\models\FrequencyData;
@@ -192,28 +194,29 @@ class CompaniesController extends BaseController
         }
 
         $companyDynamicCostForm     = new CompanyDynamicCostsForm();
+        $companyDynamicCostForm->setScenario($action = $this->request()->post('action'));
+        $companyDynamicCostForm->companies_id = (int) $this->request()->get('company_id');
         $companyDynamicCostForm->load($ajaxData = $this->request()->post(),'');
+
 
         $valid = $companyDynamicCostForm->validate();
 
-        $companyId  = (int) $this->request()->get('company_id');
 
         if ($valid) {
-            $companyDynamicCosts    = new CompanyDynamicCosts();
 
-            $companyDynamicCosts->load($companyDynamicCostForm->toArray(),'');
-            // TODO implement user defined Comapanies model
-            $companyDynamicCosts->companies_id     = $companyId;
-            $companyDynamicCosts->frequency_datas_id     = FrequencyData::find()->orderBy(new Expression('rand()'))->one()->id;
-            $companyDynamicCosts->units_id     = Units::find()->orderBy(new Expression('rand()'))->one()->id;
-            $companyDynamicCosts->created_at = Carbon::now()->format('Y-m-d H:i:s');
-            $saved = $companyDynamicCosts->save();
+            $companyDynamicCostForm->{$action.'DynamicCost'}();
+
+            $queryType  = $companyDynamicCostForm->cost_type === CompanyDynamicCosts::DYNAMIC_PERSONAL ? new CompanyDynamicPersonalCosts() : new CompanyDynamicOtherCosts();
+
+            $dynamicCosts = $queryType::findAll(['companies_id' => $companyDynamicCostForm->companies_id]);
+
 
         }
 
-        return $this->renderPartial('_partials/dynamic_cost_record',[
-            'companyDynamicCost'   => $companyDynamicCosts
+        return $this->renderPartial('_partials/dynamic_cost_table',[
+            'dynamicCosts'   => $dynamicCosts
         ]);
 
     }
+
 }

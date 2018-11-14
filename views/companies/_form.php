@@ -18,31 +18,37 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-md-6">
-            <div class="dynamic-costs-table dynamic-costs-table--perso">
-                <table>
-                    <?php foreach ($companyPersonalDynamicCosts as $companyPersonalDynamicCost): ?>
-                        <?= $this->render('_partials/dynamic_cost_record',['companyDynamicCost' => $companyPersonalDynamicCost]) ?>
-                    <?php endforeach; ?>
-                </table>
-            </div>
+
             <button class="add-dynamic-btn add-dynamic-btn--perso" data-dynamics-type="perso">ADD DYNAMIC</button>
             <div class="dynamic-costs-container dynamic-costs-container--perso">
                 <?= Html::input('number','value',null,['class' => 'dynamic-costs-value dynamic-costs-value--perso']) ?>
                 <?= Html::input('text','cost_name',null,['class' => 'dynamic-costs-cost_name dynamic-costs-cost_name--perso']) ?>
+                <button type="button" class="btn btn-secondary  dynamic-cost-update--btn " data-dynamics-type="perso">UPDATE</button>
+
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="dynamic-costs-table dynamic-costs-table--other">
+            <div class="dynamic-costs-table dynamic-costs-table--perso">
                 <table>
-                    <?php foreach ($companyOtherDynamicCosts as $companyOtherDynamicCost): ?>
-                        <?= $this->render('_partials/dynamic_cost_record',['companyDynamicCost' => $companyOtherDynamicCost]) ?>
+                    <?php foreach ($companyPersonalDynamicCosts as $companyPersonalDynamicCost): ?>
+                        <?= $this->render('_partials/dynamic_cost_record',['dynamicCost' => $companyPersonalDynamicCost]) ?>
                     <?php endforeach; ?>
                 </table>
             </div>
+        </div>
+        <div class="col-md-6">
+
             <button class="add-dynamic-btn add-dynamic-btn--other" data-dynamics-type="other">ADD DYNAMIC</button>
             <div class="dynamic-costs-container dynamic-costs-container--other">
                 <?= Html::input('number','value',null,['class' => 'dynamic-costs-value dynamic-costs-value--other']) ?>
                 <?= Html::input('text','cost_name',null,['class' => 'dynamic-costs-cost_name dynamic-costs-cost_name--other']) ?>
+                <button type="button" class="btn btn-secondary dynamic-cost-update--btn" data-dynamics-type="other">UPDATE</button>
+
+            </div>
+            <div class="dynamic-costs-table dynamic-costs-table--other">
+                <table>
+                    <?php foreach ($companyOtherDynamicCosts as $companyOtherDynamicCost): ?>
+                        <?= $this->render('_partials/dynamic_cost_record',['dynamicCost' => $companyOtherDynamicCost]) ?>
+                    <?php endforeach; ?>
+                </table>
             </div>
         </div>
     </div>
