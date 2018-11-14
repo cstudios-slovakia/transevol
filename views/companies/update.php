@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = 'Update';
         'companyStaticCostsForm'   => $companyStaticCostsForm,
         'companyPersonalDynamicCosts'  => $companyPersonalDynamicCosts,
         'companyOtherDynamicCosts'  => $companyOtherDynamicCosts,
-
+        'hideDynamics'  => false,
     ]) ?>
 
 </div>

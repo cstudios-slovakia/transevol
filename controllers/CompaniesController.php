@@ -102,7 +102,6 @@ class CompaniesController extends BaseController
             'model'                 => $company,
             'companyStaticCosts'    => $companyStaticCosts->toArray(),
             'companyStaticCostsForm'    => $companyStaticCostsForm,
-            'companyDynamicCostsForm'   => new CompanyDynamicCostsForm()
         ]);
     }
 

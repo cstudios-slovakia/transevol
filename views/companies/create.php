@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'companyStaticCosts'    => $companyStaticCosts,
         'companyStaticCostsForm'   => $companyStaticCostsForm,
-        'companyDynamicCostsForm'  => $companyDynamicCostsForm,
+        'hideDynamics'  => true,
     ]) ?>
 
 </div>

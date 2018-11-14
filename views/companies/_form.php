@@ -16,6 +16,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
+    <?php if (isset($hideDynamics) && !$hideDynamics) : ?>
     <div class="row">
         <div class="col-md-6">
 
@@ -52,9 +53,7 @@ use yii\widgets\ActiveForm;
             </div>
         </div>
     </div>
-
-
-
+    <?php endif; ?>
 
     <?= $form->field($model, 'company_name')->textInput(['maxlength' => true]) ?>
 
