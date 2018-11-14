@@ -37,6 +37,7 @@ return [
                 ['adm_disposal_rubbish','adm_disp_rbsh'],
 
             ]
-        ]
+        ],
+
     ]
 ];

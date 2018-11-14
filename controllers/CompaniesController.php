@@ -3,15 +3,22 @@
 namespace app\controllers;
 
 use app\models\CompanyCostDatas;
+use app\models\CompanyDynamicCosts;
+use app\models\CompanyDynamicCostsForm;
 use app\models\CompanyStaticCostQuery;
 use app\models\CompanyStaticCostsForm;
+use app\models\FrequencyData;
+use app\models\Units;
+use Carbon\Carbon;
 use Yii;
 use app\models\Companies;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use yii\db\Expression;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * CompaniesController implements the CRUD actions for Companies model.
@@ -75,7 +82,6 @@ class CompaniesController extends BaseController
 
         if ($company->load($this->request()->post()) && $companyStaticCostsForm->load($this->request()->post()) &&
         Model::validateMultiple([$company, $companyStaticCostsForm])) {
-//dd($companyStaticCostsForm->toArray());
 
             $company->save();
 
@@ -91,9 +97,10 @@ class CompaniesController extends BaseController
         }
 
         return $this->render('create', [
-            'model' => $company,
+            'model'                 => $company,
             'companyStaticCosts'    => $companyStaticCosts->toArray(),
-            'companyStaticCostsForm'   => $companyStaticCostsForm
+            'companyStaticCostsForm'    => $companyStaticCostsForm,
+            'companyDynamicCostsForm'   => new CompanyDynamicCostsForm()
         ]);
     }
 
@@ -135,8 +142,10 @@ class CompaniesController extends BaseController
 
         return $this->render('update', [
             'model' => $company,
-            'companyStaticCosts'    => $companyStaticCosts->toArray(),
-            'companyStaticCostsForm'   => $companyStaticCostsForm
+            'companyStaticCosts'        => $companyStaticCosts->toArray(),
+            'companyStaticCostsForm'    => $companyStaticCostsForm,
+            'companyPersonalDynamicCosts'   => $company->companyPersonalDynamicCosts,
+            'companyOtherDynamicCosts'      => $company->companyOtherDynamicCosts,
 
         ]);
     }
@@ -169,5 +178,42 @@ class CompaniesController extends BaseController
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionAjax()
+    {
+
+        if(! $this->request()->isAjax){
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            return [
+                'status_code'   => 401,
+                'message'   => 'Invalid request!'
+            ];
+        }
+
+        $companyDynamicCostForm     = new CompanyDynamicCostsForm();
+        $companyDynamicCostForm->load($ajaxData = $this->request()->post(),'');
+
+        $valid = $companyDynamicCostForm->validate();
+
+        $companyId  = (int) $this->request()->get('company_id');
+
+        if ($valid) {
+            $companyDynamicCosts    = new CompanyDynamicCosts();
+
+            $companyDynamicCosts->load($companyDynamicCostForm->toArray(),'');
+            // TODO implement user defined Comapanies model
+            $companyDynamicCosts->companies_id     = $companyId;
+            $companyDynamicCosts->frequency_datas_id     = FrequencyData::find()->orderBy(new Expression('rand()'))->one()->id;
+            $companyDynamicCosts->units_id     = Units::find()->orderBy(new Expression('rand()'))->one()->id;
+            $companyDynamicCosts->created_at = Carbon::now()->format('Y-m-d H:i:s');
+            $saved = $companyDynamicCosts->save();
+
+        }
+
+        return $this->renderPartial('_partials/dynamic_cost_record',[
+            'companyDynamicCost'   => $companyDynamicCosts
+        ]);
+
     }
 }

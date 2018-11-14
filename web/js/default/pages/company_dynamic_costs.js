@@ -1,31 +1,44 @@
 $(document).ready(function () {
 
     var addDynamicBtn = $('.add-dynamic-btn');
-    var dynamicsContainer = $('.dynamic-costs-container');
+    var dynamicValue       = $('.dynamic-costs-value');
+    var dynamicCostName    = $('.dynamic-costs-cost_name');
+
     addDynamicBtn.click(function(event) {
         event.preventDefault();
-        var  $dynamicCostType = $('#companydynamiccostsform-cost_type');
-        var  $dynamicValue = $('#companydynamiccostsform-value');
-        var  $dynamicCostName = $('#companydynamiccostsform-cost_name');
+
+        var typeOfDynamics = $(this).data('dynamics-type');
+        var  currentValue       = $(dynamicValue).filter('.dynamic-costs-value--'+typeOfDynamics).first();
+        var  currentCostName    = $(dynamicCostName).filter('.dynamic-costs-cost_name--'+typeOfDynamics).first();
+
         $.ajax({
-                url: ajaxUrl,
+            url: ajaxUrl,
             type: 'post',
             dataType: 'text',
             data: {
-            cost_type : $dynamicCostType.val(),
-                value : $dynamicValue.val(),
-                cost_name : $dynamicCostName.val(),
-                is_update : false
-        }
-    })
-        .done(function(response) {
-            $('.dynamic-costs-table table').prepend(response);
-            console.log(response);
+                cost_type       : typeOfDynamics,
+                value           : currentValue.val(),
+                cost_name   : currentCostName.val(),
+                is_update   : 1
+            }
         })
-            .fail(function() {
-                console.log("error");
-            });
+        .done(function(response) {
+            $('.dynamic-costs-table--'+typeOfDynamics+' table').prepend(response);
+
+            clearDynamicInputs([currentValue,currentCostName]);
+        })
+        .fail(function() {
+            alert('Not saved, or something wrong. Finish the error reporting.');
+        });
 
     });
+
+    function clearDynamicInputs(clearables) {
+        $.each(clearables,function (i,clearableInput) {
+            $(clearableInput).val('');
+        });
+    }
+
+
 
 });

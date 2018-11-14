@@ -17,7 +17,7 @@ use Yii;
  * @property string $updated_at
  *
  * @property Companies $companies
- * @property FrequencyDatas $frequencyDatas
+ * @property FrequencyData $frequencyDatas
  */
 class CompanyDynamicCosts extends \yii\db\ActiveRecord
 {
@@ -35,13 +35,13 @@ class CompanyDynamicCosts extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['value', 'cost_type', 'companies_id', 'frequency_datas_id', 'units_id', 'created_at'], 'required'],
+            [['value', 'cost_type','cost_name', 'companies_id', 'frequency_datas_id', 'units_id', 'created_at'], 'required'],
             [['value'], 'number'],
             [['companies_id', 'frequency_datas_id', 'units_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['cost_type'], 'string', 'max' => 5],
             [['companies_id'], 'exist', 'skipOnError' => true, 'targetClass' => Companies::className(), 'targetAttribute' => ['companies_id' => 'id']],
-            [['frequency_datas_id'], 'exist', 'skipOnError' => true, 'targetClass' => FrequencyDatas::className(), 'targetAttribute' => ['frequency_datas_id' => 'id']],
+            [['frequency_datas_id'], 'exist', 'skipOnError' => true, 'targetClass' => FrequencyData::className(), 'targetAttribute' => ['frequency_datas_id' => 'id']],
         ];
     }
 
@@ -75,6 +75,6 @@ class CompanyDynamicCosts extends \yii\db\ActiveRecord
      */
     public function getFrequencyDatas()
     {
-        return $this->hasOne(FrequencyDatas::className(), ['id' => 'frequency_datas_id']);
+        return $this->hasOne(FrequencyData::className(), ['id' => 'frequency_datas_id']);
     }
 }

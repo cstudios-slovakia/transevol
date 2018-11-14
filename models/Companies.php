@@ -83,6 +83,16 @@ class Companies extends AppBasedActiveRecord
         return $this->hasMany(CompanyDynamicCosts::className(), ['companies_id' => 'id']);
     }
 
+    public function getCompanyPersonalDynamicCosts()
+    {
+        return $this->hasMany(CompanyDynamicPersonalCosts::className(), ['companies_id' => 'id']);
+    }
+
+    public function getCompanyOtherDynamicCosts()
+    {
+        return $this->hasMany(CompanyDynamicOtherCosts::className(), ['companies_id' => 'id']);
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
