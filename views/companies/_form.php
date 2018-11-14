@@ -16,6 +16,38 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
+    <div class="row">
+        <div class="col-md-6">
+            <div class="dynamic-costs-table dynamic-costs-table--personal">
+                <table>
+
+                </table>
+            </div>
+            <button class="add-dynamic-btn">ADD DYNAMIC</button>
+            <div class="dynamic-costs-container dynamic-costs-container--personal">
+                <?= $form->field($companyDynamicCostsForm, 'cost_type')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($companyDynamicCostsForm, 'value')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($companyDynamicCostsForm, 'cost_name')->textInput(['maxlength' => true]) ?>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="dynamic-costs-table dynamic-costs-table--other">
+                <table>
+
+                </table>
+            </div>
+            <button class="add-dynamic-btn">ADD DYNAMIC</button>
+            <div class="dynamic-costs-container dynamic-costs-container--other">
+                <?= $form->field($companyDynamicCostsForm, 'cost_type')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($companyDynamicCostsForm, 'value')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($companyDynamicCostsForm, 'cost_name')->textInput(['maxlength' => true]) ?>
+            </div>
+        </div>
+    </div>
+
+
+
+
     <?= $form->field($model, 'company_name')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
@@ -41,3 +73,14 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 
 </div>
+
+<?php
+
+$this->registerJsFile(
+    '@web/js/default/pages/company_dynamic_costs.js',
+    ['depends' => [\yii\web\JqueryAsset::className()]]
+);
+
+$this->registerJsVar ( 'ajaxUrl', \yii\helpers\Url::toRoute(['companies/ajax']), 3 );
+
+?>
