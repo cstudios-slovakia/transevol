@@ -117,9 +117,11 @@ class CompaniesController extends BaseController
         $company = $this->findModel($id);
         $companyStaticCostsForm     = new CompanyStaticCostsForm();
 
-        $companyStaticCosts     = collect($company->companyCostDatas)->keyBy(function ($companyCostData){
-            return $companyCostData->staticCosts->short_name;
-        });
+//        $companyStaticCosts     = collect($company->companyCostDatas)->keyBy(function ($companyCostData){
+//            return $companyCostData->staticCosts->short_name;
+//        });
+
+        $companyStaticCosts = collect(CompanyStaticCostQuery::find()->all())->keyBy('short_name');
 
         if ($company->load($this->request()->post()) && $companyStaticCostsForm->load($this->request()->post()) &&
         Model::validateMultiple([$company, $companyStaticCostsForm])) {
@@ -135,12 +137,13 @@ class CompaniesController extends BaseController
         }
 
 
-        $loadable = $companyStaticCosts->transform(function($companyStaticCost){
-            return $companyStaticCost->value;
-        })->toArray();
+//        $loadable = $companyStaticCosts->transform(function($companyStaticCost){
+//            return $companyStaticCost->value;
+//        })->toArray();
 
+        $loadable = $companyStaticCosts->toArray();
         $companyStaticCostsForm->load($loadable,'');
-
+//        dd($companyStaticCostsForm);
         return $this->render('update', [
             'model' => $company,
             'companyStaticCosts'        => $companyStaticCosts->toArray(),

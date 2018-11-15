@@ -123,7 +123,8 @@ class VehiclesController extends Controller
         return $this->render('create', [
             'model'             => $model,
             'vehicleStaticCostFormModel' => $vehicleStaticCostFormModel,
-            'staticCostsCollection'    => $staticCostsCollection
+            'staticCostsCollection'    => $staticCostsCollection,
+            'costs' => collect($staticCosts)
         ]);
 
     }
@@ -182,7 +183,8 @@ class VehiclesController extends Controller
         return $this->render('update', [
             'model'             => $model,
             'vehicleStaticCostFormModel' => $vehicleStaticCostFormModel,
-            'staticCostsCollection'    => $staticCostsCollection
+            'staticCostsCollection'    => $staticCostsCollection,
+            'costs' => collect($staticCosts)
         ]);
     }
 

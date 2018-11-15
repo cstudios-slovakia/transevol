@@ -19,7 +19,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $this->render('_form', [
         'model' => $model,
         'vehicleStaticCostFormModel' => $vehicleStaticCostFormModel,
-        'staticCostsCollection'    => $staticCostsCollection
+        'staticCostsCollection'    => $staticCostsCollection,
+        'costs'    => $costs
     ]) ?>
 
 </div>

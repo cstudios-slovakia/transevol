@@ -15,27 +15,27 @@ $this->params['breadcrumbs'][] = 'Update';
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?php
+    $staticCosts = $costs;
+
+
     $duals = collect([]);
+    $singles = collect([]);
+    $staticCosts->each(function ($cost) use ($singles, $duals, $model){
 
-    $singles    = $costs->map(function ($cost) use ($duals){
-        if(!str_contains($cost->staticCosts->short_name,'dual')){
-            return $cost->staticCosts;
+        $record = \app\support\CostsMaker\StaticCostsFormMaker::load($model)->make($cost);
+
+        if(!str_contains($cost->short_name,'dual')){
+            $singles->push($record);
         } else{
-            $duals->push($cost->staticCosts);
-
+            $duals->push($record);
         }
 
-    })->filter(function ($data){
-        return !is_null($data);
     });
 
-    $costDatas  = collect($model->driverCostDatas)->keyBy(function($costData){
-        return $costData->staticCosts->short_name;
-    });
-//    var_dump($singles->toArray());
-//    var_dump($duals->toArray());
-//
-//    exit();
+//    $costDatas  = collect($model->driverCostDatas)->keyBy(function($costData){
+//        return $costData->staticCosts->short_name;
+//    });
+
 
     ?>
 
@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = 'Update';
         'model' => $model,
         'singles'  => $singles,
         'duals'  => $duals,
-        'costDatas' => $costDatas,
+//        'costDatas' => $costDatas,
     ]) ?>
 
 </div>

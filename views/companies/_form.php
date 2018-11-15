@@ -68,7 +68,10 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'icdph')->textInput(['maxlength' => true]) ?>
 
     <?php foreach ($companyStaticCosts as $staticCostShortName => $companyStaticCost) : ?>
-        <?= $form->field($companyStaticCostsForm, $staticCostShortName )->textInput(['maxlength' => true]) ?>
+        <?php
+        $record = \app\support\CostsMaker\StaticCostsFormMaker::load($model)->make($companyStaticCost);
+        ?>
+        <?= $this->render('../layouts/default/common/static_cost_record',['record' => $record,'form' => $form]) ?>
 
     <?php endforeach; ?>
 

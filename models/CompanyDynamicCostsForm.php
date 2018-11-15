@@ -15,6 +15,7 @@ class CompanyDynamicCostsForm extends Model
     public $action;
     public $id;
     public $companies_id;
+    public $frequency_datas_id;
 
     const SCENARIO_CREATE = 'create';
     const SCENARIO_UPDATE = 'update';
@@ -24,15 +25,16 @@ class CompanyDynamicCostsForm extends Model
     {
         return [
             [ 'action', 'required' ],
-            [ [ 'value', 'cost_name', 'companies_id' ], 'required','on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE] ],
+            [ [ 'value', 'cost_name', 'companies_id', 'frequency_datas_id' ], 'required','on' => [self::SCENARIO_CREATE, self::SCENARIO_UPDATE] ],
             [ [ 'cost_type' ], 'required','on' => [self::SCENARIO_CREATE] ],
             [ 'action', 'in', 'range' => [self::SCENARIO_CREATE,self::SCENARIO_UPDATE,self::SCENARIO_DELETE] ],
             [ 'id', 'required','on' => self::SCENARIO_DELETE ],
-            [ [ 'id','companies_id' ], 'integer'],
+            [ [ 'id','companies_id','frequency_datas_id' ], 'integer'],
             [ 'value' , 'number' ],
             [ [ 'cost_type', 'cost_name','action' ], 'string' ],
             [ ['id'], 'exist', 'skipOnError' => true, 'targetClass' => CompanyDynamicCosts::className(), 'targetAttribute' => ['id' => 'id']],
             [ ['companies_id'], 'exist', 'skipOnError' => true, 'targetClass' => Companies::className(), 'targetAttribute' => ['companies_id' => 'id']],
+            [ ['frequency_datas_id'], 'exist', 'skipOnError' => true, 'targetClass' => FrequencyData::className(), 'targetAttribute' => ['frequency_datas_id' => 'id']],
 
         ];
 
@@ -53,7 +55,7 @@ class CompanyDynamicCostsForm extends Model
         $companyDynamicCosts->load($this->toArray(),'');
         // TODO implement user defined Comapanies model
 //        $companyDynamicCosts->companies_id     = $companyId;
-        $companyDynamicCosts->frequency_datas_id     = FrequencyData::find()->orderBy(new Expression('rand()'))->one()->id;
+//        $companyDynamicCosts->frequency_datas_id     = FrequencyData::find()->orderBy(new Expression('rand()'))->one()->id;
         $companyDynamicCosts->units_id     = Units::find()->orderBy(new Expression('rand()'))->one()->id;
         $companyDynamicCosts->created_at = Carbon::now()->format('Y-m-d H:i:s');
         return $saved = $companyDynamicCosts->save();

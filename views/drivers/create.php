@@ -15,17 +15,25 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?php
-    $duals = collect([]);
+    $staticCosts = $costs;
 
-    $singles    = $costs->filter(function ($cost) use ($duals){
+
+    $duals = collect([]);
+    $singles = collect([]);
+    $staticCosts->each(function ($cost) use ($singles, $duals, $model){
+
+        $record = \app\support\CostsMaker\StaticCostsFormMaker::load($model)->make($cost);
+
         if(!str_contains($cost->short_name,'dual')){
-            return $cost;
+            $singles->push($record);
+        } else{
+            $duals->push($record);
         }
 
-        $duals->push($cost);
     });
 
-    $costDatas  = collect($model->driverCostDatas)->keyBy('short_name');
+//    $costDatas  = collect($model->driverCostDatas)->keyBy('short_name');
+//dd($singles, $duals);
 
     ?>
 
@@ -33,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'singles'  => $singles,
         'duals'  => $duals,
-        'costDatas' => $costDatas,
+//        'costDatas' => $costDatas,
     ]) ?>
 
 </div>

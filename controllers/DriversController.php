@@ -80,7 +80,7 @@ class DriversController extends Controller
     {
         $model = new Drivers();
         $driverForm = new DriverForm();
-
+//        dd(Yii::$app->request->post());
         if ($model->load(Yii::$app->request->post(),'Drivers') && $driverForm->load(Yii::$app->request->post(),'StaticCosts') &&
         Model::validateMultiple([$model, $driverForm])
         ) {
@@ -145,9 +145,11 @@ class DriversController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
+        $driverStaticCosts = DriverStaticCost::find()->all();
+
         return $this->render('update', [
             'model' => $model,
-            'costs'     => collect($driverCostData)
+            'costs'     => collect($driverStaticCosts)
         ]);
     }
 

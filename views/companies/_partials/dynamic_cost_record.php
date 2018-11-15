@@ -11,8 +11,9 @@
         <?= $dynamicCost->value ?>
     </td>
     <td >
-        <?= $dynamicCost->frequencyDatas->frequency_name ?>
+        <?= $this->render('../../layouts/default/common/dynamic_cost_select',['record' => $dynamicCost]) ?>
     </td>
+
     <td>
         <div class="btn-group" role="group" aria-label="Basic example">
             <button type="button" class="btn-edit btn btn-secondary" data-dynamics-type="<?= $dynamicCost->cost_type ?>">EDIT</button>

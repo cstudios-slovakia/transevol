@@ -27,7 +27,11 @@ use app\support\Vehicles\Relations\VehicleRelationAssistance;
 
     <?php foreach($staticCostsCollection as $costShortName => $staticCost): ?>
 
-        <?= $form->field($vehicleStaticCostFormModel, $costShortName)->textInput(['maxlength' => true]) ?>
+        <?php
+        $record = \app\support\CostsMaker\StaticCostsFormMaker::load($model)->make($staticCost);
+
+        ?>
+        <?= $this->render('../layouts/default/common/static_cost_record',['record' => $record,'form' => $form]) ?>
 
     <?php endforeach; ?>
 

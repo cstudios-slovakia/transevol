@@ -132,4 +132,10 @@ class StaticCost extends \yii\db\ActiveRecord
     {
         return $this->hasMany(VehicleStaticCosts::className(), ['static_costs_id' => 'id']);
     }
+
+    public function getFrequencyGroup()
+    {
+        return $this->hasOne(FrequencyGroup::className(), ['id' => 'frequency_groups_id']);
+
+    }
 }
