@@ -43,7 +43,6 @@ class SeedController extends Controller
      */
     public function actionMake()
     {
-
         $seederBuildHelper  = new SeederBuildHelper();
         $resolvable = $seederBuildHelper->buildResolvablePath($this->resolvable);
 

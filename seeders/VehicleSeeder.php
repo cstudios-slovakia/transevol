@@ -51,6 +51,5 @@ class VehicleSeeder extends Seeder
             'created_at' => Carbon::now()->format('Y-m-d H:i:s')
         ])->rowQuantity(2);
 
-        dd($d);
     }
 }
