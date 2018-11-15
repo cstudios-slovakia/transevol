@@ -6,6 +6,7 @@ use app\models\Companies;
 use app\models\VehicleStaticCost;
 use app\models\VehicleStaticCosts;
 use app\models\VehicleStaticCostsForm;
+use app\support\FrequencyDataBuilder;
 use app\support\Vehicles\Relations\RelationAssistance;
 use app\support\Vehicles\Relations\VehicleRelationAssistance;
 use Yii;
@@ -85,6 +86,11 @@ class VehiclesController extends Controller
      */
     public function actionCreate()
     {
+//        $timeSelect = FrequencyDataBuilder::makeType('time')->dropDownListOptions();
+//        $lengthSelect = FrequencyDataBuilder::makeType('length')->dropDownListOptions();
+//
+//        dd($timeSelect,$lengthSelect);
+
         $model = new Vehicles();
         $vehicleStaticCostFormModel  = new VehicleStaticCostsForm();
 
