@@ -39,15 +39,26 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
             ['label' => 'Dashboard', 'url' => ['/site/index']],
-//            ['label' => 'About', 'url' => ['/site/about']],
+            ['label' => 'Adresáre',
+                'url' => ['#'],
+                'template' => '<a href="{url}" >{label}<i class="fa fa-angle-left pull-right"></i></a>',
+                'items' => [
+                    ['label' => 'Servis', 'url' => ['places/index?type=services']],
+                    ['label' => 'Zákazníci', 'url' => ['places/index?type=clients']],
+                ],
+            ],
             ['label' => 'Firma', 'url' => ['companies/index']],
-            ['label' => 'Zákazníci', 'url' => ['places/index?type=clients']],
             ['label' => 'Vodič', 'url' => ['drivers/index']],
             ['label' => 'Vozidlo', 'url' => ['vehicles/index']],
             ['label' => 'Vykladky/Nakladky', 'url' => ['places/index?type=loading']],
-            ['label' => 'Servis', 'url' => ['places/index?type=services']],
             ['label' => 'Colnice', 'url' => ['places/index?type=toll']],
-            ['label' => 'Typy: miesto', 'url' => ['place-types/index']],
+            ['label' => 'Settings',
+                'url' => ['#'],
+                'template' => '<a href="{url}" >{label}<i class="fa fa-angle-left pull-right"></i></a>',
+                'items' => [
+                    ['label' => 'Typy: miesto', 'url' => ['place-types/index']],
+                ],
+            ],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (
