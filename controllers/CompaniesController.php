@@ -144,6 +144,12 @@ class CompaniesController extends BaseController
         $loadable = $companyStaticCosts->toArray();
         $companyStaticCostsForm->load($loadable,'');
 //        dd($companyStaticCostsForm);
+        $dynPersonal = $company->companyPersonalDynamicCosts;
+        $dynOther = $company->companyOtherDynamicCosts;
+//        dd($company->companyPersonalDynamicCosts);
+//        dd($company->companyOtherDynamicCosts);
+//        dd($dynPersonal, $dynOther);
+
         return $this->render('update', [
             'model' => $company,
             'companyStaticCosts'        => $companyStaticCosts->toArray(),
@@ -199,10 +205,9 @@ class CompaniesController extends BaseController
         $companyDynamicCostForm->setScenario($action = $this->request()->post('action'));
         $companyDynamicCostForm->companies_id = (int) $this->request()->get('company_id');
         $companyDynamicCostForm->load($ajaxData = $this->request()->post(),'');
-
+//        dd($companyDynamicCostForm);
 
         $valid = $companyDynamicCostForm->validate();
-
 
         if ($valid) {
 
@@ -211,7 +216,6 @@ class CompaniesController extends BaseController
             $queryType  = $companyDynamicCostForm->cost_type === CompanyDynamicCosts::DYNAMIC_PERSONAL ? new CompanyDynamicPersonalCosts() : new CompanyDynamicOtherCosts();
 
             $dynamicCosts = $queryType::findAll(['companies_id' => $companyDynamicCostForm->companies_id]);
-
 
         }
 

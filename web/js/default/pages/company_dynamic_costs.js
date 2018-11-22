@@ -3,11 +3,13 @@ $(document).ready(function () {
     var addDynamicBtn = $('.add-dynamic-btn');
     var dynamicValue       = $('.dynamic-costs-value');
     var dynamicCostName    = $('.dynamic-costs-cost_name');
+    var dynamicFrequencyDatasId    = $('.dynamic-costs-frequency_datas_id');
     var requestData = {
         cost_type   : null,
         value       : null,
         cost_name   : null,
-        action      : 'create'
+        action      : 'create',
+        frequency_datas_id : null
     };
     var currentValue;
     var currentCostName;
@@ -22,7 +24,8 @@ $(document).ready(function () {
             cost_type       : typeOfDynamics,
             value           : currentValue.val(),
             cost_name   : currentCostName.val(),
-            action   : 'create'
+            action   : 'create',
+            frequency_datas_id : currentFrequencyDataId.val()
         };
 
         ajaxRequest();
@@ -57,9 +60,11 @@ $(document).ready(function () {
         e.preventDefault();
 
         var recordIdent = $(this).parents('tr').data('dynamic-record-id');
-
+        var typeOfDynamics = $(this).data('dynamics-type');
         requestData.action  = 'delete';
         requestData.id      = parseInt(recordIdent);
+        requestData.cost_type       = typeOfDynamics;
+
 
         ajaxRequest();
     });
@@ -69,10 +74,12 @@ $(document).ready(function () {
         var typeOfDynamics = $(this).data('dynamics-type');
         var recordValue = $(currentValue).val();
         var recordCostName = $(currentCostName).val();
+        var recordFrequencyDatasId = $(currentFrequencyDataId).val();
         requestData.action  = 'update';
         requestData.value      = recordValue;
         requestData.cost_name      = recordCostName;
         requestData.cost_type       = typeOfDynamics;
+        requestData.frequency_datas_id       = recordFrequencyDatasId;
         ajaxRequest();
     });
 
@@ -91,17 +98,22 @@ $(document).ready(function () {
         var recordCostName = $(recordColumns).filter(function () {
             return $(this).data('dynamic-cost_name')
         }).data('dynamic-cost_name');
+        var recordFrequencyDatasId = $(recordColumns).filter(function () {
+            return $(this).data('dynamic-frequency_datas_id')
+        }).data('dynamic-frequency_datas_id');
 
         requestData.id      = parseInt(recordIdent);
 
 
         $(currentValue).val(recordValue);
         $(currentCostName).val(recordCostName);
+        $(currentFrequencyDataId).val(recordFrequencyDatasId);
 
     });
 
     function setInputsByType(type) {
         currentValue       = $(dynamicValue).filter('.dynamic-costs-value--'+type).first();
         currentCostName    = $(dynamicCostName).filter('.dynamic-costs-cost_name--'+type).first();
+        currentFrequencyDataId    = $(dynamicFrequencyDatasId).filter('.dynamic-costs-frequency_datas_id--'+type).first();
     }
 });

@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\Models\Drivers */
+/* @var $model app\models\Drivers */
 /* @var $form yii\widgets\ActiveForm */
 /* @var $singles \Illuminate\Support\Collection */
 /* @var $duals \Illuminate\Support\Collection */

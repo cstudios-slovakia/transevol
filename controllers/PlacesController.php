@@ -6,7 +6,7 @@ use app\models\Addresses;
 use app\models\Companies;
 use app\models\Countries;
 use app\models\PlaceTypes;
-use app\Support\Helpers\AppParams;
+use app\support\helpers\AppParams;
 use Yii;
 use app\models\Places;
 use yii\base\Model;

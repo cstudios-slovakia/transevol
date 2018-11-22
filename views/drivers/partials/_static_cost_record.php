@@ -1,3 +1,4 @@
+
 <div class="row">
     <div class="col-md-3">
         <?= $model->staticCosts->cost_name ?>
@@ -7,6 +8,6 @@
     </div>
 
     <div class="col-md-3">
-        <?= $model->staticCosts->frequencyDatas->frequency_name ?>
+        <?= $model->frequencyData->frequency_name ?>
     </div>
 </div>

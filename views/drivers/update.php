@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\Models\Drivers */
+/* @var $model app\models\Drivers */
 
 $this->title = 'Update Drivers: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Drivers', 'url' => ['index']];

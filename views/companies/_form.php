@@ -9,7 +9,7 @@ use yii\widgets\ActiveForm;
 /* @var $companyStaticCosts array */
 /* @var $companyStaticCostsForm \app\models\CompanyStaticCostsForm */
 
-//dd($companyStaticCosts);
+$dropDownOptions  = \app\support\FrequencyDataBuilder::makeType('time')->dropDownListOptions();
 ?>
 
 <div class="companies-form">
@@ -24,13 +24,15 @@ use yii\widgets\ActiveForm;
             <div class="dynamic-costs-container dynamic-costs-container--perso">
                 <?= Html::input('number','value',null,['class' => 'dynamic-costs-value dynamic-costs-value--perso']) ?>
                 <?= Html::input('text','cost_name',null,['class' => 'dynamic-costs-cost_name dynamic-costs-cost_name--perso']) ?>
+                <?= Html::dropDownList('frequency_datas_id', null, $dropDownOptions,['class' => 'dynamic-costs-frequency_datas_id dynamic-costs-frequency_datas_id--perso']  ) ?>
                 <button type="button" class="btn btn-secondary  dynamic-cost-update--btn " data-dynamics-type="perso">UPDATE</button>
 
             </div>
             <div class="dynamic-costs-table dynamic-costs-table--perso">
                 <table>
                     <?php foreach ($companyPersonalDynamicCosts as $companyPersonalDynamicCost): ?>
-                        <?= $this->render('_partials/dynamic_cost_record',['dynamicCost' => $companyPersonalDynamicCost]) ?>
+
+                        <?= $this->render('_partials/dynamic_cost_record',['dynamicCost' => $companyPersonalDynamicCost,'form' => $form]) ?>
                     <?php endforeach; ?>
                 </table>
             </div>
@@ -41,13 +43,15 @@ use yii\widgets\ActiveForm;
             <div class="dynamic-costs-container dynamic-costs-container--other">
                 <?= Html::input('number','value',null,['class' => 'dynamic-costs-value dynamic-costs-value--other']) ?>
                 <?= Html::input('text','cost_name',null,['class' => 'dynamic-costs-cost_name dynamic-costs-cost_name--other']) ?>
+                <?= Html::dropDownList('frequency_datas_id', null, $dropDownOptions,['class' => 'dynamic-costs-frequency_datas_id dynamic-costs-frequency_datas_id--other']  ) ?>
+
                 <button type="button" class="btn btn-secondary dynamic-cost-update--btn" data-dynamics-type="other">UPDATE</button>
 
             </div>
             <div class="dynamic-costs-table dynamic-costs-table--other">
                 <table>
                     <?php foreach ($companyOtherDynamicCosts as $companyOtherDynamicCost): ?>
-                        <?= $this->render('_partials/dynamic_cost_record',['dynamicCost' => $companyOtherDynamicCost]) ?>
+                        <?= $this->render('_partials/dynamic_cost_record',['dynamicCost' => $companyOtherDynamicCost,'form' => $form]) ?>
                     <?php endforeach; ?>
                 </table>
             </div>

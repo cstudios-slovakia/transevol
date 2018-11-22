@@ -8,7 +8,7 @@ use app\models\DriverForm;
 use app\models\DriverStaticCost;
 use app\models\StaticCost;
 use Yii;
-use app\Models\Drivers;
+use app\models\Drivers;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -18,7 +18,7 @@ use yii\filters\VerbFilter;
 /**
  * DriversController implements the CRUD actions for Drivers model.
  */
-class DriversController extends Controller
+class DriversController extends BaseController
 {
     /**
      * {@inheritdoc}
@@ -80,17 +80,27 @@ class DriversController extends Controller
     {
         $model = new Drivers();
         $driverForm = new DriverForm();
-//        dd(Yii::$app->request->post());
-        if ($model->load(Yii::$app->request->post(),'Drivers') && $driverForm->load(Yii::$app->request->post(),'StaticCosts') &&
+
+//        $x = $model->load(Yii::$app->request->post(),'Drivers');
+//        $v = $driverForm->load(Yii::$app->request->post(),'StaticCostsForm');
+//        $c = Model::validateMultiple([$model, $driverForm]);
+//        $q = $model->getErrorSummary(1);
+//        $k = $driverForm->getErrorSummary(1);
+//        dd($x, $v, $c, $q, $k, $this->request()->post());
+
+        if ($model->load(Yii::$app->request->post(),'Drivers') && $driverForm->load(Yii::$app->request->post(),'StaticCostsForm') &&
         Model::validateMultiple([$model, $driverForm])
         ) {
 
             $model->link('companies',Companies::findOne(['id' => 1]));
             $model->save();
-            foreach (Yii::$app->request->post('StaticCosts') as $shortName => $staticCostValue){
+            foreach (Yii::$app->request->post('StaticCostsForm') as $shortName => $staticCostValue){
                 $staticCost     = StaticCost::findOne(['short_name' => $shortName]);
 
-                $model->link('staticCosts',$staticCost,['value' => $staticCostValue]);
+                $model->link('staticCosts',$staticCost,[
+                    'value' => $staticCostValue['value'],
+                    'frequency_datas_id' => $staticCostValue['frequency_datas_id'],
+                ]);
             }
 
             return $this->redirect(['view', 'id' => $model->id]);
@@ -121,6 +131,7 @@ class DriversController extends Controller
         $driverCostData = collect($model->driverCostDatas)->keyBy(function($costData){
             return $costData->staticCosts->short_name;
         });
+
 
         if ($model->load(Yii::$app->request->post(),'Drivers') && $driverForm->load(Yii::$app->request->post(),'StaticCosts') &&
             Model::validateMultiple([$model, $driverForm])

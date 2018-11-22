@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Support\Helpers;
+namespace app\support\helpers;
 
 use yii\base\ArrayAccessTrait;
 use yii\helpers\ArrayHelper;

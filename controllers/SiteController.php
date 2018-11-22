@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Vehicles;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -121,8 +122,15 @@ class SiteController extends Controller
      *
      * @return string
      */
-    public function actionAbout()
+    public function actionDev()
     {
+
+        $oneModel   = Vehicles::findOne(['id' => 1]);
+
+//        var_dump($oneModel);
+//        die();
+//        dd($oneModel);
+
         return $this->render('about');
     }
 }

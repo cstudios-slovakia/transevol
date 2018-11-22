@@ -5,7 +5,7 @@ namespace app\seeders;
 use app\models\FrequencyData;
 use app\models\FrequencyGroup;
 use app\models\Units;
-use app\Support\Helpers\AppParams;
+use app\support\helpers\AppParams;
 use Faker\Factory;
 use Faker\Generator;
 use Illuminate\Support\Facades\App;

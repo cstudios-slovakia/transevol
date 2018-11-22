@@ -65,6 +65,12 @@ class DriverCostDatas extends \yii\db\ActiveRecord
         return $this->hasOne(Drivers::className(), ['id' => 'drivers_id']);
     }
 
+    public function getFrequencyData()
+    {
+        return $this->hasOne(FrequencyData::className(), ['id' => 'frequency_datas_id']);
+
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

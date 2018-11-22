@@ -45,7 +45,12 @@ class CompanyDynamicCostsForm extends Model
         if(!isset($this->id)){
             return false;
         }
-        return $dynamicCost = CompanyDynamicCosts::findOne(['id' => $this->id])->delete();
+
+        $dynamicCost = CompanyDynamicCosts::findOne(['id' => $this->id]);
+
+        $deleted = $dynamicCost->delete();
+
+        return $deleted;
     }
 
     public function createDynamicCost()
@@ -68,8 +73,9 @@ class CompanyDynamicCostsForm extends Model
         $companyDynamicCosts->value = $this->value;
         $companyDynamicCosts->cost_name = $this->cost_name;
 
-        $companyDynamicCosts->frequency_datas_id     = FrequencyData::find()->orderBy(new Expression('rand()'))->one()->id;
+        $companyDynamicCosts->frequency_datas_id     = $this->frequency_datas_id;
         $companyDynamicCosts->units_id     = Units::find()->orderBy(new Expression('rand()'))->one()->id;
+        $companyDynamicCosts->updated_at = Carbon::now()->format('Y-m-d H:i:s');
 
         return $companyDynamicCosts->update();
     }

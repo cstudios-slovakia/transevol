@@ -21,7 +21,7 @@ use yii\filters\VerbFilter;
 /**
  * VehiclesController implements the CRUD actions for Vehicles model.
  */
-class VehiclesController extends Controller
+class VehiclesController extends BaseController
 {
     /**
      * {@inheritdoc}
@@ -149,9 +149,15 @@ class VehiclesController extends Controller
         $associatedStaticCosts  = collect($model->vehicleStaticCosts)->keyBy(function ($vehicleStaticCost){
             return $vehicleStaticCost->staticCosts->short_name;
         });
-//        dd($vehicleStaticCostFormModel->load($request->post()));
+        $x = $model->load($request->post());
+        $x1 = $vehicleStaticCostFormModel->load($request->post());
+        $x2 = Model::validateMultiple([$model,$vehicleStaticCostFormModel]);
+        $x3 = $model->load($request->post());
+        dd($this->request(),$vehicleStaticCostFormModel->getErrorSummary(1),$x2);
         if ($model->load($request->post()) && $vehicleStaticCostFormModel->load($request->post()) &&
             Model::validateMultiple([$model,$vehicleStaticCostFormModel]) ) {
+
+
             // TODO company should be linked from logged in user
             $company    = Companies::find()->orderBy(new Expression('rand()'))->one();
 
