@@ -38,16 +38,16 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Companies', 'url' => ['companies/index']],
-            ['label' => 'Zakaznici', 'url' => ['places/index?type=clients']],
-            ['label' => 'Drivers', 'url' => ['drivers/index']],
+            ['label' => 'Dashboard', 'url' => ['/site/index']],
+//            ['label' => 'About', 'url' => ['/site/about']],
+            ['label' => 'Firma', 'url' => ['companies/index']],
+            ['label' => 'Zákazníci', 'url' => ['places/index?type=clients']],
+            ['label' => 'Vodič', 'url' => ['drivers/index']],
             ['label' => 'Vozidlo', 'url' => ['vehicles/index']],
             ['label' => 'Vykladky/Nakladky', 'url' => ['places/index?type=loading']],
             ['label' => 'Servis', 'url' => ['places/index?type=services']],
             ['label' => 'Colnice', 'url' => ['places/index?type=toll']],
-            ['label' => 'PlaceTypes', 'url' => ['place-types/index']],
+            ['label' => 'Typy: miesto', 'url' => ['place-types/index']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (
@@ -76,7 +76,7 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+        <p class="pull-left">&copy; Made by cstudios <?= date('Y') ?></p>
 
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>

@@ -30,6 +30,13 @@ class AppParams extends ArrayHelper {
 
     }
 
+    public static function getAppVersion() : string
+    {
+        $self = self::make();
+
+        return $self::getData()['version'];
+    }
+
     /**
      * Get staticCosts from params
      *
