@@ -11,8 +11,6 @@ use Yii;
  * @property string $place_name
  * @property string $position
  * @property int $companies_id
- * @property string $email
- * @property string $phone
  * @property int $countries_id
  * @property int $addresses_id
  * @property int $place_types_id
@@ -28,8 +26,6 @@ use Yii;
 class Places extends AppBasedActiveRecord
 {
     const SCENARIO_LOADING  = 'loading';
-    const SCENARIO_SERVICE  = 'services';
-    const SCENARIO_CLIENT   = 'clients';
     const SCENARIO_TOLL     = 'toll';
 
     /**
@@ -48,8 +44,6 @@ class Places extends AppBasedActiveRecord
         return [
             [['place_name', 'place_types_id'], 'required'],
             [['position'], 'required', 'on' => [self::SCENARIO_LOADING,self::SCENARIO_TOLL]],
-            [['phone'], 'required', 'on' => [self::SCENARIO_CLIENT,self::SCENARIO_SERVICE]],
-            [['email'], 'required', 'on' => self::SCENARIO_CLIENT],
 
             [['companies_id', 'countries_id', 'addresses_id', 'place_types_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
@@ -72,8 +66,7 @@ class Places extends AppBasedActiveRecord
             'place_name' => 'Place Name',
             'position' => 'Position',
             'companies_id' => 'Companies ID',
-            'email' => 'Email',
-            'phone' => 'Phone',
+
             'countries_id' => 'Countries ID',
             'addresses_id' => 'Addresses ID',
             'place_types_id' => 'Place Types ID',
