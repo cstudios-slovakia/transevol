@@ -4,8 +4,14 @@ return [
     'adminEmail' => 'admin@example.com',
     'version'   => '0.0.2',
     'core'  => [
-        'place_types'   => ['toll','loading','unloading'],
-        'place_collections'     => ['services','clients','loading','toll'],
+        'place_types'   => [
+            'toll'          => 'places',
+            'loading'       => 'places',
+            'unloading'     => 'places',
+            'services'      => 'listings',
+            'clients'       => 'listings',
+        ],
+        'places'     => ['unloading','loading','toll'],
         'static_costs' => [
             'vehicle'   => [
                 // ['non_translated_name','prefix_used_in_db']
@@ -39,6 +45,6 @@ return [
 
             ]
         ],
-
+        'listings'  => ['services','clients'],
     ]
 ];

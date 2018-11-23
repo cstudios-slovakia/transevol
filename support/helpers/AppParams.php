@@ -30,6 +30,16 @@ class AppParams extends ArrayHelper {
 
     }
 
+    public static function getPlaceTypes() : array
+    {
+        return self::coreParam('place_types');
+    }
+
+    public static function getListings() : array
+    {
+        return $core = self::coreParam('listings');
+    }
+
     public static function getAppVersion() : string
     {
         $self = self::make();

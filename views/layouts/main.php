@@ -43,8 +43,8 @@ AppAsset::register($this);
                 'url' => ['#'],
                 'template' => '<a href="{url}" >{label}<i class="fa fa-angle-left pull-right"></i></a>',
                 'items' => [
-                    ['label' => 'Servis', 'url' => ['places/index?type=services']],
-                    ['label' => 'Zákazníci', 'url' => ['places/index?type=clients']],
+                    ['label' => 'Servis', 'url' => ['listings/index?type=services']],
+                    ['label' => 'Zákazníci', 'url' => ['listings/index?type=clients']],
                 ],
             ],
             ['label' => 'Firma', 'url' => ['companies/index']],
