@@ -31,8 +31,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'place_name',
             'position',
-
-
             'countries_id',
             'addresses_id',
             'place_types_id',
@@ -41,3 +39,4 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
 </div>
+

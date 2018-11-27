@@ -75,6 +75,7 @@ $config = [
             'enableUnconfirmedLogin' => true,
             'modelMap' => [
                 'User' => 'app\models\User',
+                'Profile' => 'app\models\User\Profile'
             ],
         ],
     ],
