@@ -14,6 +14,11 @@ $config = [
         '@seeder' => 'app\seeders'
     ],
     'components' => [
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+            // uncomment if you want to cache RBAC items hierarchy
+            // 'cache' => 'cache',
+        ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
