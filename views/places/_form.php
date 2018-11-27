@@ -19,11 +19,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($placesModel, 'position')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($placesModel, 'email')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($placesModel, 'phone')->textInput(['maxlength' => true]) ?>
-
-
     <?= $form->field($addressesModel, 'city')->textInput() ?>
     <?= $form->field($addressesModel, 'street')->textInput() ?>
     <?= $form->field($addressesModel, 'zip')->textInput() ?>

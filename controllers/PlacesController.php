@@ -8,6 +8,7 @@ use app\models\Countries;
 use app\models\PLacesPlaceTypesQuery;
 use app\models\PlaceTypes;
 use app\support\helpers\AppParams;
+use app\support\helpers\LoggedInUserTrait;
 use Yii;
 use app\models\Places;
 use yii\base\Model;
@@ -23,6 +24,7 @@ use yii\filters\VerbFilter;
  */
 class PlacesController extends Controller
 {
+    use LoggedInUserTrait;
     /**
      * {@inheritdoc}
      */
@@ -111,12 +113,8 @@ class PlacesController extends Controller
             $addressesModel->save();
 
             $placesModel->countries_id  = $countries->id;
-            // TODO implement real company owner, which is defined by a logged one user
-            // now simple random finding is enough
-            $company        = Companies::find()
-                ->orderBy(new Expression('rand()'))
-                ->limit(1)
-                ->one();
+
+            $company        = self::loggedInUserCompany();
             $placesModel->companies_id  = $company->id;
 
             $placesModel->link('addresses',$addressesModel);

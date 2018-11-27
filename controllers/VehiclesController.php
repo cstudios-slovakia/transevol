@@ -7,6 +7,7 @@ use app\models\VehicleStaticCost;
 use app\models\VehicleStaticCosts;
 use app\models\VehicleStaticCostsForm;
 use app\support\FrequencyDataBuilder;
+use app\support\helpers\LoggedInUserTrait;
 use app\support\Vehicles\Relations\RelationAssistance;
 use app\support\Vehicles\Relations\VehicleRelationAssistance;
 use Yii;
@@ -23,6 +24,7 @@ use yii\filters\VerbFilter;
  */
 class VehiclesController extends BaseController
 {
+    use LoggedInUserTrait;
     /**
      * {@inheritdoc}
      */
@@ -101,8 +103,8 @@ class VehiclesController extends BaseController
 
         if ($model->load($request->post()) && $vehicleStaticCostFormModel->load($request->post()) &&
             Model::validateMultiple([$model,$vehicleStaticCostFormModel]) ) {
-            // TODO company should be linked from logged in user
-            $company    = Companies::find()->orderBy(new Expression('rand()'))->one();
+
+            $company    = self::loggedInUserCompany();
 
             $model->link('companies', $company);
             $model->save();
@@ -149,25 +151,13 @@ class VehiclesController extends BaseController
         $associatedStaticCosts  = collect($model->vehicleStaticCosts)->keyBy(function ($vehicleStaticCost){
             return $vehicleStaticCost->staticCosts->short_name;
         });
-        $x = $model->load($request->post());
-        $x1 = $vehicleStaticCostFormModel->load($request->post());
-        $x2 = Model::validateMultiple([$model,$vehicleStaticCostFormModel]);
-        $x3 = $model->load($request->post());
-        dd($this->request(),$vehicleStaticCostFormModel->getErrorSummary(1),$x2);
+
         if ($model->load($request->post()) && $vehicleStaticCostFormModel->load($request->post()) &&
             Model::validateMultiple([$model,$vehicleStaticCostFormModel]) ) {
 
-
-            // TODO company should be linked from logged in user
-            $company    = Companies::find()->orderBy(new Expression('rand()'))->one();
-
-            $model->link('companies', $company);
             $model->update();
 
             $staticCostInputs = $request->post()['VehicleStaticCostsForm'];
-
-
-
             foreach ($associatedStaticCosts as $shortName => $vehicleStaticCost){
 
                 $vehicleStaticCost->value   = $staticCostInputs[$shortName];

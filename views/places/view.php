@@ -31,14 +31,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'place_name',
             'position',
-            'companies_id',
-            'email:email',
-            'phone',
+
+
             'countries_id',
             'addresses_id',
             'place_types_id',
-            'created_at',
-            'updated_at',
+
         ],
     ]) ?>
 

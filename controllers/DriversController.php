@@ -7,6 +7,7 @@ use app\models\DriverCostDatas;
 use app\models\DriverForm;
 use app\models\DriverStaticCost;
 use app\models\StaticCost;
+use app\support\helpers\LoggedInUserTrait;
 use Yii;
 use app\models\Drivers;
 use yii\base\Model;
@@ -20,6 +21,7 @@ use yii\filters\VerbFilter;
  */
 class DriversController extends BaseController
 {
+    use LoggedInUserTrait;
     /**
      * {@inheritdoc}
      */
@@ -86,7 +88,9 @@ class DriversController extends BaseController
         Model::validateMultiple([$model, $driverForm])
         ) {
 
-            $model->link('companies',Companies::findOne(['id' => 1]));
+            $company = self::loggedInUserCompany();
+
+            $model->link('companies', $company);
             $model->save();
             foreach (Yii::$app->request->post('StaticCostsForm') as $shortName => $staticCostValue){
                 $staticCost     = StaticCost::findOne(['short_name' => $shortName]);
@@ -131,7 +135,6 @@ class DriversController extends BaseController
             Model::validateMultiple([$model, $driverForm])
         ) {
 
-            $model->link('companies',Companies::findOne(['id' => 1]));
             $model->update();
 
             foreach (Yii::$app->request->post('StaticCosts') as $shortName => $staticCostValue){

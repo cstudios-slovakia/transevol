@@ -47,8 +47,7 @@ class Places extends AppBasedActiveRecord
 
             [['companies_id', 'countries_id', 'addresses_id', 'place_types_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
-            [['place_name', 'position', 'email'], 'string', 'max' => 255],
-            [['phone'], 'string', 'max' => 20],
+            [['place_name', 'position'], 'string', 'max' => 255],
             [['addresses_id'], 'exist', 'skipOnError' => true, 'targetClass' => Addresses::className(), 'targetAttribute' => ['addresses_id' => 'id']],
             [['companies_id'], 'exist', 'skipOnError' => true, 'targetClass' => Companies::className(), 'targetAttribute' => ['companies_id' => 'id']],
             [['countries_id'], 'exist', 'skipOnError' => true, 'targetClass' => Countries::className(), 'targetAttribute' => ['countries_id' => 'id']],

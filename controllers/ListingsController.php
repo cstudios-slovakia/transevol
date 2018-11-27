@@ -7,6 +7,7 @@ use app\models\Companies;
 use app\models\PlaceTypes;
 use app\models\ServiceListingsQuery;
 use app\support\helpers\AppParams;
+use app\support\helpers\LoggedInUserTrait;
 use Yii;
 use app\models\Listings;
 use yii\base\Model;
@@ -21,6 +22,7 @@ use yii\filters\VerbFilter;
  */
 class ListingsController extends BaseController
 {
+    use LoggedInUserTrait;
     /**
      * {@inheritdoc}
      */
@@ -90,12 +92,7 @@ class ListingsController extends BaseController
 
         if ($model->load($input) && $addressesModel->load($input) && Model::validateMultiple([$model,$addressesModel])) {
 
-            // TODO implement real company owner, which is defined by a logged one user
-            // now simple random finding is enough
-            $company        = Companies::find()
-                ->orderBy(new Expression('rand()'))
-                ->limit(1)
-                ->one();
+            $company        = self::loggedInUserCompany();
             $model->companies_id  = $company->id;
             $model->countries_id  = $addressesModel->countries_id;
 
