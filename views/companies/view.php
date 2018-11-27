@@ -28,16 +28,31 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
+//            'id',
             'company_name',
-            'email:email',
+            'email',
             'phone',
             'ico',
             'dic',
             'icdph',
-            'created_at',
-            'updated_at',
+//            'created_at',
+//            'updated_at',
         ],
     ]) ?>
 
+    <h4>Company Static Costs</h4>
+    <?php
+    echo \yii\widgets\ListView::widget([
+        'dataProvider' => $costDatasDataProvider,
+        'itemView' => '@app/views/layouts/default/common/cost_data_list_record',
+    ]);
+    ?>
+
+    <h4>Company Dynamic Costs</h4>
+    <?php
+    echo \yii\widgets\ListView::widget([
+        'dataProvider' => $dynamicCostDataProvider,
+        'itemView' => '@app/views/layouts/default/common/dynamic_cost_data_list_record',
+    ]);
+    ?>
 </div>

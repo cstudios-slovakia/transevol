@@ -7,10 +7,12 @@ use app\models\CompanyDynamicCosts;
 use app\models\CompanyDynamicCostsForm;
 use app\models\CompanyDynamicOtherCosts;
 use app\models\CompanyDynamicPersonalCosts;
+use app\models\CompanyOwned;
 use app\models\CompanyStaticCostQuery;
 use app\models\CompanyStaticCostsForm;
 use app\models\FrequencyData;
 use app\models\Units;
+use app\support\helpers\LoggedInUserTrait;
 use Carbon\Carbon;
 use Yii;
 use app\models\Companies;
@@ -27,6 +29,7 @@ use yii\web\Response;
  */
 class CompaniesController extends BaseController
 {
+    use LoggedInUserTrait;
     /**
      * {@inheritdoc}
      */
@@ -42,31 +45,50 @@ class CompaniesController extends BaseController
         ];
     }
 
-    /**
-     * Lists all Companies models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Companies::find(),
-        ]);
-
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
-        ]);
-    }
+//    /**
+//     * Lists all Companies models.
+//     * @return mixed
+//     */
+//    public function actionIndex()
+//    {
+//        $dataProvider = new ActiveDataProvider([
+//            'query' => CompanyOwned::find(),
+//        ]);
+//
+//        return $this->render('index', [
+//            'dataProvider' => $dataProvider,
+//        ]);
+//    }
 
     /**
      * Displays a single Companies model.
-     * @param integer $id
+//     * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView()
     {
+        $company = $this->findModel();
+
+//        dd($company->getRelation('companyCostDatas')->all());
+
+        $costDatasDataProvider = new ActiveDataProvider([
+            'query' => $company->getRelation('companyCostDatas'),
+//            'pagination' => [
+//                'pageSize' => 20,
+//            ],
+        ]);
+
+        $dynamicCostDataProvider = new ActiveDataProvider([
+            'query' => $company->getRelation('companyDynamicCosts'),
+//            'pagination' => [
+//                'pageSize' => 20,
+//            ],
+        ]);
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $company,
+            'costDatasDataProvider' => $costDatasDataProvider,
+            'dynamicCostDataProvider' => $dynamicCostDataProvider,
         ]);
     }
 
@@ -77,25 +99,40 @@ class CompaniesController extends BaseController
      */
     public function actionCreate()
     {
+        $company = $this->findModel();
+
+        if($company && $company->id){
+            return $this->redirect(['view']);
+        }
+
         $company = new Companies();
         $companyStaticCostsForm     = new CompanyStaticCostsForm();
 
         $companyStaticCosts = collect(CompanyStaticCostQuery::find()->all())->keyBy('short_name');
 
-        if ($company->load($this->request()->post()) && $companyStaticCostsForm->load($this->request()->post()) &&
+        if ($company->load($this->request()->post()) && $companyStaticCostsForm->load($this->request()->post(),'StaticCostsForm') &&
         Model::validateMultiple([$company, $companyStaticCostsForm])) {
-
             $company->save();
 
+            $user = Yii::$app->user->identity;
+            $user->companies_id = $company->id;
+            $user->save();
+
             $companyStaticCosts->each(function($companyStaticCost,$shortName) use ($companyStaticCostsForm, $company){
+                $staticCostInput = $companyStaticCostsForm->{$shortName};
+
                 $companyStaticCostData  = new CompanyCostDatas();
-                $companyStaticCostData->value   = $companyStaticCostsForm->{$shortName};
+                $companyStaticCostData->value   = $staticCostInput['value'];
                 $companyStaticCostData->static_costs_id     = $companyStaticCost->id;
+                $companyStaticCostData->frequency_datas_id     = $staticCostInput['frequency_datas_id'];
                 $companyStaticCostData->link('companies',$company);
                 $companyStaticCostData->save();
             });
 
-            return $this->redirect(['view', 'id' => $company->id]);
+
+
+            return $this->redirect(['view']);
+
         }
 
         return $this->render('create', [
@@ -112,14 +149,12 @@ class CompaniesController extends BaseController
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate()
     {
-        $company = $this->findModel($id);
+        $company = $this->findModel();
         $companyStaticCostsForm     = new CompanyStaticCostsForm();
 
-//        $companyStaticCosts     = collect($company->companyCostDatas)->keyBy(function ($companyCostData){
-//            return $companyCostData->staticCosts->short_name;
-//        });
+
 
         $companyStaticCosts = collect(CompanyStaticCostQuery::find()->all())->keyBy('short_name');
 
@@ -137,18 +172,13 @@ class CompaniesController extends BaseController
         }
 
 
-//        $loadable = $companyStaticCosts->transform(function($companyStaticCost){
-//            return $companyStaticCost->value;
-//        })->toArray();
 
         $loadable = $companyStaticCosts->toArray();
         $companyStaticCostsForm->load($loadable,'');
 //        dd($companyStaticCostsForm);
         $dynPersonal = $company->companyPersonalDynamicCosts;
         $dynOther = $company->companyOtherDynamicCosts;
-//        dd($company->companyPersonalDynamicCosts);
-//        dd($company->companyOtherDynamicCosts);
-//        dd($dynPersonal, $dynOther);
+
 
         return $this->render('update', [
             'model' => $company,
@@ -181,11 +211,16 @@ class CompaniesController extends BaseController
      * @return Companies the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel()
     {
-        if (($model = Companies::findOne($id)) !== null) {
-            return $model;
-        }
+//        if (($model = Companies::findOne($id)) !== null) {
+//            return $model;
+//        }
+//        $model = CompanyOwned::find()->one();
+        $model = self::loggedInUserCompany();
+
+        // TODO user can NOT access other company other than own.
+        return $model;
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }

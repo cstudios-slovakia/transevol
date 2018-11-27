@@ -124,4 +124,9 @@ class Companies extends AppBasedActiveRecord
     {
         return $this->hasMany(Vehicles::className(), ['companies_id' => 'id']);
     }
+
+    public function getUser()
+    {
+        return $this->hasMany(User::className(),['companies_id' => 'id']);
+    }
 }

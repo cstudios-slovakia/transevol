@@ -14,11 +14,11 @@ $config = [
 
     ],
     'components' => [
-        'authManager' => [
-            'class' => 'yii\rbac\DbManager',
-            // uncomment if you want to cache RBAC items hierarchy
-            // 'cache' => 'cache',
-        ],
+//        'authManager' => [
+//            'class' => 'yii\rbac\DbManager',
+//            // uncomment if you want to cache RBAC items hierarchy
+//            // 'cache' => 'cache',
+//        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'cRujEtMzbPR_FKHxPbhZ0ovrkGPMT0FD',
@@ -26,10 +26,11 @@ $config = [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
-        'user' => [
-            'identityClass' => 'app\models\User',
-            'enableAutoLogin' => true,
-        ],
+//        'user' => [
+//            'identityClass' => 'app\models\User',
+//            'enableAutoLogin' => true,
+//        ],
+
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
@@ -57,7 +58,25 @@ $config = [
             'rules' => [
             ],
         ],
+        'view' => [
+            'theme' => [
+                'pathMap' => [
+                    '@dektrium/user/views' => '@app/views/user'
+                ],
+            ],
+        ],
 
+    ],
+    'modules'   => [
+        'rbac' => 'dektrium\rbac\RbacWebModule',
+        'user' => [
+            'class' => 'dektrium\user\Module',
+            'enableConfirmation' => false,
+            'enableUnconfirmedLogin' => true,
+            'modelMap' => [
+                'User' => 'app\models\User',
+            ],
+        ],
     ],
     'params' => $params,
 ];

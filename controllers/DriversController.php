@@ -81,12 +81,6 @@ class DriversController extends BaseController
         $model = new Drivers();
         $driverForm = new DriverForm();
 
-//        $x = $model->load(Yii::$app->request->post(),'Drivers');
-//        $v = $driverForm->load(Yii::$app->request->post(),'StaticCostsForm');
-//        $c = Model::validateMultiple([$model, $driverForm]);
-//        $q = $model->getErrorSummary(1);
-//        $k = $driverForm->getErrorSummary(1);
-//        dd($x, $v, $c, $q, $k, $this->request()->post());
 
         if ($model->load(Yii::$app->request->post(),'Drivers') && $driverForm->load(Yii::$app->request->post(),'StaticCostsForm') &&
         Model::validateMultiple([$model, $driverForm])

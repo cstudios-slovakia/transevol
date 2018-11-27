@@ -72,4 +72,12 @@ class CompanyCostDatas extends \yii\db\ActiveRecord
     {
         return $this->hasOne(StaticCost::className(), ['id' => 'static_costs_id']);
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFrequencyData()
+    {
+        return $this->hasOne(FrequencyData::className(), ['id' => 'frequency_datas_id']);
+    }
 }

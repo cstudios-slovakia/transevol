@@ -47,7 +47,7 @@ AppAsset::register($this);
                     ['label' => 'Zákazníci', 'url' => ['listings/index?type=clients']],
                 ],
             ],
-            ['label' => 'Firma', 'url' => ['companies/index']],
+            ['label' => 'Firma', 'url' => ['companies/view']],
             ['label' => 'Vodič', 'url' => ['drivers/index']],
             ['label' => 'Vozidlo', 'url' => ['vehicles/index']],
             ['label' => 'Vykladky/Nakladky', 'url' => ['places/index?type=loading']],
@@ -59,18 +59,32 @@ AppAsset::register($this);
                     ['label' => 'Typy: miesto', 'url' => ['place-types/index']],
                 ],
             ],
-            Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
-            ) : (
-                '<li>'
-                . Html::beginForm(['/site/logout'], 'post')
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
-            )
+            [
+                'label' => 'AUTH',
+                'url'   => ['#'],
+                'template' => '<a href="{url}" >{label}<i class="fa fa-angle-left pull-right"></i></a>',
+                'items' => [
+                    Yii::$app->user->isGuest ?
+                        ['label' => 'Sign in', 'url' => ['/user/security/login']] :
+                        ['label' => 'Sign out (' . Yii::$app->user->identity->username . ')',
+                            'url' => ['/user/security/logout'],
+                            'linkOptions' => ['data-method' => 'post']],
+                    ['label' => 'Register', 'url' => ['/user/registration/register'], 'visible' => Yii::$app->user->isGuest]
+                ],
+
+            ],
+//            Yii::$app->user->isGuest ? (
+//                ['label' => 'Login', 'url' => ['/site/login']]
+//            ) : (
+//                '<li>'
+//                . Html::beginForm(['/site/logout'], 'post')
+//                . Html::submitButton(
+//                    'Logout (' . Yii::$app->user->identity->username . ')',
+//                    ['class' => 'btn btn-link logout']
+//                )
+//                . Html::endForm()
+//                . '</li>'
+//            )
         ],
     ]);
     NavBar::end();
