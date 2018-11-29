@@ -30,20 +30,7 @@ use yii\web\Response;
 class CompaniesController extends BaseController
 {
     use LoggedInUserTrait;
-    /**
-     * {@inheritdoc}
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
+
 
 //    /**
 //     * Lists all Companies models.

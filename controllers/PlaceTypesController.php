@@ -12,22 +12,9 @@ use yii\filters\VerbFilter;
 /**
  * PlaceTypesController implements the CRUD actions for PlaceTypes model.
  */
-class PlaceTypesController extends Controller
+class PlaceTypesController extends BaseController
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
+
 
     /**
      * Lists all PlaceTypes models.

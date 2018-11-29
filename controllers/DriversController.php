@@ -22,20 +22,7 @@ use yii\filters\VerbFilter;
 class DriversController extends BaseController
 {
     use LoggedInUserTrait;
-    /**
-     * {@inheritdoc}
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
+
 
     /**
      * Lists all Drivers models.

@@ -42,10 +42,10 @@ $config = [
             'useFileTransport' => false,
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
-                'host' => 'smtp.mailtrap.io',
-                'username' => 'ba65f163dccca8',
-                'password' => '48daf378661c7a',
-                'port' => '2525',
+                'host' => env('MAIL_HOST'),
+                'username' => env('MAIL_USERNAME'),
+                'password' => env('MAIL_PASSWORD'),
+                'port' => env('MAIL_PORT'),
             ],
         ],
         'log' => [
@@ -77,18 +77,23 @@ $config = [
 
     ],
     'modules'   => [
-//        'rbac' => 'dektrium\rbac\RbacWebModule',
+        'rbac' => 'dektrium\rbac\RbacWebModule',
         'user' => [
             'class' => 'dektrium\user\Module',
             'enableConfirmation' => false,
             'enableUnconfirmedLogin' => true,
             'modelMap' => [
                 'User' => 'app\models\User',
-                'Profile' => 'app\models\User\Profile'
+                'Profile' => 'app\models\userOverrides\Profile',
+                'RegistrationForm'  => 'app\models\userOverrides\RegistrationForm'
             ],
+            'controllerMap' => [
+                'registration' => 'app\controllers\RegistrationController'
+            ]
         ],
     ],
     'params' => $params,
+
 ];
 
 if (YII_ENV_DEV) {

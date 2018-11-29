@@ -12,22 +12,9 @@ use yii\filters\VerbFilter;
 /**
  * EmissionClassesController implements the CRUD actions for EmissionClasses model.
  */
-class EmissionClassesController extends Controller
+class EmissionClassesController extends BaseController
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
+
 
     /**
      * Lists all EmissionClasses models.

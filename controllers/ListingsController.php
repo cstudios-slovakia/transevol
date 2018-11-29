@@ -23,20 +23,6 @@ use yii\filters\VerbFilter;
 class ListingsController extends BaseController
 {
     use LoggedInUserTrait;
-    /**
-     * {@inheritdoc}
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
 
     /**
      * Lists all Listings models.

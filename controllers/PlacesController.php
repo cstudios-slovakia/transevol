@@ -22,23 +22,9 @@ use yii\filters\VerbFilter;
 /**
  * PlacesController implements the CRUD actions for Places model.
  */
-class PlacesController extends Controller
+class PlacesController extends BaseController
 {
     use LoggedInUserTrait;
-    /**
-     * {@inheritdoc}
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
 
 
     /**

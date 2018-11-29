@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models\User;
+namespace app\models\userOverrides;
 
 use dektrium\user\models\Profile as BaseProfile;
 

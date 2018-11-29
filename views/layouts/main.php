@@ -28,6 +28,10 @@ AppAsset::register($this);
 
 <div class="wrap">
     <?php
+
+    $identity = Yii::$app->user->getIdentity();
+
+
     NavBar::begin([
         'brandLabel' => Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
@@ -35,19 +39,15 @@ AppAsset::register($this);
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => [
-            ['label' => 'Dashboard', 'url' => ['/site/index']],
+
+    $allowedCompanyNavigationItems = [
             ['label' => 'Adresáre',
-                'url' => ['#'],
-                'template' => '<a href="{url}" >{label}<i class="fa fa-angle-left pull-right"></i></a>',
-                'items' => [
-                    ['label' => 'Servis', 'url' => ['listings/index?type=services']],
-                    ['label' => 'Zákazníci', 'url' => ['listings/index?type=clients']],
-                ],
-            ],
-            ['label' => 'Firma', 'url' => ['companies/view']],
+            'url' => ['#'],
+            'template' => '<a href="{url}" >{label}<i class="fa fa-angle-left pull-right"></i></a>',
+            'items' => [
+                ['label' => 'Servis', 'url' => ['listings/index?type=services']],
+                ['label' => 'Zákazníci', 'url' => ['listings/index?type=clients']],
+            ]],
             ['label' => 'Vodič', 'url' => ['drivers/index']],
             ['label' => 'Vozidlo', 'url' => ['vehicles/index']],
             ['label' => 'Vykladky/Nakladky', 'url' => ['places/index?type=loading']],
@@ -59,33 +59,37 @@ AppAsset::register($this);
                     ['label' => 'Typy: miesto', 'url' => ['place-types/index']],
                 ],
             ],
-            [
-                'label' => 'AUTH',
-                'url'   => ['#'],
-                'template' => '<a href="{url}" >{label}<i class="fa fa-angle-left pull-right"></i></a>',
-                'items' => [
-                    Yii::$app->user->isGuest ?
-                        ['label' => 'Sign in', 'url' => ['/user/security/login']] :
-                        ['label' => 'Sign out (' . Yii::$app->user->identity->username . ')',
-                            'url' => ['/user/security/logout'],
-                            'linkOptions' => ['data-method' => 'post']],
-                    ['label' => 'Register', 'url' => ['/user/registration/register'], 'visible' => Yii::$app->user->isGuest]
-                ],
 
-            ],
-//            Yii::$app->user->isGuest ? (
-//                ['label' => 'Login', 'url' => ['/site/login']]
-//            ) : (
-//                '<li>'
-//                . Html::beginForm(['/site/logout'], 'post')
-//                . Html::submitButton(
-//                    'Logout (' . Yii::$app->user->identity->username . ')',
-//                    ['class' => 'btn btn-link logout']
-//                )
-//                . Html::endForm()
-//                . '</li>'
-//            )
-        ],
+    ];
+
+    $companyFreeNavigationItems = [
+        ['label' => 'Dashboard', 'url' => ['/site/index']],
+        ['label' => 'Moja Firma', 'url' => $identity && $identity->company ? ['companies/view'] : ['companies/create']],
+
+    ];
+
+    $authNavigationItems = [
+        ['label' => 'AUTH',
+            'url'   => ['#'],
+            'template' => '<a href="{url}" >{label}<i class="fa fa-angle-left pull-right"></i></a>',
+            'items' => [
+                Yii::$app->user->isGuest ?
+                    ['label' => 'Sign in', 'url' => ['/user/security/login']] :
+                    ['label' => 'Sign out (' . Yii::$app->user->identity->username . ')',
+                        'url' => ['/user/security/logout'],
+                        'linkOptions' => ['data-method' => 'post']],
+                ['label' => 'Register', 'url' => ['/user/registration/register'], 'visible' => Yii::$app->user->isGuest]
+            ]],
+
+    ];
+
+    $navigationItems = array_merge($companyFreeNavigationItems, $identity && $identity->company ? $allowedCompanyNavigationItems : [], $authNavigationItems);
+
+//    dd($navigationItems);
+
+    echo Nav::widget([
+        'options' => ['class' => 'navbar-nav navbar-right'],
+        'items' => $navigationItems,
     ]);
     NavBar::end();
     ?>
@@ -94,6 +98,11 @@ AppAsset::register($this);
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
+        <?php
+//        $x = \yii\helpers\Url::toRoute(['/company/create'],true);
+//        dd($x);
+
+        ?>
         <?= Alert::widget() ?>
         <?= $content ?>
     </div>
