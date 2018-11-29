@@ -39,7 +39,14 @@ $config = [
             // send all mails to a file by default. You have to set
             // 'useFileTransport' to false and configure a transport
             // for the mailer to send real emails.
-            'useFileTransport' => true,
+            'useFileTransport' => false,
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'smtp.mailtrap.io',
+                'username' => 'ba65f163dccca8',
+                'password' => '48daf378661c7a',
+                'port' => '2525',
+            ],
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -56,6 +63,8 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+//                'module:w+/controller:w+/action:w+' => '//',
+//                'module:w+/controller:w+/action:w+/id:d+' => '//',
             ],
         ],
         'view' => [
@@ -68,7 +77,7 @@ $config = [
 
     ],
     'modules'   => [
-        'rbac' => 'dektrium\rbac\RbacWebModule',
+//        'rbac' => 'dektrium\rbac\RbacWebModule',
         'user' => [
             'class' => 'dektrium\user\Module',
             'enableConfirmation' => false,
