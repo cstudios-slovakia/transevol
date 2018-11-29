@@ -13,10 +13,10 @@ $this->title = 'My Yii Application';
         Demo runs on: <strong>It is a dev-server!</strong>
         </p>
         <div class="alert alert-danger">
-            NOW: Create / Update records are under massive construction. Some section may have throw errors.
+            NOW: Testing authorization flow. Adding new companyAdmin, register, login and password reset.
         </div>
         <div class="alert alert-info">
-            NextStep: Move address listings (zakaznici/servis zoznamy) into another block/DB-tables, now: implemented into Places (colnica/nakl./vykl.)
+            NextStep: Implement logic, that CompanyAdmin can add CompanyUser
         </div>
     </div>
 

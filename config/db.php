@@ -3,7 +3,7 @@
 // TODO make something more reusable for LocalDEV
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host='.env('DB_HOST').';dbname='.env('DB_NAME').'',
+    'dsn' => 'mysql:host='.env('DB_HOST').';port='.env('DB_PORT').';dbname='.env('DB_NAME').'',
     'username' => env('DB_USERNAME','root'),
     'password' => env('DB_PASSWORD',''),
     'charset' => env('DB_CHARSET','utf8'),
