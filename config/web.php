@@ -63,8 +63,9 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-//                'module:w+/controller:w+/action:w+' => '//',
-//                'module:w+/controller:w+/action:w+/id:d+' => '//',
+//                'company-user-register/registration/index' => 'company-user-register/index',
+//                '<controller:(company-user-register)>/index' => 'company-user-register/index',
+//                'post/<id:\d+>' => 'post/view',
             ],
         ],
         'view' => [
@@ -89,6 +90,14 @@ $config = [
             ],
             'controllerMap' => [
                 'registration' => 'app\controllers\RegistrationController'
+            ]
+        ],
+        'company-user-register' => [
+            'class' => 'dektrium\user\Module',
+            'enableConfirmation' => false,
+            'enableUnconfirmedLogin' => true,
+            'controllerMap' => [
+                'registration' => 'app\controllers\CompanyUserRegisterController'
             ]
         ],
     ],
