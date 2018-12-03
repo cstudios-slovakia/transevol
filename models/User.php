@@ -2,20 +2,16 @@
 
 namespace app\models;
 
-use yii\base\NotSupportedException;
+use app\support\helpers\LoggedInUserTrait;
 use yii\behaviors\TimestampBehavior;
-use yii\db\ActiveRecord;
-use yii\web\IdentityInterface;
+
 use dektrium\user\models\User as BaseUser;
 
 class User extends BaseUser
 {
-//    public $id;
-//    public $username;
-//    public $email;
-//    public $password_hash;
-//    public $authKey;
-//    public $accessToken;
+
+
+
 
     public static function tableName()
     {
@@ -44,5 +40,16 @@ class User extends BaseUser
         return $this->hasOne(Companies::className(),['id' => 'companies_id']);
     }
 
+//    public function beforeValidate()
+//    {
+//        if ($this->getScenario() === self::SCENARIO_REGISTRATION_LEVEL_USER){
+//
+//            $associatedCompany = self::loggedInUserCompany();
+//
+//            $this->setAttribute('companies_id', $associatedCompany->id);
+//        }
+//
+//        return parent::beforeValidate();
+//    }
 
 }

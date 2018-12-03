@@ -25,7 +25,9 @@ class RegistrationController extends BaseRegistrationController
         $this->trigger(self::EVENT_BEFORE_REGISTER, $event);
 
         $this->performAjaxValidation($model);
+        $model->load(\Yii::$app->request->post());
 
+        dd($model);
         if ($model->load(\Yii::$app->request->post()) && $model->register()) {
             $this->trigger(self::EVENT_AFTER_REGISTER, $event);
 

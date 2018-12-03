@@ -10,10 +10,15 @@ use yii\rbac\Assignment;
 class RegistrationForm extends BaseRegistrationForm
 {
 
+
+
+    const SCENARIO_REGISTRATION_LEVEL = 'companyAdmin';
+
+
     /**
      * @var null|User
      */
-    private $registeredUser = null;
+    protected $registeredUser = null;
 
     /**
      * @inheritdoc
@@ -28,6 +33,9 @@ class RegistrationForm extends BaseRegistrationForm
         $user = \Yii::createObject(User::className());
         $user->setScenario('register');
         $this->loadAttributes($user);
+        if ($this->getScenario() === CompanyUserRegistrationForm::SCENARIO_REGISTRATION_LEVEL){
+            $this->associateCompany($user);
+        }
 
         if (!$user->register()) {
             return false;
@@ -35,7 +43,7 @@ class RegistrationForm extends BaseRegistrationForm
 
         $this->registeredUser = $user;
 
-        $this->addRoleToUser('companyAdmin', $user);
+        $this->addRoleToUser(static::SCENARIO_REGISTRATION_LEVEL, $user);
 
         \Yii::$app->session->setFlash(
             'info',
@@ -48,7 +56,7 @@ class RegistrationForm extends BaseRegistrationForm
         return true;
     }
 
-    private function addRoleToUser(string $roleName, User $user) : Assignment
+    protected function addRoleToUser(string $roleName, User $user) : Assignment
     {
         $auth = \Yii::$app->authManager;
 
@@ -65,6 +73,7 @@ class RegistrationForm extends BaseRegistrationForm
 
     }
 
+
     /**
      * @return User|null
      */
@@ -72,6 +81,9 @@ class RegistrationForm extends BaseRegistrationForm
     {
         return $this->registeredUser;
     }
+
+    protected function associateCompany($user){}
+
 }
 
 ?>

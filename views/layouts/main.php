@@ -57,14 +57,16 @@ AppAsset::register($this);
                 'template' => '<a href="{url}" >{label}<i class="fa fa-angle-left pull-right"></i></a>',
                 'items' => [
                     ['label' => 'Typy: miesto', 'url' => ['place-types/index']],
+                    ['label' => 'Pridat company USER', 'url' => ['company-user-register/registration/register'],'visible' => Yii::$app->user->can('companyAdmin')],
+
                 ],
             ],
-
     ];
 
     $companyFreeNavigationItems = [
         ['label' => 'Dashboard', 'url' => ['/site/index']],
         ['label' => 'Moja Firma', 'url' => $identity && $identity->company ? ['companies/view'] : ['companies/create']],
+
 
     ];
 

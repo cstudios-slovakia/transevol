@@ -96,9 +96,15 @@ $config = [
             'class' => 'dektrium\user\Module',
             'enableConfirmation' => false,
             'enableUnconfirmedLogin' => true,
+
             'controllerMap' => [
                 'registration' => 'app\controllers\CompanyUserRegisterController'
-            ]
+            ],
+            'modelMap' => [
+                'User' => 'app\models\User',
+                'RegistrationForm'  => 'app\models\userOverrides\CompanyUserRegistrationForm'
+            ],
+
         ],
     ],
     'params' => $params,

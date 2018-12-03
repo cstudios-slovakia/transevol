@@ -3,31 +3,35 @@
 namespace app\controllers;
 
 use app\models\CompanyOwned;
-use app\models\RegistrationForm;
-use app\models\userOverrides\CompanyUserRegistrationForm;
 use Yii;
 use app\models\User;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
+use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-
-use dektrium\user\controllers\RegistrationController as BaseRegistrationController;
+use yii\filters\VerbFilter;
 
 /**
- * CompanyUserRegisterController implements the CRUD actions for User model.
+ * CompanyUsersController implements the CRUD actions for User model.
  */
-class CompanyUserRegisterController extends BaseRegistrationController
+class CompanyUsersController extends Controller
 {
-
-    /** @inheritdoc */
+    /**
+     * {@inheritdoc}
+     */
     public function behaviors()
     {
         return [
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
-                    ['allow' => true, 'actions' => ['index'], 'roles' => ['@']],
-                    ['allow' => true, 'actions' => ['register'], 'roles' => ['companyAdmin']],
+                    ['allow' => true, 'actions' => ['index'], 'roles' => ['companyAdmin']],
                 ],
             ],
         ];
@@ -39,10 +43,10 @@ class CompanyUserRegisterController extends BaseRegistrationController
      */
     public function actionIndex()
     {
-
+        $company = \Yii::$app->user->identity->company;
 
         $dataProvider = new ActiveDataProvider([
-            'query' => CompanyOwned::find()->user,
+            'query' => User::find()->where(['companies_id' => $company->id]),
         ]);
 
         return $this->render('index', [
@@ -58,63 +62,28 @@ class CompanyUserRegisterController extends BaseRegistrationController
      */
     public function actionView($id)
     {
-        dd($id);
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
     }
 
     /**
-     * @inheritdoc
+     * Creates a new User model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
      */
-    public function actionRegister()
+    public function actionCreate()
     {
+        $model = new User();
 
-        if (!$this->module->enableRegistration) {
-            throw new NotFoundHttpException();
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        /** @var CompanyUserRegistrationForm $model */
-        $model = \Yii::createObject(CompanyUserRegistrationForm::className());
-        $event = $this->getFormEvent($model);
-//        dd($model->scenarios());
-        $model->setScenario('companyUser');
-
-        $this->trigger(self::EVENT_BEFORE_REGISTER, $event);
-
-        $this->performAjaxValidation($model);
-         $model->load(\Yii::$app->request->post());
-
-//        dd($model,\Yii::$app->request->post());
-
-
-        if ($model->load(\Yii::$app->request->post()) && $model->register()) {
-            $this->trigger(self::EVENT_AFTER_REGISTER, $event);
-
-            $registeredUser = $model->getRegisteredUser();
-
-
-
-            \Yii::$app->session->setFlash(
-                'info',
-                \Yii::t(
-                    'user',
-                    'User was added into company!'
-                )
-            );
-
-            return $this->redirect(['view', 'id' => $registeredUser->id]);
-
-        }
-
-        return $this->render('./../company-user-register/create', [
+        return $this->render('create', [
             'model' => $model,
         ]);
-
-
-
     }
-
 
     /**
      * Updates an existing User model.
@@ -165,6 +134,4 @@ class CompanyUserRegisterController extends BaseRegistrationController
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
-
-
 }
