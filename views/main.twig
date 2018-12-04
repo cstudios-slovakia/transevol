@@ -1,0 +1,42 @@
+{{ register_asset_bundle('app/assets/AppAsset') }}
+    {{   void(this.beginPage()) }}
+
+{{ set(this,'title','titleName') }}
+<!DOCTYPE html>
+<html lang="{{ app.language }}">
+<head>
+        <meta charset="{{ app.charset }}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {#<title>{{ title | raw }}</title>#}
+        <title>
+
+        </title>
+        {% block head %}
+                <style type="text/css">
+                        .important { color: #00aa00; }
+                </style>
+        {% endblock head %}
+        {{ html.csrfMetaTags | raw }}
+        {{   void(this.head) }}
+</head>
+<body>
+{{   void(this.beginBody()) }}
+{#<section id="header">#}
+        {#dffggf#}
+        {# header content #}
+{#</section>#}
+
+{{  content | raw }}
+{% block content %}
+
+{% endblock %}
+<footer class="footer">
+        <div class="container">
+                <p>xx</p>
+                {# footer content #}
+        </div>
+</footer>
+{{   void(this.endBody()) }}
+</body>
+</html>
+{{   void(this.endPage()) }}

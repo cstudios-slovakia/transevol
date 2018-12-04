@@ -109,4 +109,18 @@ class SiteController extends BaseController
 
         return $this->render('about');
     }
+
+    public function actionAbout()
+    {
+
+        $oneModel   = Vehicles::findOne(['id' => 1]);
+
+//        var_dump($oneModel);
+//        die();
+//        dd($oneModel);
+
+        return $this->render('about.twig',[
+            'model' => $oneModel
+        ]);
+    }
 }

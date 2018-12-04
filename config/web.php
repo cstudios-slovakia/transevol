@@ -74,9 +74,33 @@ $config = [
                     '@dektrium/user/views' => '@app/views/user'
                 ],
             ],
+            'class' => 'yii\web\View',
+            'defaultExtension' => 'twig',
+            'renderers' => [
+                'twig' => [
+                    'class' => 'yii\twig\ViewRenderer',
+                    'cachePath' => false,
+//                    'cachePath' => '@runtime/Twig/cache',
+                    // Array of twig options:
+                    'options' => [
+                        'auto_reload' => true,
+                    ],
+                    'globals' => [
+                        'html' => ['class' => '\yii\helpers\Html'],
+                        'Url'   => ['class' => '\yii\helpers\Url']
+                    ],
+                    'uses' => ['yii\bootstrap'],
+
+                ],
+                // ...
+            ],
         ],
 
+
     ],
+
+    'layout' => false,
+//    'layout' => '@app/views/main.twig',
     'modules'   => [
         'rbac' => 'dektrium\rbac\RbacWebModule',
         'user' => [
