@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\CompanyOwned;
 use app\models\RegistrationForm;
 use app\models\userOverrides\CompanyUserRegistrationForm;
+use app\support\helpers\LoggedInUserTrait;
 use Yii;
 use app\models\User;
 use yii\data\ActiveDataProvider;
@@ -19,6 +20,8 @@ use dektrium\user\controllers\RegistrationController as BaseRegistrationControll
 class CompanyUserRegisterController extends BaseRegistrationController
 {
 
+    use LoggedInUserTrait;
+
     /** @inheritdoc */
     public function behaviors()
     {
@@ -26,8 +29,7 @@ class CompanyUserRegisterController extends BaseRegistrationController
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
-                    ['allow' => true, 'actions' => ['index'], 'roles' => ['@']],
-                    ['allow' => true, 'actions' => ['register'], 'roles' => ['companyAdmin']],
+                    ['allow' => true, 'actions' => ['index','register','view'], 'roles' => ['companyAdmin']],
                 ],
             ],
         ];
@@ -42,7 +44,7 @@ class CompanyUserRegisterController extends BaseRegistrationController
 
 
         $dataProvider = new ActiveDataProvider([
-            'query' => CompanyOwned::find()->user,
+            'query' => User::find()->where(['companies_id' => self::loggedInUserCompany()->id]),
         ]);
 
         return $this->render('index', [
@@ -58,7 +60,7 @@ class CompanyUserRegisterController extends BaseRegistrationController
      */
     public function actionView($id)
     {
-        dd($id);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -136,19 +138,6 @@ class CompanyUserRegisterController extends BaseRegistrationController
         ]);
     }
 
-    /**
-     * Deletes an existing User model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
 
     /**
      * Finds the User model based on its primary key value.
@@ -160,6 +149,11 @@ class CompanyUserRegisterController extends BaseRegistrationController
     protected function findModel($id)
     {
         if (($model = User::findOne($id)) !== null) {
+
+            if($model->companies_id !== self::loggedInUserCompany()->id){
+                throw new \Exception('Company is not the same.');
+            }
+
             return $model;
         }
 

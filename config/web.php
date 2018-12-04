@@ -89,7 +89,7 @@ $config = [
                 'RegistrationForm'  => 'app\models\userOverrides\RegistrationForm'
             ],
             'controllerMap' => [
-                'registration' => 'app\controllers\RegistrationController'
+                'registration' => 'app\controllers\RegistrationController',
             ]
         ],
         'company-user-register' => [
@@ -98,7 +98,9 @@ $config = [
             'enableUnconfirmedLogin' => true,
 
             'controllerMap' => [
-                'registration' => 'app\controllers\CompanyUserRegisterController'
+                'list' => 'app\controllers\CompanyUserRegisterController',
+                'registration' => 'app\controllers\CompanyUserRegisterController',
+                'profile' => 'app\controllers\CompanyUserProfileController',
             ],
             'modelMap' => [
                 'User' => 'app\models\User',
