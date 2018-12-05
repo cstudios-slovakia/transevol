@@ -10,6 +10,8 @@ use app\support\Listings\Relations\PlaceTypeRelationAssistance;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
+<?php $this->beginContent('@app/views/layouts/default/common/forms/base_form.php'); ?>
+
 <div class="listings-form">
 
     <?php $form = ActiveForm::begin(); ?>
@@ -36,3 +38,7 @@ use app\support\Listings\Relations\PlaceTypeRelationAssistance;
     <?php ActiveForm::end(); ?>
 
 </div>
+
+
+<?php $this->endContent(); ?>
+

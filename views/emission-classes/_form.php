@@ -8,6 +8,8 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
+<?php $this->beginContent('@app/views/layouts/default/common/forms/base_form.php'); ?>
+
 <div class="emission-classes-form">
 
     <?php $form = ActiveForm::begin(); ?>
@@ -21,3 +23,7 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 
 </div>
+
+<?php $this->endContent(); ?>
+
+

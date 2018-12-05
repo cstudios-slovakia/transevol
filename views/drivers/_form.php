@@ -11,6 +11,8 @@ use yii\widgets\ActiveForm;
 /* @var $costDatas \Illuminate\Support\Collection */
 ?>
 
+<?php $this->beginContent('@app/views/layouts/default/common/forms/base_form.php'); ?>
+
 <div class="drivers-form">
 
     <?php $form = ActiveForm::begin(); ?>
@@ -28,7 +30,7 @@ use yii\widgets\ActiveForm;
 
         <?= $this->render('../layouts/default/common/static_cost_record',['record' => $single,'form' => $form]) ?>
 
-    <?php
+        <?php
     });
     ?>
 
@@ -50,3 +52,7 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 
 </div>
+
+<?php $this->endContent(); ?>
+
+

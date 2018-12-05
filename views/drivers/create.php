@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="drivers-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+
 
     <?php
     $staticCosts = $costs;

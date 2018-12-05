@@ -10,6 +10,8 @@ use app\support\Vehicles\Relations\VehicleRelationAssistance;
 /* @var $staticCostsCollection \Illuminate\Support\Collection */
 ?>
 
+<?php $this->beginContent('@app/views/layouts/default/common/forms/base_form.php'); ?>
+
 <div class="vehicles-form">
 
     <?php $form = ActiveForm::begin(); ?>
@@ -42,3 +44,7 @@ use app\support\Vehicles\Relations\VehicleRelationAssistance;
     <?php ActiveForm::end(); ?>
 
 </div>
+
+<?php $this->endContent(); ?>
+
+

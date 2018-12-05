@@ -1,6 +1,5 @@
 <?php
 $sectionName = $this->context->id;
-
 ?>
 
 <div class="<?= $sectionName ?>-index">

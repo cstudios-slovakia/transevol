@@ -11,6 +11,8 @@ use yii\widgets\ActiveForm;
 /* @var $related array */
 ?>
 
+<?php $this->beginContent('@app/views/layouts/default/common/forms/base_form.php'); ?>
+
 <div class="places-form">
 
     <?php $form = ActiveForm::begin(); ?>
@@ -33,3 +35,7 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 
 </div>
+
+
+<?php $this->endContent(); ?>
+
