@@ -32,9 +32,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     });
 
-//    $costDatas  = collect($model->driverCostDatas)->keyBy('short_name');
-//dd($singles, $duals);
-
     ?>
 
     <?= $this->render('_form', [
