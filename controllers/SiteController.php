@@ -119,7 +119,7 @@ class SiteController extends BaseController
 //        die();
 //        dd($oneModel);
 
-        return $this->render('about.twig',[
+        return $this->render('about',[
             'model' => $oneModel
         ]);
     }

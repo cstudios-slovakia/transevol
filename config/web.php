@@ -8,6 +8,7 @@ $config = [
     'basePath' => dirname(__DIR__),
     'name'  => 'Transevol WebApp',
     'bootstrap' => ['log'],
+    'language'=>'sk',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
@@ -33,6 +34,18 @@ $config = [
 
         'errorHandler' => [
             'errorAction' => 'site/error',
+        ],
+        'i18n' => [
+            'translations' => [
+                '*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@app/messages', // if advanced application, set @frontend/messages
+                    'sourceLanguage' => 'en',
+                    'fileMap' => [
+                        //'main' => 'main.php',
+                    ],
+                ],
+            ],
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
@@ -74,33 +87,37 @@ $config = [
                     '@dektrium/user/views' => '@app/views/user'
                 ],
             ],
-            'class' => 'yii\web\View',
-            'defaultExtension' => 'twig',
-            'renderers' => [
-                'twig' => [
-                    'class' => 'yii\twig\ViewRenderer',
-                    'cachePath' => false,
-//                    'cachePath' => '@runtime/Twig/cache',
-                    // Array of twig options:
-                    'options' => [
-                        'auto_reload' => true,
-                    ],
-                    'globals' => [
-                        'html' => ['class' => '\yii\helpers\Html'],
-                        'Url'   => ['class' => '\yii\helpers\Url']
-                    ],
-                    'uses' => ['yii\bootstrap'],
 
-                ],
-                // ...
-            ],
+//            'class' => 'yii\web\View',
+//            'defaultExtension' => 'twig',
+//            'renderers' => [
+//                'twig' => [
+//                    'class' => 'yii\twig\ViewRenderer',
+//                    'cachePath' => false,
+////                    'cachePath' => '@runtime/Twig/cache',
+//                    // Array of twig options:
+//                    'options' => YII_DEBUG ? [
+//                        'debug' => true,
+//                        'auto_reload' => true,
+//                    ] : [],
+//                    'extensions' => YII_DEBUG ? [
+//                        '\Twig_Extension_Debug',
+//                    ] : [],
+//                    'globals' => [
+//                        'html' => ['class' => '\yii\helpers\Html'],
+//                        'Url'   => ['class' => '\yii\helpers\Url']
+//                    ],
+//                    'uses' => ['yii\bootstrap'],
+//
+//                ],
+//                // ...
+
         ],
 
 
     ],
 
-    'layout' => false,
-//    'layout' => '@app/views/main.twig',
+    'layout' => '@app/views/layouts/default/skeleton/base.php',
     'modules'   => [
         'rbac' => 'dektrium\rbac\RbacWebModule',
         'user' => [
@@ -114,6 +131,7 @@ $config = [
             ],
             'controllerMap' => [
                 'registration' => 'app\controllers\RegistrationController',
+                'security' => 'app\controllers\SecurityController',
             ]
         ],
         'company-user-register' => [
