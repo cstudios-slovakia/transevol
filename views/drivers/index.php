@@ -9,28 +9,29 @@ use yii\grid\GridView;
 $this->title = 'Drivers';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="drivers-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+<?php $this->beginContent('@app/views/layouts/default/common/tables/base_table.php'); ?>
+<?= GridView::widget([
+    'dataProvider' => $dataProvider,
+    'columns' => [
+        ['class' => 'yii\grid\SerialColumn'],
 
-    <p>
-        <?= Html::a('Create Drivers', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'driver_name',
+        'id',
+        'driver_name',
 //            'companies_id',
-            'email:email',
-            'phone',
-            //'created_at',
-            //'updated_at',
+        'email:email',
+        'phone',
+        //'created_at',
+        //'updated_at',
 
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
-</div>
+        ['class' => 'yii\grid\ActionColumn'],
+    ],
+    'tableOptions' => [
+        'class' => 'table table-striped- table-bordered table-hover table-checkable',
+        'id' => 'm_table_1'
+    ]
+]); ?>
+
+<?php $this->endContent(); ?>
+
+

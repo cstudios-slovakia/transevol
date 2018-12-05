@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Vehicles;
+use app\support\helpers\LoggedInUserTrait;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -13,7 +14,7 @@ use app\models\ContactForm;
 
 class SiteController extends BaseController
 {
-
+    use LoggedInUserTrait;
 
     /**
      * {@inheritdoc}

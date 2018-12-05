@@ -9,30 +9,31 @@ use yii\grid\GridView;
 $this->title = 'Vehicles';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="vehicles-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+<?php $this->beginContent('@app/views/layouts/default/common/tables/base_table.php'); ?>
+<?= GridView::widget([
+    'dataProvider' => $dataProvider,
+    'columns' => [
+        ['class' => 'yii\grid\SerialColumn'],
 
-    <p>
-        <?= Html::a('Create Vehicles', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+        'id',
+        'ecv',
+        'companies_id',
+        'vehicle_types_id',
+        'emission_classes_id',
+        //'weight',
+        //'shaft',
+        //'created_at',
+        //'updated_at',
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+        ['class' => 'yii\grid\ActionColumn'],
+    ],
+    'tableOptions' => [
+        'class' => 'table table-striped- table-bordered table-hover table-checkable',
+        'id' => 'm_table_1'
+    ]
+]); ?>
 
-            'id',
-            'ecv',
-            'companies_id',
-            'vehicle_types_id',
-            'emission_classes_id',
-            //'weight',
-            //'shaft',
-            //'created_at',
-            //'updated_at',
+<?php $this->endContent(); ?>
 
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
-</div>
+

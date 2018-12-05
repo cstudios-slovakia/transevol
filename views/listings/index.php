@@ -9,31 +9,31 @@ use yii\grid\GridView;
 $this->title = 'Listings';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="listings-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Listings', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            'place_name',
-            [
-                'label' => 'fullAddress',
-                'value' => function ($model) {
-                    return $model->addresses->getFullAddress();
-                }
-            ],
-            'email:email',
-            'phone',
-            'created_at',
-            'updated_at',
-
-            ['class' => 'yii\grid\ActionColumn'],
+<?php $this->beginContent('@app/views/layouts/default/common/tables/base_table.php'); ?>
+<?= GridView::widget([
+    'dataProvider' => $dataProvider,
+    'columns' => [
+        ['class' => 'yii\grid\SerialColumn'],
+        'place_name',
+        [
+            'label' => 'fullAddress',
+            'value' => function ($model) {
+                return $model->addresses->getFullAddress();
+            }
         ],
-    ]); ?>
-</div>
+        'email:email',
+        'phone',
+        'created_at',
+        'updated_at',
+
+        ['class' => 'yii\grid\ActionColumn'],
+    ],
+    'tableOptions' => [
+        'class' => 'table table-striped- table-bordered table-hover table-checkable',
+        'id' => 'm_table_1'
+    ]
+]); ?>
+
+<?php $this->endContent(); ?>
+
