@@ -17,27 +17,5 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Clients list' => '',
-    'Company expenses' => '',
-    'Create diver' => '',
-    'Create listings record' => '',
-    'Create toll' => '',
-    'Create un/load place' => '',
-    'Create user' => '',
-    'Create vehicle' => '',
-    'Dashboard' => '',
-    'Driver' => '',
-    'Drivers list' => '',
-    'Expenses' => '',
-    'Expenses settings' => '',
-    'Listings' => '',
-    'Loads and unloads' => '',
-    'Loads and unloads list' => '',
-    'Services list' => '',
-    'Tolls' => '',
-    'Tolls list' => '',
-    'Users' => '',
-    'Users list' => '',
-    'Vehicle' => '',
-    'Vehicles list' => '',
+    'Vehicle' => 'Vozidlo',
 ];

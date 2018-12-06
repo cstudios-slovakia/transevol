@@ -17,6 +17,26 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Select all' => '',
-    'Unselect all' => '',
+    'adm_buy_thnc' => '',
+    'adm_disp_rbsh' => '',
+    'adm_prev' => '',
+    'adm_rntl' => '',
+    'cmins' => '',
+    'cmrins' => '',
+    'colins' => '',
+    'mass_acc_ins' => '',
+    'mass_cls_ins' => '',
+    'mass_cmr_ins' => '',
+    'mass_req_ins' => '',
+    'mnvhcl' => '',
+    'mnvhcl_trlr_empty' => '',
+    'mnvhcl_trlr_weight' => '',
+    'otha' => '',
+    'othb' => '',
+    'pnmt' => '',
+    'privtma' => '',
+    'privtmb' => '',
+    'rdtx' => '',
+    'srvs' => '',
+    'leasing' => 'Leasing/Amortizácia',
 ];

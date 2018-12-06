@@ -10,11 +10,11 @@
 $dropDownOptions = \app\support\FrequencyDataBuilder::makeType($record->frequency_group_name)->dropDownListOptions();
 ?>
 <div class="row">
-    <div class="col-md-5">
-        <?= $record->cost_name ?>
+    <div class="col-md-2">
+        <?=  Yii::t('static_costs',$record->cost_name)  ?>
     </div>
     <div class="col-md-3">
-        <?= $form->field($record, '['.$record->short_name.']value')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($record, '['.$record->short_name.']value')->textInput(['maxlength' => true])->label(false)  ?>
     </div>
     <div class="col-md-1">
         <?= $record->unit_name ?>
