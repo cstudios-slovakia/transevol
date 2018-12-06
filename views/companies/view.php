@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Companies */
@@ -10,6 +11,8 @@ $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Companies', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<?php $this->beginContent('@app/views/layouts/default/common/pages/show.php' ); ?>
 <div class="companies-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
@@ -56,3 +59,9 @@ $this->params['breadcrumbs'][] = $this->title;
     ]);
     ?>
 </div>
+
+    <?php $this->beginBlock('editButton'); ?>
+        <?= $this->render('@app/views/layouts/default/common/buttons/detail_edit_btn.php',['url' => Url::toRoute(['companies/update','id' => $model->id],true)]) ?>
+    <?php $this->endBlock(); ?>
+
+<?php $this->endContent(); ?>

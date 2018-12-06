@@ -9,7 +9,9 @@ use yii\widgets\DetailView;
 $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Vehicles', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+$this->params['page']['show'] = $model->ecv
 ?>
+<?php $this->beginContent('@app/views/layouts/default/common/pages/show.php' ); ?>
 <div class="vehicles-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
@@ -45,3 +47,5 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
 </div>
+
+<?php $this->endContent(); ?>
