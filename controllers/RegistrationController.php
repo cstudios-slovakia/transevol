@@ -10,6 +10,7 @@ use yii\helpers\Url;
 
 class RegistrationController extends BaseRegistrationController
 {
+    public $layout = '@app/views/layouts/public/base.php';
     /**
      * @inheritdoc
      */
@@ -49,6 +50,8 @@ class RegistrationController extends BaseRegistrationController
             return $this->redirectToCompanyCreate();
 
         }
+
+//        dd($model);
 
         return $this->render('register', [
             'model'  => $model,
