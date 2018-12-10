@@ -3,6 +3,8 @@
 namespace app\controllers;
 
 use app\models\CompanyOwned;
+use app\support\helpers\LoggedInUserTrait;
+use Faker\Provider\Base;
 use Yii;
 use app\models\User;
 use yii\data\ActiveDataProvider;
@@ -14,8 +16,10 @@ use yii\filters\VerbFilter;
 /**
  * CompanyUsersController implements the CRUD actions for User model.
  */
-class CompanyUsersController extends Controller
+class CompanyUsersController extends BaseController
 {
+    use LoggedInUserTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -43,10 +47,12 @@ class CompanyUsersController extends Controller
      */
     public function actionIndex()
     {
-        $company = \Yii::$app->user->identity->company;
+        $user = self::loggedInUser();
+        $company = $user->company;
+        $userId = $user->id;
 
         $dataProvider = new ActiveDataProvider([
-            'query' => User::find()->where(['companies_id' => $company->id]),
+            'query' => User::find()->where(['companies_id' => $company->id])->andWhere(['<>','id',$userId]),
         ]);
 
         return $this->render('index', [

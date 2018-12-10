@@ -9,35 +9,24 @@ use yii\grid\GridView;
 $this->title = 'Users';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="user-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+<?php $this->beginContent('@app/views/layouts/default/common/tables/base_table.php'); ?>
+<?= GridView::widget([
+    'dataProvider' => $dataProvider,
+    'columns' => [
+        ['class' => 'yii\grid\SerialColumn'],
 
-    <p>
-        <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+        'username',
+        'email:email',
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'username',
-            'email:email',
-            'password_hash',
-            'auth_key',
-            //'confirmed_at',
-            //'unconfirmed_email:email',
-            //'blocked_at',
-            //'registration_ip',
-            //'created_at',
-            //'updated_at',
-            //'flags',
-            //'last_login_at',
-            //'companies_id',
+        ['class' => 'yii\grid\ActionColumn'],
+    ],
+    'tableOptions' => [
+        'class' => 'table table-striped- table-bordered table-hover table-checkable',
+        'id' => 'm_table_1'
+    ]
+]); ?>
 
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
-</div>
+<?php $this->endContent(); ?>
+

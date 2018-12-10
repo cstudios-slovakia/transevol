@@ -34,8 +34,38 @@ $config = [
     ],
     'params' => $params,
     'modules'   => [
-        'rbac' => 'dektrium\rbac\RbacConsoleModule',
-    ],
+        'rbac' => 'dektrium\rbac\RbacWebModule',
+        'user' => [
+            'class' => 'dektrium\user\Module',
+            'enableConfirmation' => false,
+            'enableUnconfirmedLogin' => true,
+            'modelMap' => [
+                'User' => 'app\models\User',
+                'Profile' => 'app\models\userOverrides\Profile',
+                'RegistrationForm'  => 'app\models\userOverrides\RegistrationForm'
+            ],
+            'controllerMap' => [
+                'registration' => 'app\controllers\RegistrationController',
+                'security' => 'app\controllers\SecurityController',
+            ]
+        ],
+        'company-user-register' => [
+            'class' => 'dektrium\user\Module',
+            'enableConfirmation' => false,
+            'enableUnconfirmedLogin' => true,
+
+            'controllerMap' => [
+                'list' => 'app\controllers\CompanyUserRegisterController',
+                'registration' => 'app\controllers\CompanyUserRegisterController',
+                'profile' => 'app\controllers\CompanyUserProfileController',
+            ],
+            'modelMap' => [
+                'User' => 'app\models\User',
+                'RegistrationForm'  => 'app\models\userOverrides\CompanyUserRegistrationForm'
+            ],
+
+        ],
+    ]
     /*
     'controllerMap' => [
         'fixture' => [ // Fixture generation command line.
