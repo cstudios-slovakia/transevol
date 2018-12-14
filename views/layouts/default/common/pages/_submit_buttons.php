@@ -1,0 +1,4 @@
+<div class="m-form__actions m-form__actions">
+    <button type="reset" class="btn btn-primary"><?= Yii::t('pages.create.save_btn','Save') ?></button>
+    <a class="btn btn-secondary" href="<?= $cancelUrl ?>"><?= Yii::t('pages.common.cancel','Cancel') ?></a>
+</div>

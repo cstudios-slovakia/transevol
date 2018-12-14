@@ -76,9 +76,7 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-//                'company-user-register/registration/index' => 'company-user-register/index',
-//                '<controller:(company-user-register)>/index' => 'company-user-register/index',
-//                'post/<id:\d+>' => 'post/view',
+                'ujurl/<action>' => 'user/settings/<action>'
             ],
         ],
         'view' => [
@@ -88,29 +86,6 @@ $config = [
                 ],
             ],
 
-//            'class' => 'yii\web\View',
-//            'defaultExtension' => 'twig',
-//            'renderers' => [
-//                'twig' => [
-//                    'class' => 'yii\twig\ViewRenderer',
-//                    'cachePath' => false,
-////                    'cachePath' => '@runtime/Twig/cache',
-//                    // Array of twig options:
-//                    'options' => YII_DEBUG ? [
-//                        'debug' => true,
-//                        'auto_reload' => true,
-//                    ] : [],
-//                    'extensions' => YII_DEBUG ? [
-//                        '\Twig_Extension_Debug',
-//                    ] : [],
-//                    'globals' => [
-//                        'html' => ['class' => '\yii\helpers\Html'],
-//                        'Url'   => ['class' => '\yii\helpers\Url']
-//                    ],
-//                    'uses' => ['yii\bootstrap'],
-//
-//                ],
-//                // ...
 
         ],
 
@@ -132,6 +107,8 @@ $config = [
             'controllerMap' => [
                 'registration' => 'app\controllers\RegistrationController',
                 'security' => 'app\controllers\SecurityController',
+                'recovery'  => 'app\controllers\RecoveryController',
+                'settings' => 'app\controllers\user\SettingsController',
             ]
         ],
         'company-user-register' => [

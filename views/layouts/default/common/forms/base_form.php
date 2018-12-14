@@ -1,11 +1,12 @@
+<?php
+/** @var $p \yii\widgets\ActiveForm */
+?>
 
-
-<?php $this->beginContent('@app/views/layouts/default/common/pages/create.php'); ?>
-
-<form class="m-form">
+<div class="m-portlet__body">
     <div class="m-form__section m-form__section--first">
-        <?= $content ?>
+        {content}
     </div>
-</form>
-
-<?php $this->endContent(); ?>
+</div>
+<div class="m-portlet__foot m-portlet__foot--fit">
+    {footer}
+</div>

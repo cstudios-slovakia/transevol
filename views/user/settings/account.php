@@ -22,49 +22,46 @@ $this->title = Yii::t('user', 'Account settings');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
+<?php
+
+dd(\yii\helpers\Url::toRoute(['user/show','id' => 148]))
+
+?>
+
+
+<?php $this->beginContent('@app/views/layouts/default/common/pages/create.php'); ?>
+
 <?= $this->render('/_alert', ['module' => Yii::$app->getModule('user')]) ?>
 
+<?php $form = \app\components\ViewTyped\Form\BaseCreateFormWidget::begin([
+    'id' => 'account-form',
+    'options' => ['class' => 'm-form'],
+    'fieldConfig' => [
+        'template' => "{label}\n<div class=\"col-lg-9\">{input}</div>\n<div class=\"col-sm-offset-3 col-lg-9\">{error}\n{hint}</div>",
+        'labelOptions' => ['class' => 'col-lg-3 control-label'],
+    ],
+    'enableAjaxValidation' => true,
+    'enableClientValidation' => false,
+]); ?>
+
+<?= $form->field($model, 'email') ?>
+
+<?= $form->field($model, 'username') ?>
+
+<?= $form->field($model, 'new_password')->passwordInput() ?>
+
+<hr/>
+
+<?= $form->field($model, 'current_password')->passwordInput() ?>
+
+<?php
+
+?>
+
+<?php \app\components\ViewTyped\Form\BaseCreateFormWidget::end() ?>
+
 <div class="row">
-    <div class="col-md-3">
-        <?= $this->render('_menu') ?>
-    </div>
-    <div class="col-md-9">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
-            </div>
-            <div class="panel-body">
-                <?php $form = ActiveForm::begin([
-                    'id' => 'account-form',
-                    'options' => ['class' => 'form-horizontal'],
-                    'fieldConfig' => [
-                        'template' => "{label}\n<div class=\"col-lg-9\">{input}</div>\n<div class=\"col-sm-offset-3 col-lg-9\">{error}\n{hint}</div>",
-                        'labelOptions' => ['class' => 'col-lg-3 control-label'],
-                    ],
-                    'enableAjaxValidation' => true,
-                    'enableClientValidation' => false,
-                ]); ?>
-
-                <?= $form->field($model, 'email') ?>
-
-                <?= $form->field($model, 'username') ?>
-
-                <?= $form->field($model, 'new_password')->passwordInput() ?>
-
-                <hr/>
-
-                <?= $form->field($model, 'current_password')->passwordInput() ?>
-
-                <div class="form-group">
-                    <div class="col-lg-offset-3 col-lg-9">
-                        <?= Html::submitButton(Yii::t('user', 'Save'), ['class' => 'btn btn-block btn-success']) ?><br>
-                    </div>
-                </div>
-
-                <?php ActiveForm::end(); ?>
-            </div>
-        </div>
-
+    <div class="col-md-12">
         <?php if ($model->module->enableAccountDelete): ?>
             <div class="panel panel-danger">
                 <div class="panel-heading">
@@ -86,3 +83,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php endif ?>
     </div>
 </div>
+
+
+<?php $this->endContent(); ?>
+
+

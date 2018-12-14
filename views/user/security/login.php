@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
 
             <!--begin::Form-->
-            <!--    <form class="m-login__form m-form" action="">-->
+
             <?php $form = ActiveForm::begin([
                 'id' => 'login-form',
                 'enableAjaxValidation' => true,
@@ -62,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ]) ?>
 
             <div class="form-group m-form__group">
-                <!--        <input class="form-control m-input" type="text" placeholder="Username" name="username" autocomplete="off">-->
+
                 <?= $form->field($model, 'login',
                     [ 'inputOptions' => ['autofocus' => 'autofocus', 'class' => 'form-control', 'tabindex' => '1'] ])
                     ->label('Prihlasovacie meno');

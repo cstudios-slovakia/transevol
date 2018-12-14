@@ -11,11 +11,11 @@ use yii\widgets\ActiveForm;
 /* @var $costDatas \Illuminate\Support\Collection */
 ?>
 
-<?php $this->beginContent('@app/views/layouts/default/common/forms/base_form.php'); ?>
+<?php $this->beginContent('@app/views/layouts/default/common/pages/create.php'); ?>
 
 <div class="drivers-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = \app\components\ViewTyped\Form\BaseCreateFormWidget::begin(); ?>
 
     <?= $form->field($model, 'driver_name')->textInput(['maxlength' => true]) ?>
 
@@ -49,7 +49,7 @@ use yii\widgets\ActiveForm;
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>
 
-    <?php ActiveForm::end(); ?>
+    <?php \app\components\ViewTyped\Form\BaseCreateFormWidget::end(); ?>
 
 </div>
 
