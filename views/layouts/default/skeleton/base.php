@@ -200,7 +200,7 @@ AppAsset::register($this);
             <div class="m-subheader ">
                 <div class="d-flex align-items-center">
                     <div class="mr-auto">
-                        <h3 class="m-subheader__title m-subheader__title--separator"><?= ($this->context)::loggedInUserCompany()->company_name ?></h3>
+                        <h3 class="m-subheader__title m-subheader__title--separator"><?= $company = ($this->context)::loggedInUserCompany() ? $company->company_name : '' ?></h3>
                         <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                             <li class="m-nav__item m-nav__item--home">
                                 <a href="<?= Url::to(Yii::$app->homeUrl,true) ?>" class="m-nav__link m-nav__link--icon">

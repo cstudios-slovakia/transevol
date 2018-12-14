@@ -51,7 +51,6 @@ class RegistrationController extends BaseRegistrationController
 
         }
 
-//        dd($model);
 
         return $this->render('register', [
             'model'  => $model,
