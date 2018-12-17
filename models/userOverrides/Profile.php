@@ -23,20 +23,14 @@ class Profile extends BaseProfile
         return $scenarios;
     }
 
-//    public function rules()
-//    {
-//        $rules = parent::rules();
-//        // add some rules
-////        $rules['fieldRequired'] = ['field', 'required'];
-////        $rules['fieldLength']   = ['field', 'string', 'max' => 10];
-//
-//        return $rules;
-//    }
-
     public function rules()
     {
-        return [
-           'nameLength'  => ['name', 'string', 'max' => 255],
+        $rules = parent::rules();
+
+        $commonRules = [
+            [['first_name','last_name','phone_number','company_position'],'required']
         ];
+
+        return array_merge($rules, $commonRules);
     }
 }
