@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php
 
-dd(\yii\helpers\Url::toRoute(['user/show','id' => 148]))
+dd(\yii\helpers\Url::toRoute(['/user/profile/show','id' => 148]))
 
 ?>
 
