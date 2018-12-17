@@ -122,13 +122,7 @@ AppAsset::register($this);
                                         <div class="m-dropdown__inner">
                                             <div class="m-dropdown__header m--align-center" style="background: url(../../../assets/app/media/img/misc/user_profile_bg.jpg); background-size: cover;">
                                                 <div class="m-card-user m-card-user--skin-dark">
-                                                    <div class="m-card-user__pic">
-                                                        <img src="../../../assets/app/media/img/users/user4.jpg" class="m--img-rounded m--marginless" alt="" />
 
-                                                        <!--
-						<span class="m-type m-type--lg m--bg-danger"><span class="m--font-light">S<span><span>
-						-->
-                                                    </div>
                                                     <div class="m-card-user__details">
                                                         <span class="m-card-user__name m--font-weight-500"><?= Yii::$app->user->identity->username ?></span>
                                                         <a href="" class="m-card-user__email m--font-weight-300 m-link"><?= Yii::$app->user->identity->email ?></a>
@@ -142,16 +136,13 @@ AppAsset::register($this);
                                                             <span class="m-nav__section-text">Section</span>
                                                         </li>
                                                         <li class="m-nav__item">
-                                                            <a href="../../../header/profile.html" class="m-nav__link">
+                                                            <a href="<?= Url::toRoute('/user/settings/profile') ?>" class="m-nav__link">
                                                                 <i class="m-nav__link-icon flaticon-profile-1"></i>
                                                                 <span class="m-nav__link-title">
-																			<span class="m-nav__link-wrap">
-																				<span class="m-nav__link-text">My Profile</span>
-																				<span class="m-nav__link-badge">
-																					<span class="m-badge m-badge--success">2</span>
-																				</span>
-																			</span>
-																		</span>
+                                                                    <span class="m-nav__link-wrap">
+                                                                        <span class="m-nav__link-text"><?= Yii::t('layout/tobpar','My profile') ?></span>
+                                                                    </span>
+                                                                </span>
                                                             </a>
                                                         </li>
 
