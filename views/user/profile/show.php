@@ -10,7 +10,8 @@
  */
 
 use yii\helpers\Html;
-
+use yii\widgets\DetailView;
+use yii\helpers\Url;
 /**
  * @var \yii\web\View $this
  * @var \dektrium\user\models\Profile $profile
@@ -21,39 +22,20 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php $this->beginContent('@app/views/layouts/default/common/pages/show.php' ); ?>
 
-<?= \yii\widgets\DetailView::widget([
+<?= DetailView::widget([
     'model' => $profile,
     'attributes' => [
-        'username',
-        'public_email'
+        'first_name',
+        'last_name',
+        'phone_number',
+        'company_position'
     ],
 ]) ?>
 
+<?php $this->beginBlock('editButton') ?>
+<?= $this->render('@app/views/layouts/default/common/buttons/detail_edit_btn.php',['url' => Url::toRoute('/user/settings/profile',true)]) ?>
+
+<?php $this->endBlock() ?>
+
 <?php $this->endContent() ?>
-<div class="row">
-    <div class="col-xs-12 col-sm-6 col-md-6">
-        <div class="row">
 
-            <div class="col-sm-6 col-md-8">
-                <h4><?= $this->title ?></h4>
-                <ul style="padding: 0; list-style: none outside none;">
-
-                    <?php if (!empty($profile->website)): ?>
-                        <li>
-                            <i class="glyphicon glyphicon-globe text-muted"></i> <?= Html::a(Html::encode($profile->website), Html::encode($profile->website)) ?>
-                        </li>
-                    <?php endif; ?>
-                    <?php if (!empty($profile->public_email)): ?>
-                        <li>
-                            <i class="glyphicon glyphicon-envelope text-muted"></i> <?= Html::a(Html::encode($profile->public_email), 'mailto:' . Html::encode($profile->public_email)) ?>
-                        </li>
-                    <?php endif; ?>
-                    <li>
-                        <i class="glyphicon glyphicon-time text-muted"></i> <?= Yii::t('user', 'Joined on {0, date}', $profile->user->created_at) ?>
-                    </li>
-                </ul>
-
-            </div>
-        </div>
-    </div>
-</div>

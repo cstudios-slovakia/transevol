@@ -40,16 +40,13 @@ class User extends BaseUser
         return $this->hasOne(Companies::className(),['id' => 'companies_id']);
     }
 
-//    public function beforeValidate()
-//    {
-//        if ($this->getScenario() === self::SCENARIO_REGISTRATION_LEVEL_USER){
-//
-//            $associatedCompany = self::loggedInUserCompany();
-//
-//            $this->setAttribute('companies_id', $associatedCompany->id);
-//        }
-//
-//        return parent::beforeValidate();
-//    }
+    public function getIsAdmin()
+    {
+        return
+            (\Yii::$app->getAuthManager() && $this->module->adminPermission ?
+                \Yii::$app->authManager->checkAccess($this->id, $this->module->adminPermission) : false)
+            || in_array($this->username, $this->module->admins);
+    }
+
 
 }

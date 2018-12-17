@@ -13,10 +13,7 @@ $sectionName = $this->context->id;
 $headText = isset($this->params['page']) && isset($this->params['page']['show']) ? $this->params['page']['show'] : $this->title;
 $editIdParam = array_key_exists('id', $this->context->actionParams) ? (int) $this->context->actionParams['id'] : 0;
 
-
 ?>
-
-
 
 <div class="m-portlet m-portlet--full-height ">
     <div class="m-portlet__head">
@@ -39,7 +36,12 @@ $editIdParam = array_key_exists('id', $this->context->actionParams) ? (int) $thi
                 <?php else: ?>
                     <?= $this->render('@app/views/layouts/default/common/buttons/detail_edit_btn.php',['url' => Url::toRoute([$sectionName.'/update','id' => $editIdParam],true)]) ?>
                 <?php endif; ?>
-                <a href="<?= Url::toRoute($sectionName.'/index',true) ?>" class="btn m-btn--pill    btn-secondary"><?= Yii::t('view/pages/show','Cancel') ?></a>
+
+                <?php if (isset($this->blocks['cancelButton'])): ?>
+                    <?= $this->blocks['cancelButton'] ?>
+                <?php else: ?>
+                    <?= $this->render('@app/views/layouts/default/common/buttons/detail_cancel_btn.php',['cancelUrl' => Url::home()]) ?>
+                <?php endif; ?>
             </div>
         </div>
     </div>

@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php
 
-dd(\yii\helpers\Url::toRoute(['/user/profile/show','id' => 148]))
+
 
 ?>
 
@@ -84,6 +84,7 @@ dd(\yii\helpers\Url::toRoute(['/user/profile/show','id' => 148]))
     </div>
 </div>
 
+<?= $this->render('_settings_action_buttons.php') ?>
 
 <?php $this->endContent(); ?>
 

@@ -15,6 +15,9 @@ use app\models\User;
 use app\models\userOverrides\Profile;
 use app\support\helpers\LoggedInUserTrait;
 use dektrium\user\controllers\SettingsController as BaseSettingsController;
+use dektrium\user\models\SettingsForm;
+use yii\helpers\Url;
+
 /**
  * SettingsController manages updating user settings (e.g. profile, email and password).
  *
@@ -56,5 +59,31 @@ class SettingsController extends BaseSettingsController
         ]);
     }
 
+    /** @inheritdoc */
+    public function actionAccount()
+    {
+        /** @var SettingsForm $model */
+        $model = \Yii::createObject(SettingsForm::className());
+        $event = $this->getFormEvent($model);
 
+        $this->performAjaxValidation($model);
+
+        $this->trigger(self::EVENT_BEFORE_ACCOUNT_UPDATE, $event);
+        if ($model->load(\Yii::$app->request->post()) && $model->save()) {
+            \Yii::$app->session->setFlash('success', \Yii::t('user', 'Your account details have been updated'));
+            $this->trigger(self::EVENT_AFTER_ACCOUNT_UPDATE, $event);
+            return $this->refresh();
+        }
+
+        return $this->render('account', [
+            'model' => $model,
+        ]);
+    }
+
+    /** @inheritdoc */
+    public function actionNetworks()
+    {
+        // we dont use this, so override and redirect to profile.
+        return $this->redirect(Url::toRoute('/user/settings/profile'));
+    }
 }

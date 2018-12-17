@@ -96,30 +96,35 @@ $config = [
     'modules'   => [
         'rbac' => 'dektrium\rbac\RbacWebModule',
         'user' => [
-            'class' => 'dektrium\user\Module',
-            'enableConfirmation' => false,
-            'enableUnconfirmedLogin' => true,
+            'class'                     => 'dektrium\user\Module',
+            'enableConfirmation'        => false,
+            'enableUnconfirmedLogin'    => true,
             'modelMap' => [
-                'User' => 'app\models\User',
-                'Profile' => 'app\models\userOverrides\Profile',
-                'RegistrationForm'  => 'app\models\userOverrides\RegistrationForm'
+                'User'              => 'app\models\User',
+                'Profile'           => 'app\models\userOverrides\Profile',
+                'RegistrationForm'  => 'app\models\userOverrides\RegistrationForm',
+                'UserSearch'        => 'app\models\userOverrides\UserSearch',
+
             ],
             'controllerMap' => [
-                'registration' => 'app\controllers\RegistrationController',
-                'security' => 'app\controllers\SecurityController',
-                'recovery'  => 'app\controllers\RecoveryController',
-                'settings' => 'app\controllers\user\SettingsController',
-            ]
+                'registration'  => 'app\controllers\RegistrationController',
+                'security'      => 'app\controllers\SecurityController',
+                'recovery'      => 'app\controllers\RecoveryController',
+                'settings'      => 'app\controllers\user\SettingsController',
+                'profile'       => 'app\controllers\user\ProfileController',
+                'admin'         => 'app\controllers\user\AdminController',
+            ],
+            'adminPermission'   => 'companyAdmin'
         ],
         'company-user-register' => [
-            'class' => 'dektrium\user\Module',
-            'enableConfirmation' => false,
-            'enableUnconfirmedLogin' => true,
+            'class'                     => 'dektrium\user\Module',
+            'enableConfirmation'        => false,
+            'enableUnconfirmedLogin'    => true,
 
             'controllerMap' => [
-                'list' => 'app\controllers\CompanyUserRegisterController',
-                'registration' => 'app\controllers\CompanyUserRegisterController',
-                'profile' => 'app\controllers\CompanyUserProfileController',
+                'list'              => 'app\controllers\CompanyUserRegisterController',
+                'registration'      => 'app\controllers\CompanyUserRegisterController',
+                'profile'           => 'app\controllers\CompanyUserProfileController',
             ],
             'modelMap' => [
                 'User' => 'app\models\User',

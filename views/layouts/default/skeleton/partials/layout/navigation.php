@@ -214,7 +214,7 @@ $user = Yii::$app->user;
 
             <a href="javascript:;" class="m-menu__link m-menu__toggle">
                 <i class="m-menu__link-icon flaticon-layers"></i>
-                <span class="m-menu__link-text"><?= Yii::t('navigation','Users') ?> </span>
+                <span class="m-menu__link-text"><?= Yii::t('navigation','Users Management') ?> </span>
                 <i class="m-menu__ver-arrow la la-angle-right"></i>
             </a>
             <div class="m-menu__submenu ">
@@ -222,7 +222,7 @@ $user = Yii::$app->user;
                 <ul class="m-menu__subnav">
 
                     <li class="m-menu__item " aria-haspopup="true">
-                        <a href="#" class="m-menu__link ">
+                        <a href="<?= Url::toRoute('/user/admin/index') ?>" class="m-menu__link ">
                             <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                 <span></span>
                             </i>
@@ -231,7 +231,7 @@ $user = Yii::$app->user;
                     </li>
 
                     <li class="m-menu__item " aria-haspopup="true">
-                        <a href="#" class="m-menu__link ">
+                        <a href="<?= Url::toRoute('/user/admin/create') ?>" class="m-menu__link ">
                             <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                 <span></span>
                             </i>

@@ -47,16 +47,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $form->field($model, 'phone_number') ?>
     <?= $form->field($model, 'company_position') ?>
 
-    <?php $form->setCancelUrl(Url::home()); ?>
+    <?php $form->setCancelUrl(Url::toRoute(['/user/profile/show','id' => $model->user_id])); ?>
 
     <?php BaseCreateFormWidget::end() ?>
 
 
-
-    <?php $this->beginBlock('action_btn_dropdown')?>
-        <?= $this->render('@app/views/layouts/default/common/pages/_action_btn_dropdown_item.php',['linkUrl' => Url::toRoute('/user/settings/profile'),'linkIconClass' => 'flaticon-user','linkText' => Yii::t('user', 'Profile')]) ?>
-        <?= $this->render('@app/views/layouts/default/common/pages/_action_btn_dropdown_item.php',['linkUrl' => Url::toRoute('/user/settings/account'),'linkIconClass' => 'flaticon-user-settings','linkText' => Yii::t('user', 'Account')]) ?>
-    <?php $this->endBlock() ?>
-
+    <?= $this->render('_settings_action_buttons.php') ?>
 
 <?php $this->endContent(); ?>
