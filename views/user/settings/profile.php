@@ -14,6 +14,7 @@ use dektrium\user\helpers\Timezone;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use app\components\ViewTyped\Form\BaseCreateFormWidget;
+use yii\helpers\Url;
 /**
  * @var yii\web\View $this
  * @var yii\widgets\ActiveForm $form
@@ -26,10 +27,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?= $this->render('/_alert', ['module' => Yii::$app->getModule('user')]) ?>
 
+
 <?php $this->beginContent('@app/views/layouts/default/common/pages/create.php'); ?>
-<div class="col-md-3">
-    <?= $this->render('_menu') ?>
-</div>
+
     <?php $form = BaseCreateFormWidget::begin([
         'id' => 'profile-form',
         'options' => ['class' => 'form-horizontal'],
@@ -47,7 +47,16 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $form->field($model, 'phone_number') ?>
     <?= $form->field($model, 'company_position') ?>
 
+    <?php $form->setCancelUrl(Url::home()); ?>
 
     <?php BaseCreateFormWidget::end() ?>
+
+
+
+    <?php $this->beginBlock('action_btn_dropdown')?>
+        <?= $this->render('@app/views/layouts/default/common/pages/_action_btn_dropdown_item.php',['linkUrl' => Url::toRoute('/user/settings/profile'),'linkIconClass' => 'flaticon-user','linkText' => Yii::t('user', 'Profile')]) ?>
+        <?= $this->render('@app/views/layouts/default/common/pages/_action_btn_dropdown_item.php',['linkUrl' => Url::toRoute('/user/settings/account'),'linkIconClass' => 'flaticon-user-settings','linkText' => Yii::t('user', 'Account')]) ?>
+    <?php $this->endBlock() ?>
+
 
 <?php $this->endContent(); ?>
