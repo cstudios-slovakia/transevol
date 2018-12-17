@@ -36,3 +36,4 @@ tests/_support/_generated
 .env.*
 
 **/node_modules
+/resources
