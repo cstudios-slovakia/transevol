@@ -13,10 +13,10 @@ $this->title = 'My Yii Application';
         Demo runs on: <strong>It is a dev-server!</strong>
         </p>
         <div class="alert alert-danger">
-            NOW: Testing authorization flow. Adding new companyAdmin, register, login and password reset.
+            NOW: Testing authorization flow and registration, user adding by company Admin.s
         </div>
         <div class="alert alert-info">
-            NextStep: Implement logic, that CompanyAdmin can add CompanyUser
+            NextStep: Testing every section before transport addings
         </div>
     </div>
 
@@ -24,7 +24,7 @@ $this->title = 'My Yii Application';
 
         <div class="row">
             <div class="col-md-12">
-                <?= \yii\helpers\Html::img('@web/images/aerial-shot-aerial-view-architecture-1427107.jpg',['class' => 'img-responsive']) ?>
+                <?= \yii\helpers\Html::img('@web/images/aerial-shot-aerial-view-architecture-1427107.jpg',['class' => 'img-thumbnail']) ?>
             </div>
         </div>
 

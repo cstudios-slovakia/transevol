@@ -2,7 +2,7 @@
 
 return [
     'adminEmail' => 'admin@example.com',
-    'version'   => '0.0.3',
+    'version'   => '0.0.6',
     'core'  => [
         'place_types'   => [
             'toll'          => 'places',

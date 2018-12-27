@@ -21,7 +21,7 @@ class AdminController extends BaseAdminController
             ],
             [
                 'allow' => true,
-                'roles' => ['companyAdmin'],
+                'roles' => ['admin','companyAdmin'],
             ],
         ];
 

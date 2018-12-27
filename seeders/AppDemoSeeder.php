@@ -26,6 +26,7 @@ class AppDemoSeeder extends Seeder
             \Yii::$app->runAction('seed/make',['resolvable'=>'DriverStaticCostsSeeder']);
             \Yii::$app->runAction('seed/make',['resolvable'=>'CompanyStaticCostsSeeder']);
             \Yii::$app->runAction('seed/make',['resolvable'=>'CompanyDynamicCostsSeeder']);
+            \Yii::$app->runAction('seed/make',['resolvable'=>'UserSeeder']);
 
         }
     }

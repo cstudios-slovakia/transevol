@@ -24,6 +24,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?= $this->render('/_alert', ['module' => Yii::$app->getModule('user')]) ?>
 
+<?php $this->beginContent('@app/views/layouts/default/common/pages/edit.php'); ?>
+
+<?php $this->beginBlock('action_btn_dropdown') ?>
+
+    <?= $this->render('@app/views/layouts/default/common/pages/_action_btn_dropdown_item.php',['linkUrl' => '','linkText' => '', 'linkIconClass' => '']) ?>
+
+<?php $this->endBlock() ?>
+
+<?php $this->endContent() ?>
+
 <?= $this->render('_menu') ?>
 
 <div class="row">

@@ -34,7 +34,7 @@ $config = [
     ],
     'params' => $params,
     'modules'   => [
-        'rbac' => 'dektrium\rbac\RbacWebModule',
+        'rbac' => 'dektrium\rbac\RbacConsoleModule',
         'user' => [
             'class' => 'dektrium\user\Module',
             'enableConfirmation' => false,
