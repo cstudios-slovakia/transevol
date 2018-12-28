@@ -12,7 +12,7 @@ class m181125_122806_CallDektriumsUserMigration extends Migration
      */
     public function safeUp()
     {
-//        Yii::$app->runAction('migrate/up',['migrationPath'=>'@vendor/dektrium/yii2-user/migrations','interactive'=> false]);
+//        Yii::$app->runAction('migrate/up',['migrationPath'=>'@vendor/dektrium/yii2-user/migrations','interactive'=> 0]);
     }
 
     /**

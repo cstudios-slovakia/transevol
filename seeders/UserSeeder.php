@@ -38,38 +38,30 @@ class UserSeeder extends Seeder
         collect($companies)->each(function ($company,$key) use (&$users, $email, $userName, &$lastId,&$authAssignment,$randomAmount){
 
             $times  = call_user_func($randomAmount);
-//            $emailInput  = call_user_func($email);
-
             $id = $lastId++;
-//
-//            $hashed     = \Yii::$app->security->generatePasswordHash($emailInput);
 
             $user_name      = call_user_func($userName);
             $email_input    = call_user_func($email);
 
             if($key === 0 ){
-                $user_name      = 'mckenzie.jazlyn';
-                $email_input    = 'shea22@hotmail.com';
+                $user_name      = 'demoadmin';
+                $email_input    = 'demoadmin@transevol.com';
             }
 
-//            $users[]    = [$id, call_user_func($userName), $emailInput , $hashed, $company->id];
             $this->makeUser($users, $user_name, $email_input, $company, $id);
 
-            $authAssignment[] = [$lastId, 'roleCompanyAdmin'];
+            $authAssignment[] = [$id, 'roleCompanyAdmin'];
 
             for ($i = 0; $i < $times; $i++){
                 $id = $lastId++;
-//                $emailInput  = call_user_func($email);
-//                $hashed     = \Yii::$app->security->generatePasswordHash($emailInput);
-//
-//                $users[]    = [$id, call_user_func($userName), $emailInput , $hashed, $company->id];
+
                 $user_name      = call_user_func($userName);
                 $email_input    = call_user_func($email);
 
                 $this->makeUser($users, $user_name, $email_input, $company, $id);
 
 
-                $authAssignment[] = [$lastId, 'roleCompanyUser'];
+                $authAssignment[] = [$id, 'roleCompanyUser'];
             }
 
         });
@@ -103,7 +95,6 @@ class UserSeeder extends Seeder
 
     protected function makeUser(&$users,$user_name,$email_input,$company,$id)
     {
-//        $id = $lastId++;
         $hashed     = \Yii::$app->security->generatePasswordHash($email_input);
         $users[]    = [$id, $user_name, $email_input , $hashed, $company->id];
     }
