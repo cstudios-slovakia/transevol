@@ -18,4 +18,8 @@
  */
 return [
     'Driver' => 'Vodič',
+    'Driver name' => 'Celé meno vodiča',
+    'Email' => 'Email',
+    'Phone' => 'Tel.číslo',
+    'companies_id' => 'Názov firmy',
 ];

@@ -18,6 +18,7 @@
  */
 return [
     'Clients list' => '',
+    'Company admin' => '',
     'Company expenses' => '',
     'Create diver' => '',
     'Create listings record' => '',
@@ -35,7 +36,7 @@ return [
     'Services list' => '',
     'Tolls' => '',
     'Tolls list' => '',
-    'Users' => '',
+    'Users Management' => '',
     'Users list' => '',
     'Vehicle' => '',
     'Vehicles list' => '',

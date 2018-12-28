@@ -43,8 +43,18 @@ return [
                 ['adm_buy_technic','adm_buy_thnc',Yii::t('static_costs','adm_buy_thnc')],
                 ['adm_disposal_rubbish','adm_disp_rbsh',Yii::t('static_costs','adm_disp_rbsh')],
 
-            ]
-        ],
-        'listings'  => ['services','clients'],
+            ],
+            'driver' => [
+                ['luncheon_voucher','lnch',Yii::t('static_costs','lnch')],
+                ['wage_for_km','wgfr',Yii::t('static_costs','wgfr')],
+                ['loadings','ldng',Yii::t('static_costs','ldng')],
+                ['constant_salary','cslr',Yii::t('static_costs','cslr')] ,
+                ['luncheon_voucher_dual','lnch_dual',Yii::t('static_costs','lnch_dual')],
+                ['wage_for_km_dual','wgfr_dual',Yii::t('static_costs','wgfr_dual')],
+                ['loadings_dual','ldng_dual',Yii::t('static_costs','ldng_dual')],
+
+            ],
+            'listings'  => ['services','clients'],
+            ]   ,
     ]
 ];

@@ -45,9 +45,6 @@ use yii\widgets\ActiveForm;
     });
     ?>
 
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
-    </div>
 
     <?php \app\components\ViewTyped\Form\BaseCreateFormWidget::end(); ?>
 

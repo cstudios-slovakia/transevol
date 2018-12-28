@@ -17,7 +17,6 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Cancel' => '',
-    'Details' => '',
-    'Edit' => '',
+    'Create {sectionName}' => 'Vytvoriť nový: {sectionName}',
+    'Navigation options' => '',
 ];

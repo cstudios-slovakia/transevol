@@ -17,5 +17,6 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'You does not defined your company. Create one!' => '',
     'Company' => 'Firma',
 ];

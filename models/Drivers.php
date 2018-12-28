@@ -64,12 +64,12 @@ class Drivers extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'driver_name' => 'Driver Name',
-            'companies_id' => 'Companies ID',
-            'email' => 'Email',
-            'phone' => 'Phone',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'driver_name' => Yii::t('driver','Driver name'),
+            'companies_id' => Yii::t('driver','companies_id'),
+            'email' => Yii::t('driver','Email'),
+            'phone' => Yii::t('driver','Phone'),
+            'created_at' => Yii::t('common','created_at'),
+            'updated_at' => Yii::t('common','updated_at'),
         ];
     }
 

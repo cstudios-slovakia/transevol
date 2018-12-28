@@ -72,6 +72,7 @@ return [
     'Don\'t have an account? Sign up!' => '',
     'Email' => '',
     'Email (public)' => '',
+    'Enter your details to create your account:' => '',
     'Error occurred while changing password' => '',
     'Error occurred while confirming user' => '',
     'Error occurred while deleting user' => '',
@@ -135,6 +136,7 @@ return [
     'Registrácia!' => '',
     'Remember me next time' => '',
     'Request new confirmation message' => '',
+    'Request new password' => '',
     'Reset your password' => '',
     'Roles' => '',
     'Rules' => '',
@@ -192,6 +194,5 @@ return [
     'Your password on {0} has been changed' => '',
     'Your profile has been updated' => '',
     '{0, date, MMMM dd, YYYY HH:mm}' => '',
-    'Zabudli ste heslo?' => '@@@@',
     'Forgot password?' => 'Zabudli ste heslo?',
 ];

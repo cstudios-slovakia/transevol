@@ -10,6 +10,7 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use yii\helpers\Url;
+use app\components\ViewTyped\Page\BaseBreadcrumbs;
 
 AppAsset::register($this);
 ?>
@@ -193,26 +194,11 @@ AppAsset::register($this);
                     <div class="mr-auto">
 
                         <h3 class="m-subheader__title m-subheader__title--separator"><small><?= Yii::t('common','Your company is:') ?></small> <?= \app\support\helpers\LoggedInUserFinder::showCompanyName() ?></h3>
-                        <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
-                            <li class="m-nav__item m-nav__item--home">
-                                <a href="<?= Url::to(Yii::$app->homeUrl,true) ?>" class="m-nav__link m-nav__link--icon">
-                                    <i class="m-nav__link-icon la la-home"></i>
-                                </a>
-                            </li>
-                            <li class="m-nav__separator">-</li>
-                            <li class="m-nav__item">
-                                <a href="" class="m-nav__link">
-                                    <span class="m-nav__link-text">section</span>
-                                </a>
-                            </li>
-                            <li class="m-nav__separator">-</li>
-                            <li class="m-nav__item">
-                                <a href="" class="m-nav__link">
-                                    <span class="m-nav__link-text">create/edit</span>
-                                </a>
-                            </li>
 
-                        </ul>
+                        <?=  BaseBreadcrumbs::widget([
+                            'links' => isset($this->params['breadcrumbs']['links']) ? $this->params['breadcrumbs']['links'] : [],
+                        ]) ?>
+
                     </div>
 
                 </div>

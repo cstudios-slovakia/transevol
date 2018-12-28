@@ -7,7 +7,10 @@ use yii\grid\GridView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Emission Classes';
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][''] = [
+    'label' => 'Drivers Section'
+];
+//$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="emission-classes-index">
 

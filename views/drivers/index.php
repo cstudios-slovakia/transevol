@@ -5,9 +5,12 @@ use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-
 $this->title = 'Drivers';
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs']['section'] = $this->context->id;
+$this->params['breadcrumbs']['links'][] = [
+    'label' => 'Drivers Section',
+    'url' => \yii\helpers\Url::toRoute('/drivers/index')
+];
 ?>
 
 <?php $this->beginContent('@app/views/layouts/default/common/tables/base_table.php'); ?>

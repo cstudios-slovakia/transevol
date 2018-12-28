@@ -54,7 +54,11 @@ Insert fake data with command:
 yii seed/make -class=AppDemoSeeder
 ~~~
 
+### Translating
+~~~
+yii message config/i18n.php -l=sk --overwrite --remove-unused
 
+~~~
 
 
 CONFIGURATION

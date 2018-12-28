@@ -17,7 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Cancel' => '',
-    'Details' => '',
-    'Edit' => '',
+    'Your company is:' => '',
+    'created_at' => 'Vytvorený',
+    'updated_at' => 'Aktualizovaný',
 ];

@@ -98,7 +98,22 @@ AppAsset::register($this);
 
     <div class="container">
         <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+            'itemTemplate' => "<li class=\"m-nav__item\">
+                                <a href=\"\" class=\"m-nav__link\">
+                                    <span class=\"m-nav__link-text\">{link}</span>
+                                </a>
+                            </li>\n", // template for all links
+            'links' => [
+                [
+                    'label' => 'Post Category',
+                    'url' => ['post-category/view', 'id' => 10],
+                    'template' => "<li><b>{link}</b></li>\n", // template for this link only
+                ],
+                ['label' => 'Sample Post', 'url' => ['post/edit', 'id' => 1]],
+                'Edit',
+            ],
+
+//            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
         <?php
 //        $x = \yii\helpers\Url::toRoute(['/company/create'],true);

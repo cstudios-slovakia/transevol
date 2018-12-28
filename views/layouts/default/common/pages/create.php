@@ -13,7 +13,9 @@ $sectionName = $this->context->id;
                                 <i class="la la-gear"></i>
                             </span>
                         <h3 class="m-portlet__head-text">
-                            <?= Yii::t($sectionName,'Create {sectionName}') ?>
+                            <?= Yii::t('common/pages/create','Create {sectionName}', [
+                                'sectionName' => $sectionName
+                            ]) ?>
                         </h3>
                     </div>
                 </div>
