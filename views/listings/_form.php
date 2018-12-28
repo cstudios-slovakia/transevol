@@ -10,11 +10,11 @@ use app\support\Listings\Relations\PlaceTypeRelationAssistance;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<?php $this->beginContent('@app/views/layouts/default/common/forms/base_form.php'); ?>
+<?php $this->beginContent('@app/views/layouts/default/common/pages/create.php'); ?>
 
 <div class="listings-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = \app\components\ViewTyped\Form\BaseCreateFormWidget::begin(); ?>
 
     <?= $form->field($model, 'place_name')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'place_types_id')->dropDownList(PlaceTypeRelationAssistance::listingsPlaceTypesSelectOptions()) ?>
@@ -35,7 +35,7 @@ use app\support\Listings\Relations\PlaceTypeRelationAssistance;
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>
 
-    <?php ActiveForm::end(); ?>
+    <?php \app\components\ViewTyped\Form\BaseCreateFormWidget::end(); ?>
 
 </div>
 

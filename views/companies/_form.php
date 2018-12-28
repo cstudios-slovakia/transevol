@@ -12,11 +12,11 @@ use yii\widgets\ActiveForm;
 $dropDownOptions  = \app\support\FrequencyDataBuilder::makeType('time')->dropDownListOptions();
 ?>
 
-<?php $this->beginContent('@app/views/layouts/default/common/forms/base_form.php'); ?>
+<?php $this->beginContent('@app/views/layouts/default/common/pages/create.php'); ?>
 
     <div class="companies-form">
 
-        <?php $form = ActiveForm::begin(); ?>
+        <?php $form = \app\components\ViewTyped\Form\BaseCreateFormWidget::begin(); ?>
 
         <?php if (isset($hideDynamics) && !$hideDynamics) : ?>
             <div class="row">
@@ -86,7 +86,7 @@ $dropDownOptions  = \app\support\FrequencyDataBuilder::makeType('time')->dropDow
             <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
         </div>
 
-        <?php ActiveForm::end(); ?>
+        <?php \app\components\ViewTyped\Form\BaseCreateFormWidget::end(); ?>
 
     </div>
 

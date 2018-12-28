@@ -25,7 +25,7 @@ $user = Yii::$app->user;
             <i class="m-menu__section-icon flaticon-more-v2"></i>
         </li>
         <li class="m-menu__item">
-            <a href="{{ Url.toRoute('drivers/index') }}" class="m-menu__link">
+            <a href="<?= Url::toRoute('settings/detail') ?>" class="m-menu__link">
                 <i class="m-menu__link-icon flaticon-layers"></i>
                 <span class="m-menu__link-text"><?= Yii::t('navigation','Expenses settings') ?></span>
             </a>

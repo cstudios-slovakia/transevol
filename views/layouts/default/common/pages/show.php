@@ -10,7 +10,7 @@ use yii\helpers\Url;
 
 $sectionName = $this->context->id;
 
-$headText = isset($this->params['page']) && isset($this->params['page']['show']) ? $this->params['page']['show'] : $this->title;
+$headText = isset($this->params['page']) && isset($this->params['page']['show']) ? $this->params['page']['show']['portlet_title'] : $this->title;
 $editIdParam = array_key_exists('id', $this->context->actionParams) ? (int) $this->context->actionParams['id'] : 0;
 
 ?>

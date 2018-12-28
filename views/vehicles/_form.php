@@ -10,11 +10,11 @@ use app\support\Vehicles\Relations\VehicleRelationAssistance;
 /* @var $staticCostsCollection \Illuminate\Support\Collection */
 ?>
 
-<?php $this->beginContent('@app/views/layouts/default/common/forms/base_form.php'); ?>
+<?php $this->beginContent('@app/views/layouts/default/common/pages/create.php'); ?>
 
 <div class="vehicles-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = \app\components\ViewTyped\Form\BaseCreateFormWidget::begin(); ?>
 
     <?= $form->field($model, 'ecv')->textInput(['maxlength' => true]) ?>
 
@@ -41,7 +41,7 @@ use app\support\Vehicles\Relations\VehicleRelationAssistance;
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>
 
-    <?php ActiveForm::end(); ?>
+    <?php \app\components\ViewTyped\Form\BaseCreateFormWidget::end(); ?>
 
 </div>
 
