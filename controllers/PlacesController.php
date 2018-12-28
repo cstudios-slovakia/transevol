@@ -5,7 +5,7 @@ namespace app\controllers;
 use app\models\Addresses;
 use app\models\Companies;
 use app\models\Countries;
-use app\models\PLacesPlaceTypesQuery;
+use app\models\PlacesPlaceTypesQuery;
 use app\models\PlaceTypes;
 use app\support\helpers\AppParams;
 use app\support\helpers\LoggedInUserTrait;
@@ -112,7 +112,7 @@ class PlacesController extends BaseController
 
         // add relations and populate dropdowns
         $countries      = Countries::find()->all();
-        $placeTypes = PLacesPlaceTypesQuery::find()->all();
+        $placeTypes = PlacesPlaceTypesQuery::find()->all();
 
         return $this->render('create', [
             'placesModel'       => $placesModel,

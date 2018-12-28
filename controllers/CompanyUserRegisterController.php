@@ -29,7 +29,7 @@ class CompanyUserRegisterController extends BaseRegistrationController
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
-                    ['allow' => true, 'actions' => ['index','register','view'], 'roles' => ['companyAdmin']],
+                    ['allow' => true, 'actions' => ['index','register','view'], 'roles' => ['roleCompanyAdmin']],
                 ],
             ],
         ];

@@ -35,7 +35,7 @@ class CompanyUsersController extends BaseController
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
-                    ['allow' => true, 'actions' => ['index'], 'roles' => ['companyAdmin']],
+                    ['allow' => true, 'actions' => ['index'], 'roles' => ['roleCompanyAdmin']],
                 ],
             ],
         ];

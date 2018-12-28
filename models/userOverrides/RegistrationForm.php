@@ -12,7 +12,7 @@ class RegistrationForm extends BaseRegistrationForm
 
 
 
-    const SCENARIO_REGISTRATION_LEVEL = 'companyAdmin';
+    const SCENARIO_REGISTRATION_LEVEL = 'rolCompanyAdmin';
 
 
     /**

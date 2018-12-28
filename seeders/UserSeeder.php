@@ -35,28 +35,41 @@ class UserSeeder extends Seeder
             return $faker->numberBetween(2,5);
         };
 
-        collect($companies)->each(function ($company) use (&$users, $email, $userName, &$lastId,&$authAssignment,$randomAmount){
+        collect($companies)->each(function ($company,$key) use (&$users, $email, $userName, &$lastId,&$authAssignment,$randomAmount){
 
             $times  = call_user_func($randomAmount);
-            $emailInput  = call_user_func($email);
+//            $emailInput  = call_user_func($email);
 
             $id = $lastId++;
+//
+//            $hashed     = \Yii::$app->security->generatePasswordHash($emailInput);
 
-            $hashed     = \Yii::$app->security->generatePasswordHash($emailInput);
+            $user_name      = call_user_func($userName);
+            $email_input    = call_user_func($email);
 
+            if($key === 0 ){
+                $user_name      = 'mckenzie.jazlyn';
+                $email_input    = 'shea22@hotmail.com';
+            }
 
-            $users[]    = [$id, call_user_func($userName), $emailInput , $hashed, $company->id];
+//            $users[]    = [$id, call_user_func($userName), $emailInput , $hashed, $company->id];
+            $this->makeUser($users, $user_name, $email_input, $company, $id);
 
-            $authAssignment[] = [$id, 'companyAdmin'];
+            $authAssignment[] = [$lastId, 'roleCompanyAdmin'];
 
             for ($i = 0; $i < $times; $i++){
                 $id = $lastId++;
-                $emailInput  = call_user_func($email);
-                $hashed     = \Yii::$app->security->generatePasswordHash($emailInput);
+//                $emailInput  = call_user_func($email);
+//                $hashed     = \Yii::$app->security->generatePasswordHash($emailInput);
+//
+//                $users[]    = [$id, call_user_func($userName), $emailInput , $hashed, $company->id];
+                $user_name      = call_user_func($userName);
+                $email_input    = call_user_func($email);
 
-                $users[]    = [$id, call_user_func($userName), $emailInput , $hashed, $company->id];
+                $this->makeUser($users, $user_name, $email_input, $company, $id);
 
-                $authAssignment[] = [$id, 'companyUser'];
+
+                $authAssignment[] = [$lastId, 'roleCompanyUser'];
             }
 
         });
@@ -70,5 +83,28 @@ class UserSeeder extends Seeder
 
 
 
+
+        $authItemData = [
+            ['roleCompanyAdmin', 1],
+            ['roleCompanyUser', 1],
+            ['companyAdmin', 2],
+            ['companyUser', 2],
+        ];
+        $this->table('auth_item')->data($authItemData, ['name','type'])->rowQuantity(count($authItemData));
+
+
+        $authItemChildData = [
+            ['companyAdmin', 'companyUser']
+        ];
+
+        $this->table('auth_item_child')->data($authItemChildData, ['parent','child'])->rowQuantity(count($authItemChildData));
+
+    }
+
+    protected function makeUser(&$users,$user_name,$email_input,$company,$id)
+    {
+//        $id = $lastId++;
+        $hashed     = \Yii::$app->security->generatePasswordHash($email_input);
+        $users[]    = [$id, $user_name, $email_input , $hashed, $company->id];
     }
 }

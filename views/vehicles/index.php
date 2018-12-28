@@ -16,13 +16,18 @@ $this->params['breadcrumbs'][] = $this->title;
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
 
-        'id',
+//        'id',
         'ecv',
-        'companies_id',
-        'vehicle_types_id',
-        'emission_classes_id',
-        //'weight',
-        //'shaft',
+//        'companies_id',
+        ['attribute' => 'vehicle_types_id', 'value' => function($model){
+            return $model->vehicleTypes->vehicle_type_name;
+        }],
+        ['attribute' => 'emission_classes_id', 'value' => function($model){
+            return $model->emissionClasses->emission_name;
+        }],
+
+        'weight',
+        'shaft',
         //'created_at',
         //'updated_at',
 

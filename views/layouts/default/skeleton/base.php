@@ -192,7 +192,7 @@ AppAsset::register($this);
                 <div class="d-flex align-items-center">
                     <div class="mr-auto">
 
-                        <h3 class="m-subheader__title m-subheader__title--separator"><?= \app\support\helpers\LoggedInUserFinder::showCompanyName() ?></h3>
+                        <h3 class="m-subheader__title m-subheader__title--separator"><small><?= Yii::t('common','Your company is:') ?></small> <?= \app\support\helpers\LoggedInUserFinder::showCompanyName() ?></h3>
                         <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                             <li class="m-nav__item m-nav__item--home">
                                 <a href="<?= Url::to(Yii::$app->homeUrl,true) ?>" class="m-nav__link m-nav__link--icon">

@@ -114,7 +114,7 @@ $config = [
                 'profile'       => 'app\controllers\user\ProfileController',
                 'admin'         => 'app\controllers\user\AdminController',
             ],
-            'adminPermission'   => 'companyAdmin'
+            'adminPermission'   => 'roleCompanyAdmin'
         ],
         'company-user-register' => [
             'class'                     => 'dektrium\user\Module',

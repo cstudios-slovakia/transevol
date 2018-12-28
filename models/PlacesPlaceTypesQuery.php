@@ -2,7 +2,7 @@
 
 namespace app\models;
 
-class PLacesPlaceTypesQuery extends PlaceTypes
+class PlacesPlaceTypesQuery extends PlaceTypes
 {
     const SECTION = 'places';
 

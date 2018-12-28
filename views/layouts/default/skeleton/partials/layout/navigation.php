@@ -24,12 +24,7 @@ $user = Yii::$app->user;
             <h4 class="m-menu__section-text"><?= Yii::t('navigation','Expenses') ?></h4>
             <i class="m-menu__section-icon flaticon-more-v2"></i>
         </li>
-        <li class="m-menu__item">
-            <a href="<?= Url::toRoute('settings/detail') ?>" class="m-menu__link">
-                <i class="m-menu__link-icon flaticon-layers"></i>
-                <span class="m-menu__link-text"><?= Yii::t('navigation','Expenses settings') ?></span>
-            </a>
-        </li>
+
         <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
 
 
@@ -43,7 +38,7 @@ $user = Yii::$app->user;
                 <ul class="m-menu__subnav">
 
                     <li class="m-menu__item " aria-haspopup="true">
-                        <a href="<?= Url::toRoute('drivers/index') ?>" class="m-menu__link ">
+                        <a href="<?= Url::toRoute('/drivers/index') ?>" class="m-menu__link ">
                             <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                 <span></span>
                             </i>
@@ -52,7 +47,7 @@ $user = Yii::$app->user;
                     </li>
 
                     <li class="m-menu__item " aria-haspopup="true">
-                        <a href="<?= Url::toRoute('drivers/create') ?>" class="m-menu__link ">
+                        <a href="<?= Url::toRoute('/drivers/create') ?>" class="m-menu__link ">
                             <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                 <span></span>
                             </i>
@@ -73,7 +68,7 @@ $user = Yii::$app->user;
                 <ul class="m-menu__subnav">
 
                     <li class="m-menu__item " aria-haspopup="true">
-                        <a href="<?= Url::toRoute('vehicles/index') ?>" class="m-menu__link ">
+                        <a href="<?= Url::toRoute('/vehicles/index') ?>" class="m-menu__link ">
                             <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                 <span></span>
                             </i>
@@ -81,7 +76,7 @@ $user = Yii::$app->user;
                         </a>
                     </li>
                     <li class="m-menu__item " aria-haspopup="true">
-                        <a href="<?= Url::toRoute('vehicles/create') ?>" class="m-menu__link ">
+                        <a href="<?= Url::toRoute('/vehicles/create') ?>" class="m-menu__link ">
                             <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                 <span></span>
                             </i>
@@ -92,7 +87,7 @@ $user = Yii::$app->user;
             </div>
         </li>
         <li class="m-menu__item">
-            <a href="<?= Url::toRoute('companies/show') ?>" class="m-menu__link">
+            <a href="<?= Url::toRoute('/companies/view') ?>" class="m-menu__link">
                 <i class="m-menu__link-icon flaticon-layers"></i>
                 <span class="m-menu__link-text"><?= Yii::t('navigation','Company expenses') ?></span>
             </a>
@@ -113,7 +108,7 @@ $user = Yii::$app->user;
                 <span class="m-menu__arrow"></span>
                 <ul class="m-menu__subnav">
                     <li class="m-menu__item " aria-haspopup="true">
-                        <a href="<?= Url::toRoute('listings/index?type=services') ?>" class="m-menu__link ">
+                        <a href="<?= Url::toRoute('/listings/index?type=services') ?>" class="m-menu__link ">
                             <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                 <span></span>
                             </i>
@@ -122,7 +117,7 @@ $user = Yii::$app->user;
                     </li>
 
                     <li class="m-menu__item " aria-haspopup="true">
-                        <a href="<?= Url::toRoute('listings/index?type=clients') ?>" class="m-menu__link ">
+                        <a href="<?= Url::toRoute('/listings/index?type=clients') ?>" class="m-menu__link ">
                             <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                 <span></span>
                             </i>
@@ -131,7 +126,7 @@ $user = Yii::$app->user;
                     </li>
 
                     <li class="m-menu__item " aria-haspopup="true">
-                        <a href="<?= Url::toRoute('listings/create') ?>" class="m-menu__link ">
+                        <a href="<?= Url::toRoute('/listings/create') ?>" class="m-menu__link ">
                             <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                 <span></span>
                             </i>
@@ -155,7 +150,7 @@ $user = Yii::$app->user;
                 <ul class="m-menu__subnav">
 
                     <li class="m-menu__item " aria-haspopup="true">
-                        <a href="<?= Url::toRoute('places/index?type=loading') ?>" class="m-menu__link ">
+                        <a href="<?= Url::toRoute('/places/index?type=loading') ?>" class="m-menu__link ">
                             <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                 <span></span>
                             </i>
@@ -164,7 +159,7 @@ $user = Yii::$app->user;
                     </li>
 
                     <li class="m-menu__item " aria-haspopup="true">
-                        <a href="<?= Url::toRoute('places/create') ?>" class="m-menu__link ">
+                        <a href="<?= Url::toRoute('/places/create') ?>" class="m-menu__link ">
                             <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                 <span></span>
                             </i>
@@ -189,7 +184,7 @@ $user = Yii::$app->user;
                 <ul class="m-menu__subnav">
 
                     <li class="m-menu__item " aria-haspopup="true">
-                        <a href="<?= Url::toRoute('places/index?type=toll') ?>" class="m-menu__link ">
+                        <a href="<?= Url::toRoute('/places/index?type=toll') ?>" class="m-menu__link ">
                             <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                 <span></span>
                             </i>
@@ -198,7 +193,7 @@ $user = Yii::$app->user;
                     </li>
 
                     <li class="m-menu__item " aria-haspopup="true">
-                        <a href="<?= Url::toRoute('places/create') ?>" class="m-menu__link ">
+                        <a href="<?= Url::toRoute('/places/create') ?>" class="m-menu__link ">
                             <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                 <span></span>
                             </i>
@@ -208,7 +203,17 @@ $user = Yii::$app->user;
                 </ul>
             </div>
         </li>
-        <?php if($user->can('companyAdmin')) : ?>
+        <li class="m-menu__section ">
+            <h4 class="m-menu__section-text"><?= Yii::t('navigation','Company admin') ?></h4>
+            <i class="m-menu__section-icon flaticon-more-v2"></i>
+        </li>
+        <?php if($user->can('roleCompanyAdmin')) : ?>
+            <li class="m-menu__item">
+                <a href="<?= Url::toRoute('/settings/detail') ?>" class="m-menu__link">
+                    <i class="m-menu__link-icon flaticon-layers"></i>
+                    <span class="m-menu__link-text"><?= Yii::t('navigation','Expenses settings') ?></span>
+                </a>
+            </li>
         <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
 
 
