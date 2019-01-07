@@ -17,10 +17,15 @@ $dropDownOptions = \app\support\FrequencyDataBuilder::makeType($record->frequenc
         <?= $form->field($record, '['.$record->short_name.']value')->textInput(['maxlength' => true])->label(false)  ?>
     </div>
     <div class="col-md-1">
-        <?= $record->unit_name ?>
+        <span class="text-uppercase"><?= $record->unit_name ?></span>
     </div>
     <div class="col-md-3">
-        <?= $this->render('static_cost_select',['form' => $form, 'record' => $record,'dropDownOptions' => $dropDownOptions,'selectedId' => $record->frequency_datas_id]) ?>
+        <?= $this->render('static_cost_select',[
+            'form' => $form,
+            'record' => $record,
+            'dropDownOptions' => $dropDownOptions,
+            'selectedId' => $record->frequency_datas_id
+            ]) ?>
     </div>
 </div>
 

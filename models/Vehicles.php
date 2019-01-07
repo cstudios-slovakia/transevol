@@ -57,14 +57,14 @@ class Vehicles extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'ecv' => 'Ecv',
-            'companies_id' => 'Companies ID',
-            'vehicle_types_id' => 'Vehicle Types ID',
-            'emission_classes_id' => 'Emission Classes ID',
-            'weight' => 'Weight',
-            'shaft' => 'Shaft',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'ecv' => Yii::t('vehicle','ECV'),
+            'companies_id' => Yii::t('vehicle','Companies ID'),
+            'vehicle_types_id' => Yii::t('vehicle','Vehicle Types ID'),
+            'emission_classes_id' => Yii::t('vehicle','Emission Classes ID'),
+            'weight' => Yii::t('vehicle','Weight'),
+            'shaft' => Yii::t('vehicle','Shaft'),
+            'created_at' => Yii::t('common','Created At'),
+            'updated_at' => Yii::t('common','Updated At'),
         ];
     }
 

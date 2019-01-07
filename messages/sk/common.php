@@ -17,6 +17,8 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Created At' => '',
+    'Updated At' => '',
     'Your company is:' => '',
     'created_at' => 'Vytvorený',
     'updated_at' => 'Aktualizovaný',
