@@ -54,7 +54,8 @@ return [
                 ['loadings_dual','ldng_dual',Yii::t('static_costs','ldng_dual')],
 
             ],
-            'listings'  => ['services','clients'],
-            ]   ,
+
+        ],
+        'listings'  => ['services','clients'],
     ]
 ];

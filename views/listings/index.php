@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use app\support\LayoutSupporters\Grid\DefaultActionColumn;
+use app\components\ViewTyped\Page\Index\BaseGridView;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -11,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <?php $this->beginContent('@app/views/layouts/default/common/tables/base_table.php'); ?>
-<?= GridView::widget([
+<?= BaseGridView::widget([
     'dataProvider' => $dataProvider,
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
@@ -24,14 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'email:email',
         'phone',
-//        'created_at',
-//        'updated_at',
-
-        ['class' => 'yii\grid\ActionColumn'],
-    ],
-    'tableOptions' => [
-        'class' => 'table table-striped- table-bordered table-hover table-checkable',
-        'id' => 'm_table_1'
+        DefaultActionColumn::renderActionsColumns(),
     ]
 ]); ?>
 
