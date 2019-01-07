@@ -2,7 +2,8 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-
+use app\support\LayoutSupporters\Grid\DefaultActionColumn;
+use app\components\ViewTyped\Page\Index\BaseGridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 $this->title = 'Drivers';
@@ -11,28 +12,24 @@ $this->params['breadcrumbs']['links'][] = [
     'label' => 'Drivers Section',
     'url' => \yii\helpers\Url::toRoute('/drivers/index')
 ];
+
+$additionalOptions = [];
+$buttonOptions = [];
+
 ?>
 
 <?php $this->beginContent('@app/views/layouts/default/common/tables/base_table.php'); ?>
-<?= GridView::widget([
+<?= BaseGridView::widget([
     'dataProvider' => $dataProvider,
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
-
-//        'id',
         'driver_name',
-//            'companies_id',
         'email:email',
         'phone',
-        //'created_at',
-        //'updated_at',
 
-        ['class' => 'yii\grid\ActionColumn'],
+        DefaultActionColumn::renderActionsColumns()
     ],
-    'tableOptions' => [
-        'class' => 'table table-striped- table-bordered table-hover table-checkable',
-        'id' => 'm_table_1'
-    ]
+
 ]); ?>
 
 <?php $this->endContent(); ?>

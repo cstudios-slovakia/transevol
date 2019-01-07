@@ -22,7 +22,7 @@
         "illuminate/support": "^5.7",
         "dektrium/yii2-rbac": "1.0.0-alpha@dev",
         "dektrium/yii2-user": "^0.9.14",
-        "symfony/dotenv": "^4.1",
+        "symfony/dotenv": "^4.1"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
