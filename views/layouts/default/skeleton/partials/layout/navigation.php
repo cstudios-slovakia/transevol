@@ -29,7 +29,7 @@ $user = Yii::$app->user;
 
 
             <a href="javascript:;" class="m-menu__link m-menu__toggle">
-                <i class="m-menu__link-icon flaticon-layers"></i>
+                <i class="m-menu__link-icon flaticon-dashboard"></i>
                 <span class="m-menu__link-text"><?= Yii::t('navigation','Driver') ?> </span>
                 <i class="m-menu__ver-arrow la la-angle-right"></i>
             </a>
@@ -59,7 +59,7 @@ $user = Yii::$app->user;
         </li>
         <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
             <a href="javascript:;" class="m-menu__link m-menu__toggle">
-                <i class="m-menu__link-icon flaticon-layers"></i>
+                <i class="m-menu__link-icon flaticon-truck"></i>
                 <span class="m-menu__link-text"><?= Yii::t('navigation','Vehicle') ?> </span>
                 <i class="m-menu__ver-arrow la la-angle-right"></i>
             </a>
@@ -88,7 +88,7 @@ $user = Yii::$app->user;
         </li>
         <li class="m-menu__item">
             <a href="<?= Url::toRoute('/companies/view') ?>" class="m-menu__link">
-                <i class="m-menu__link-icon flaticon-layers"></i>
+                <i class="m-menu__link-icon flaticon-statistics"></i>
                 <span class="m-menu__link-text"><?= Yii::t('navigation','Company expenses') ?></span>
             </a>
         </li>
@@ -100,7 +100,7 @@ $user = Yii::$app->user;
 
 
             <a href="javascript:;" class="m-menu__link m-menu__toggle">
-                <i class="m-menu__link-icon flaticon-layers"></i>
+                <i class="m-menu__link-icon flaticon-book"></i>
                 <span class="m-menu__link-text"><?= Yii::t('navigation','Listings') ?> </span>
                 <i class="m-menu__ver-arrow la la-angle-right"></i>
             </a>
@@ -141,7 +141,7 @@ $user = Yii::$app->user;
 
 
             <a href="javascript:;" class="m-menu__link m-menu__toggle">
-                <i class="m-menu__link-icon flaticon-layers"></i>
+                <i class="m-menu__link-icon flaticon-placeholder"></i>
                 <span class="m-menu__link-text"><?= Yii::t('navigation','Loads and unloads') ?> </span>
                 <i class="m-menu__ver-arrow la la-angle-right"></i>
             </a>
@@ -175,7 +175,7 @@ $user = Yii::$app->user;
 
 
             <a href="javascript:;" class="m-menu__link m-menu__toggle">
-                <i class="m-menu__link-icon flaticon-layers"></i>
+                <i class="m-menu__link-icon flaticon-globe"></i>
                 <span class="m-menu__link-text"><?= Yii::t('navigation','Tolls') ?> </span>
                 <i class="m-menu__ver-arrow la la-angle-right"></i>
             </a>
@@ -210,7 +210,7 @@ $user = Yii::$app->user;
         <?php if($user->can('roleCompanyAdmin')) : ?>
             <li class="m-menu__item">
                 <a href="<?= Url::toRoute('/settings/detail') ?>" class="m-menu__link">
-                    <i class="m-menu__link-icon flaticon-layers"></i>
+                    <i class="m-menu__link-icon flaticon-piggy-bank"></i>
                     <span class="m-menu__link-text"><?= Yii::t('navigation','Expenses settings') ?></span>
                 </a>
             </li>
@@ -218,7 +218,7 @@ $user = Yii::$app->user;
 
 
             <a href="javascript:;" class="m-menu__link m-menu__toggle">
-                <i class="m-menu__link-icon flaticon-layers"></i>
+                <i class="m-menu__link-icon flaticon-map"></i>
                 <span class="m-menu__link-text"><?= Yii::t('navigation','Users Management') ?> </span>
                 <i class="m-menu__ver-arrow la la-angle-right"></i>
             </a>

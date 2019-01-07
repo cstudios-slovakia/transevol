@@ -37,3 +37,4 @@ tests/_support/_generated
 
 **/node_modules
 /resources
+*.zip
