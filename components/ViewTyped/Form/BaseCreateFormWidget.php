@@ -21,6 +21,7 @@ class BaseCreateFormWidget extends ActiveForm
     protected $defaultFooterLayoutPath  = '@app/views/layouts/default/common/pages/_submit_buttons.php';
     protected $cancelUrl = '#';
 
+    public $options = ['class' => 'm-form'];
     /**
      * Initializes the widget.
      * This renders the form open tag.

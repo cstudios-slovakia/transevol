@@ -17,14 +17,5 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Create vehicle' => 'nové vozidlo',
-    'Static expenses for vehicle' => 'Fixné náklady vozidla',
-    'Technical parameters' => 'Technické parametre vozidla',
-    'Companies ID' => 'Názov firmy',
-    'ECV' => 'EČV',
-    'Emission Classes ID' => 'Emisná trieda',
-    'Shaft' => 'Počt náprav',
-    'Vehicle' => 'Vozidlo',
-    'Vehicle Types ID' => 'Typ vozidla',
-    'Weight' => 'Pohotovosťná hmotnosť',
+    'Save' => '',
 ];

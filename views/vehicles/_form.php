@@ -16,17 +16,21 @@ use app\support\Vehicles\Relations\VehicleRelationAssistance;
 
     <?php $form = \app\components\ViewTyped\Form\BaseCreateFormWidget::begin(); ?>
 
-    <?= $form->field($model, 'ecv')->textInput(['maxlength' => true]) ?>
+    <div class="m-form__section m-form__section--first">
+        <div class="m-form__heading">
+            <h3 class="m-form__heading-title"><?= Yii::t('vehicle','Technical parameters') ?></h3>
+        </div>
+        <?= $form->field($model, 'ecv')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'vehicle_types_id')->dropDownList(VehicleRelationAssistance::vehicleTypesList()) ?>
+        <?= $form->field($model, 'weight')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'shaft')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'emission_classes_id')->dropDownList(VehicleRelationAssistance::emissionClassesList()) ?>
+    </div>
 
-
-    <?= $form->field($model, 'vehicle_types_id')->dropDownList(VehicleRelationAssistance::vehicleTypesList()) ?>
-
-    <?= $form->field($model, 'emission_classes_id')->dropDownList(VehicleRelationAssistance::emissionClassesList()) ?>
-
-    <?= $form->field($model, 'weight')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'shaft')->textInput(['maxlength' => true]) ?>
-
+    <div class="m-form__section m-form__section--first">
+        <div class="m-form__heading">
+            <h3 class="m-form__heading-title"><?= Yii::t('vehicle','Static expenses for vehicle') ?></h3>
+        </div>
     <?php foreach($staticCostsCollection as $costShortName => $staticCost): ?>
 
         <?php
@@ -36,9 +40,6 @@ use app\support\Vehicles\Relations\VehicleRelationAssistance;
         <?= $this->render('../layouts/default/common/static_cost_record',['record' => $record,'form' => $form]) ?>
 
     <?php endforeach; ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php \app\components\ViewTyped\Form\BaseCreateFormWidget::end(); ?>

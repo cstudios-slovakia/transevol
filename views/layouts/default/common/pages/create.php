@@ -12,9 +12,9 @@ $sectionName = $this->context->id;
                             <span class="m-portlet__head-icon m--hide">
                                 <i class="la la-gear"></i>
                             </span>
-                        <h3 class="m-portlet__head-text">
+                        <h3 class="m-portlet__head-text text-uppercase">
                             <?= Yii::t('common/pages/create','Create {sectionName}', [
-                                'sectionName' => $sectionName
+                                'sectionName' => Yii::t('vehicle','Create vehicle')
                             ]) ?>
                         </h3>
                     </div>

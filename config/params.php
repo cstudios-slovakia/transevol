@@ -16,7 +16,7 @@ return [
             'vehicle'   => [
                 // ['non_translated_name','prefix_used_in_db']
                 // see below
-                ['leasing','lsng',Yii::t('static_costs','leasing')],
+                ['leasing','lsng',Yii::t('static_costs','lsng')],
                 ['road_tax','rdtx',Yii::t('static_costs','rdtx')],
                 ['servis','srvs',Yii::t('static_costs','srvs')],
                 ['other_a','otha',Yii::t('static_costs','otha')],
@@ -27,7 +27,7 @@ return [
                 ['cmr_insurance','cmrins',Yii::t('static_costs','cmrins')],
                 ['private_time_cost_a','privtma',Yii::t('static_costs','privtma')],
                 ['private_time_cost_b','privtmb',Yii::t('static_costs','privtmb')],
-                ['private_time_cost_c','privtmc',Yii::t('static_costs','privtmb')],
+                ['private_time_cost_c','privtmc',Yii::t('static_costs','privtmc')],
                 // liquid statics :S
                 ['main_vehicle','mnvhcl',Yii::t('static_costs','mnvhcl')],
                 ['main_with_trailer_is_empty','mnvhcl_trlr_empty',Yii::t('static_costs','mnvhcl_trlr_empty')],
