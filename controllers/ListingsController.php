@@ -78,7 +78,7 @@ class ListingsController extends BaseController
         $input = $this->request()->post();
 
         if ($model->load($input) && $model->validate() && $model->store()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->listingsModelId]);
         }
 
         return $this->render('create', [
@@ -95,24 +95,23 @@ class ListingsController extends BaseController
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $listings = $this->findModel($id);
 
-        $addressesModel = $model->addresses;
+        $listingsModel  = new ListingsModel();
+        $listingsModel->listingsModelId = $listings->id;
+        $listingsModel->setAttributes(array_merge($listings->toArray(),$listings->addresses->toArray()),false);
 
         $input = $this->request()->post();
 
-        if ($model->load($input) && $addressesModel->load($input) && Model::validateMultiple([$model, $addressesModel])) {
+        if ($listingsModel->load($input) && $listingsModel->validate()) {
 
-            $addressesModel->update();
+            $listingsModel->update();
 
-            $model->countries_id  = $addressesModel->countries_id;
-            $model->update();
-
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $listingsModel->listingsModelId]);
         }
 
         return $this->render('update', [
-            'model' => $model,
+            'model' => $listingsModel,
         ]);
     }
 
@@ -139,8 +138,9 @@ class ListingsController extends BaseController
      */
     protected function findModel($id)
     {
-        if (($model = Listings::findOne($id)) !== null) {
-            return $model;
+
+        if (($listings = Listings::findOne($id)) !== null) {
+            return $listings;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');

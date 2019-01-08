@@ -9,7 +9,7 @@ class ListingsModel extends Model
 {
     use LoggedInUserTrait;
 
-    public $id;
+    public $listingsModelId;
     public $place_name;
     public $place_types_id;
     public $email;
@@ -63,9 +63,24 @@ class ListingsModel extends Model
         $listings->link('addresses', $addresses);
 
         $saved = $listings->save();
-        $this->id = $listings->id;
+        $this->listingsModelId = $listings->id;
 
         return $saved;
+    }
+
+    public function update($attributes = []) : bool
+    {
+
+        $listings = Listings::findOne($this->listingsModelId);
+
+        $listings->load(\Yii::$app->request->post(),'ListingsModel');
+
+        $listings->addresses->load(\Yii::$app->request->post(),'ListingsModel');
+//        $address->load(\Yii::$app->request->post(),'ListingsModel');
+//        $address->update();
+        $listings->update();
+
+        return true;
     }
 
 

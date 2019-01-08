@@ -17,7 +17,8 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Cancel' => '',
-    'Details' => '',
-    'Edit' => '',
+    'Details for {sectionName}' => '',
+    'Details for&nbsp;<strong>{sectionName}</strong>' => '',
+    'Cancel' => 'Späť do zoznamu',
+    'Edit' => 'Aktualizovať údaje',
 ];
