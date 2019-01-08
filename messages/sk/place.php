@@ -17,5 +17,14 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Create {sectionName}' => 'Vytvoriť {sectionName}',
+    'loading' => 'Miesto nakládky',
+    'toll' => 'Colnica',
+    'unloading' => 'Miesto vykládky',
+    'Addresses id' => 'Adresa',
+    'Companies id' => 'Názov firmy',
+    'Countries id' => 'Štát',
+    'Create place' => 'Pridať nové miesto',
+    'Place name' => 'Označenie miesta',
+    'Place types id' => 'Typ miesta',
+    'Position' => 'Pozícia miesta',
 ];

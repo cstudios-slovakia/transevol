@@ -57,5 +57,12 @@ return [
 
         ],
         'listings'  => ['services','clients'],
+        'options_translation' => [
+            'place_types'   => [
+                'toll'          => Yii::t('place','toll'),
+                'loading'       => Yii::t('place','loading'),
+                'unloading'     => Yii::t('place','unloading'),
+            ],
+        ]
     ]
 ];

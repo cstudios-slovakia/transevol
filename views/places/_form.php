@@ -28,9 +28,6 @@ use yii\widgets\ActiveForm;
     <?= $form->field($addressesModel, 'countries_id')->dropDownList($related['countries']) ?>
     <?= $form->field($placesModel, 'place_types_id')->dropDownList($related['placetypes']) ?>
 
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
-    </div>
 
     <?php \app\components\ViewTyped\Form\BaseCreateFormWidget::end(); ?>
 

@@ -9,6 +9,7 @@ use app\models\PlacesPlaceTypesQuery;
 use app\models\PlaceTypes;
 use app\support\helpers\AppParams;
 use app\support\helpers\LoggedInUserTrait;
+use app\support\Places\Relations\PlaceRelationAssistance;
 use Yii;
 use app\models\Places;
 use yii\base\Model;
@@ -112,14 +113,13 @@ class PlacesController extends BaseController
 
         // add relations and populate dropdowns
         $countries      = Countries::find()->all();
-        $placeTypes = PlacesPlaceTypesQuery::find()->all();
 
         return $this->render('create', [
             'placesModel'       => $placesModel,
             'addressesModel'    => $addressesModel,
             'related'   => [
                 'countries' => ArrayHelper::map($countries,'id','country_name'),
-                'placetypes' => ArrayHelper::map($placeTypes,'id','placetype_name'),
+                'placetypes' => PlaceRelationAssistance::placeTypesSelectOptions(),
             ],
         ]);
     }

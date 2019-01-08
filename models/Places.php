@@ -62,13 +62,13 @@ class Places extends AppBasedActiveRecord
     {
         return [
             'id' => 'ID',
-            'place_name' => 'Place Name',
-            'position' => 'Position',
-            'companies_id' => 'Companies ID',
+            'place_name' => Yii::t('place','Place name'),
+            'position' => Yii::t('place','Position'),
+            'companies_id' => Yii::t('place','Companies id'),
 
-            'countries_id' => 'Countries ID',
-            'addresses_id' => 'Addresses ID',
-            'place_types_id' => 'Place Types ID',
+            'countries_id' => Yii::t('place','Countries id'),
+            'addresses_id' => Yii::t('place','Addresses id'),
+            'place_types_id' => Yii::t('place','Place types id'),
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

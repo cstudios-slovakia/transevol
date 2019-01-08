@@ -9,10 +9,10 @@ use yii\helpers\Html;
 $this->title = 'Create Places';
 $this->params['breadcrumbs'][] = ['label' => 'Places', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+$this->params['portlet']['title'] = Yii::t('place', 'Create place');
 ?>
 <div class="places-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
         'placesModel'       => $placesModel,
