@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Addresses;
 use app\models\Companies;
+use app\models\ListingsModel;
 use app\models\PlaceTypes;
 use app\models\ServiceListingsQuery;
 use app\support\helpers\AppParams;
@@ -71,21 +72,12 @@ class ListingsController extends BaseController
      */
     public function actionCreate()
     {
-        $model = new Listings();
-        $addressesModel = new Addresses();
+
+        $model = new ListingsModel();
 
         $input = $this->request()->post();
 
-        if ($model->load($input) && $addressesModel->load($input) && Model::validateMultiple([$model,$addressesModel])) {
-
-            $company        = self::loggedInUserCompany();
-            $model->companies_id  = $company->id;
-            $model->countries_id  = $addressesModel->countries_id;
-
-            $addressesModel->save();
-
-            $model->link('addresses', $addressesModel);
-
+        if ($model->load($input) && $model->validate() && $model->store()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

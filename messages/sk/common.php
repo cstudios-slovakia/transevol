@@ -18,6 +18,8 @@
  */
 return [
     'Created At' => '',
+    'Dátum aktualizácie' => '',
+    'Dátum vytvorenia' => '',
     'Updated At' => '',
     'Your company is:' => '',
     'created_at' => 'Vytvorený',

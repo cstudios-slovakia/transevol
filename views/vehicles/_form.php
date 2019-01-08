@@ -14,7 +14,7 @@ use app\support\Vehicles\Relations\VehicleRelationAssistance;
 
 <div class="vehicles-form">
 
-    <?php $form = \app\components\ViewTyped\Form\BaseCreateFormWidget::begin(); ?>
+    <?php $form = ActiveForm::begin(); ?>
 
     <div class="m-form__section m-form__section--first">
         <div class="m-form__heading">
@@ -42,7 +42,8 @@ use app\support\Vehicles\Relations\VehicleRelationAssistance;
     <?php endforeach; ?>
     </div>
 
-    <?php \app\components\ViewTyped\Form\BaseCreateFormWidget::end(); ?>
+    <button type="submit">x</button>
+    <?php ActiveForm::end(); ?>
 
 </div>
 

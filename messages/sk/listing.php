@@ -17,13 +17,12 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Companies ID' => 'Názov firmy',
-    'ECV' => 'EČV',
-    'Emission Classes ID' => 'Emisná trieda',
-    'Shaft' => 'Počt náprav',
-    'Static expenses for vehicle' => 'Fixné náklady vozidla',
-    'Technical parameters' => 'Technické parametre vozidla',
-    'Vehicle' => 'Vozidlo',
-    'Vehicle Types ID' => 'Typ vozidla',
-    'Weight' => 'Pohotovosťná hmotnosť',
+    'Adresa' => '',
+    'Create listing' => 'Pridať novú adresu',
+    'E-mail' => '',
+    'Názov firmy' => '',
+    'Názov miesta' => '',
+    'Tel.číslo' => '',
+    'Typ miesta' => '',
+    'Štát' => '',
 ];

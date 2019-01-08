@@ -40,8 +40,9 @@ class Vehicles extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ecv', 'vehicle_types_id', 'emission_classes_id', 'weight', 'shaft'], 'required'],
-            [['companies_id', 'vehicle_types_id', 'emission_classes_id', 'weight', 'shaft'], 'integer'],
+            [['ecv', 'vehicle_types_id', 'emission_classes_id', 'weight', 'shaft'], 'required',],
+
+            [['companies_id', 'vehicle_types_id', 'emission_classes_id', 'weight', 'shaft'], 'integer',  'skipOnEmpty' => false],
             [['created_at', 'updated_at'], 'safe'],
             [['ecv'], 'string', 'max' => 100],
             [['companies_id'], 'exist', 'skipOnError' => true, 'targetClass' => Companies::className(), 'targetAttribute' => ['companies_id' => 'id']],

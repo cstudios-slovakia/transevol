@@ -17,6 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Value should be numeric {value}' => '',
     'adm_buy_thnc' => '',
     'adm_disp_rbsh' => '',
     'adm_prev' => '',
@@ -26,6 +27,7 @@ return [
     'mass_cls_ins' => '',
     'mass_cmr_ins' => '',
     'mass_req_ins' => '',
+    'privtmc' => '',
     'cmins' => 'PZP',
     'cmrins' => 'CMR poistenie',
     'colins' => 'Havarijné poistenie',

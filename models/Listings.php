@@ -40,11 +40,10 @@ class Listings extends AppBasedActiveRecord
     {
         return [
             [['place_name', 'place_types_id'], 'required'],
-            [['companies_id', 'countries_id', 'addresses_id', 'place_types_id'], 'integer'],
+            [['companies_id', 'countries_id', 'place_types_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['place_name', 'email'], 'string', 'max' => 255],
             [['phone'], 'string', 'max' => 20],
-            [['addresses_id'], 'exist', 'skipOnError' => true, 'targetClass' => Addresses::className(), 'targetAttribute' => ['addresses_id' => 'id']],
             [['companies_id'], 'exist', 'skipOnError' => true, 'targetClass' => Companies::className(), 'targetAttribute' => ['companies_id' => 'id']],
             [['countries_id'], 'exist', 'skipOnError' => true, 'targetClass' => Countries::className(), 'targetAttribute' => ['countries_id' => 'id']],
             [['place_types_id'], 'exist', 'skipOnError' => true, 'targetClass' => PlaceTypes::className(), 'targetAttribute' => ['place_types_id' => 'id']],
@@ -58,15 +57,15 @@ class Listings extends AppBasedActiveRecord
     {
         return [
             'id' => 'ID',
-            'place_name' => 'Place Name',
-            'companies_id' => 'Companies ID',
-            'email' => 'Email',
-            'phone' => 'Phone',
-            'countries_id' => 'Countries ID',
-            'addresses_id' => 'Addresses ID',
-            'place_types_id' => 'Place Types ID',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'place_name' => Yii::t('listing','Názov miesta'),
+            'companies_id' => Yii::t('listing','Názov firmy'),
+            'email' =>  Yii::t('listing','E-mail'),
+            'phone' => Yii::t('listing','Tel.číslo'),
+            'countries_id' =>  Yii::t('listing','Štát'),
+            'addresses_id' =>  Yii::t('listing','Adresa'),
+            'place_types_id' =>  Yii::t('listing','Typ miesta'),
+            'created_at' =>  Yii::t('common','Dátum vytvorenia'),
+            'updated_at' => Yii::t('common','Dátum aktualizácie'),
         ];
     }
 

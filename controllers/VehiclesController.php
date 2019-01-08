@@ -83,11 +83,20 @@ class VehiclesController extends BaseController
 //        $lengthSelect = FrequencyDataBuilder::makeType('length')->dropDownListOptions();
 //
 //        dd($timeSelect,$lengthSelect);
-
         $model = new Vehicles();
         $vehicleStaticCostFormModel  = new VehicleStaticCostsForm();
 
         $request = Yii::$app->request;
+//        dd($request->post(),$model->load($request->post(),'Vehicles'),
+//            $vehicleStaticCostFormModel->load($request->post(),'StaticCostsForm'),
+////        $vehicleStaticCostFormModel->validate(),
+////        $vehicleStaticCostFormModel->getErrorSummary(0),
+//            Model::validateMultiple([$model,$vehicleStaticCostFormModel]),
+//            $vehicleStaticCostFormModel->getErrorSummary(1),
+//            $model->getErrorSummary(1),
+//            $model->getErrors(),
+//            $vehicleStaticCostFormModel->getErrors()
+//            );
 
         $staticCosts = VehicleStaticCost::find()->all();
         $staticCostsCollection = collect($staticCosts)->keyBy('short_name');

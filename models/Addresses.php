@@ -51,12 +51,12 @@ class Addresses extends AppBasedActiveRecord
     {
         return [
             'id' => 'ID',
-            'city' => 'City',
-            'street' => 'Street',
-            'zip' => 'Zip',
-            'countries_id' => 'Countries ID',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'city' => Yii::t('address','Mesto'),
+            'street' =>Yii::t('address','Ulica'),
+            'zip' => Yii::t('address','PSČ'),
+            'countries_id' => Yii::t('address','Štát'),
+            'created_at' => Yii::t('common','Dátum vytvorenia'),
+            'updated_at' => Yii::t('common','Dátum aktualizácie'),
         ];
     }
 

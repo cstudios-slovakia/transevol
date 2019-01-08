@@ -1,5 +1,10 @@
 <?php
 $sectionName = $this->context->id;
+
+$portletTitle = isset($this->params['portlet']['title']) ? $this->params['portlet']['title'] : Yii::t('common/pages/create','Create {sectionName}', [
+    'sectionName' => $sectionName
+]);
+
 ?>
 
 <div class="row">
@@ -13,9 +18,7 @@ $sectionName = $this->context->id;
                                 <i class="la la-gear"></i>
                             </span>
                         <h3 class="m-portlet__head-text text-uppercase">
-                            <?= Yii::t('common/pages/create','Create {sectionName}', [
-                                'sectionName' => Yii::t('vehicle','Create vehicle')
-                            ]) ?>
+                            <?= $portletTitle ?>
                         </h3>
                     </div>
                 </div>

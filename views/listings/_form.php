@@ -8,6 +8,8 @@ use app\support\Listings\Relations\PlaceTypeRelationAssistance;
 /* @var $this yii\web\View */
 /* @var $model app\models\Listings */
 /* @var $form yii\widgets\ActiveForm */
+
+
 ?>
 
 <?php $this->beginContent('@app/views/layouts/default/common/pages/create.php'); ?>
@@ -24,16 +26,10 @@ use app\support\Listings\Relations\PlaceTypeRelationAssistance;
 
     <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($addressesModel, 'city')->textInput() ?>
-    <?= $form->field($addressesModel, 'street')->textInput() ?>
-    <?= $form->field($addressesModel, 'zip')->textInput() ?>
-    <?= $form->field($addressesModel, 'countries_id')->dropDownList(CountryRelationAssistance::countrySelectOptions()) ?>
-
-
-
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
-    </div>
+    <?= $form->field($model, 'city')->textInput() ?>
+    <?= $form->field($model, 'street')->textInput() ?>
+    <?= $form->field($model, 'zip')->textInput() ?>
+    <?= $form->field($model, 'countries_id')->dropDownList(CountryRelationAssistance::countrySelectOptions()) ?>
 
     <?php \app\components\ViewTyped\Form\BaseCreateFormWidget::end(); ?>
 
