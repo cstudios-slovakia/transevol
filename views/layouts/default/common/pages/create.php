@@ -1,7 +1,7 @@
 <?php
 $sectionName = $this->context->id;
 
-$portletTitle = isset($this->params['portlet']['title']) ? $this->params['portlet']['title'] : Yii::t('common/pages/create','Create {sectionName}', [
+$portletTitle = isset($this->params['portlet']['title']) ? $this->params['portlet']['title'] : Yii::t('view/pages/create','Create {sectionName}', [
     'sectionName' => $sectionName
 ]);
 

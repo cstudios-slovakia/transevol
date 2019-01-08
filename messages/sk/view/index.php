@@ -17,13 +17,5 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Adresa' => '',
-    'E-mail' => '',
-    'Názov firmy' => '',
-    'Názov miesta' => '',
-    'Tel.číslo' => '',
-    'Typ miesta' => '',
-    'new listingType' => 'nový zoznam',
-    'Štát' => '',
-    'Create listing' => 'Pridať novú adresu',
+    'Create {listingType}' => '',
 ];

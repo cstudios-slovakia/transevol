@@ -2,6 +2,11 @@
 use yii\helpers\Url;
 
 $sectionName = $this->context->id;
+
+$portletTitle = isset($this->params['portlet']['title']) ? $this->params['portlet']['title'] : Yii::t('view/pages/index','Create {sectionName}', [
+    'sectionName' => $sectionName
+]);
+
 ?>
 
 <div class="<?= $sectionName ?>-index">
@@ -17,13 +22,12 @@ $sectionName = $this->context->id;
             <div class="m-portlet__head-tools">
                 <ul class="m-portlet__nav">
                     <li class="m-portlet__nav-item">
-                        <a href="<?= Url::toRoute($sectionName.'/create') ?>" class="btn btn-accent m-btn m-btn--custom m-btn--pill m-btn--icon m-btn--air">
-												<span>
-													<i class="la la-plus"></i>
-													<span><?= Yii::t('view/pages/index','Pridať {sectionName}',[
-													    'sectionName' => $sectionName
-                                                        ]) ?></span>
-												</span>
+                        <a href="<?= Url::toRoute($sectionName.'/create') ?>"
+                           class="btn btn-accent m-btn m-btn--custom m-btn--pill m-btn--icon m-btn--air">
+                            <span>
+                                <i class="la la-plus"></i>
+                                <span><?= $portletTitle ?></span>
+                            </span>
                         </a>
                     </li>
 

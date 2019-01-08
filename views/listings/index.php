@@ -10,6 +10,9 @@ use app\components\ViewTyped\Page\Index\BaseGridView;
 
 $this->title = 'Listings';
 $this->params['breadcrumbs'][] = $this->title;
+$this->params['portlet']['title'] = Yii::t('view/index','Create {listingType}',[
+    'listingType' => Yii::t('listing','new listingType')
+])
 ?>
 
 <?php $this->beginContent('@app/views/layouts/default/common/tables/base_table.php'); ?>
