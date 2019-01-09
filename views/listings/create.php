@@ -18,7 +18,8 @@ $this->params['portlet']['title'] = Yii::t('listing', 'Create listing');
 
     <?= $this->render('_form', [
         'model' => $model,
-//        'addressesModel'    => new \app\models\Addresses()
+
     ]) ?>
+
 
 </div>

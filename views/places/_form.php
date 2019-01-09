@@ -2,13 +2,16 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model app\models\Places */
 /* @var $form yii\widgets\ActiveForm */
 /* @var $placesModel \app\models\Places*/
 /* @var $addressesModel \app\models\Addresses*/
 /* @var $related array */
+
+$cancelUrl  = Url::toRoute(['/places/index','type' => $type]);
+
 ?>
 
 <?php $this->beginContent('@app/views/layouts/default/common/pages/create.php'); ?>
@@ -16,6 +19,7 @@ use yii\widgets\ActiveForm;
 <div class="places-form">
 
     <?php $form = \app\components\ViewTyped\Form\BaseCreateFormWidget::begin(); ?>
+    <?php $form->setCancelUrl($cancelUrl) ?>
 
     <?= $form->field($placesModel, 'place_name')->textInput(['maxlength' => true]) ?>
 

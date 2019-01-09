@@ -15,12 +15,18 @@ class DefaultActionColumn
     public $buttons = ['view','update','delete'];
 
     /**
+     * @var DefaultActionColumn
+     */
+    protected static $instance;
+
+    /**
      * @var array
      */
     protected $actionColumnSettings = ['class' => 'yii\grid\ActionColumn'];
 
     public $additionalOptions = [];
     public $buttonOptions = [];
+    public $actionColumnOptions = [];
 
     /**
      * Icon is wrapped into button.
@@ -43,38 +49,60 @@ class DefaultActionColumn
     ];
 
 
+
+
     /**
      * Rendering action columns. Columns have predefined buttons and options.
      * @return array
      */
     public static function renderActionsColumns() : array
     {
-        $instance   = new self();
-
+        $instance = self::getInstance();
         $instance->composeActionButtons();
 
         return array_merge($instance->actionColumnSettings,[
             'buttons'   => $instance->buttons
-        ]);
+        ],$instance->actionColumnOptions);
     }
 
     protected function composeActionButtons() : self
     {
         foreach ($this->buttons as $index => $action){
-            unset($this->buttons[$index]);
-            $this->buttons[$action] = $this->renderSpecificButton($action);
+            $buttonGenerator = $this->renderSpecificButton($action);
+
+            if(! is_callable($action) ){
+                unset($this->buttons[$index]);
+            }
+
+            $this->buttons[$action] = $buttonGenerator;
         }
 
         return $this;
     }
 
 
+
+
+    public static function setUrlCreator( callable $urlCreator) : self
+    {
+        self::getInstance()->actionColumnOptions['urlCreator'] = $urlCreator;
+
+        return self::$instance;
+    }
+
+    public function setButton(string $actionName, callable $buttonGenerator)
+    {
+        $this->buttons[$actionName] = $buttonGenerator;
+
+        return $this;
+    }
+
     /**
      * Rendering action specific button.
      * @param string $actionType
      * @return callable
      */
-    protected function renderSpecificButton(string $actionType) : callable
+    protected function renderSpecificButton(string $actionType, string $url = '') : callable
     {
         return function ($url, $model, $key) use ($actionType)  {
 
@@ -125,5 +153,15 @@ class DefaultActionColumn
 
         return $options;
     }
+
+    public static function getInstance()
+    {
+        if(! isset(self::$instance)){
+            self::$instance = new self();
+        }
+
+        return self::$instance;
+    }
+
 
 }

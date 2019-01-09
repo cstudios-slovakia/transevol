@@ -92,6 +92,7 @@ class BaseCreateFormWidget extends ActiveForm
         if (isset($this->footer)){
             return $this->footer;
         }
+
         return $this->render($this->defaultFooterLayoutPath,['cancelUrl' => $this->cancelUrl]);
     }
 

@@ -17,9 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'loading' => 'Miesto nakládky',
-    'toll' => 'Colnica',
-    'unloading' => 'Miesto vykládky',
+    'Update place' => 'Aktualizovať miesto',
     'Addresses id' => 'Adresa',
     'Companies id' => 'Názov firmy',
     'Countries id' => 'Štát',
@@ -27,4 +25,7 @@ return [
     'Place name' => 'Označenie miesta',
     'Place types id' => 'Typ miesta',
     'Position' => 'Pozícia miesta',
+    'loading' => 'Miesto nakládky',
+    'toll' => 'Colnica',
+    'unloading' => 'Miesto vykládky',
 ];

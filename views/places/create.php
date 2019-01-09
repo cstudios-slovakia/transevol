@@ -17,7 +17,8 @@ $this->params['portlet']['title'] = Yii::t('place', 'Create place');
     <?= $this->render('_form', [
         'placesModel'       => $placesModel,
         'addressesModel'    => $addressesModel,
-        'related'  => $related
+        'related'  => $related,
+        'type'  => $type
     ]) ?>
 
 </div>

@@ -42,12 +42,15 @@ class PlacesController extends BaseController
         // check type is defined, if not simple use default
         if(in_array($type, $placeCollections)){
 
+            $type = strtolower($type);
+
             // building query, make attention that this query replaces query above,
             // and search for places for needed type
             $query  = $query->leftJoin('place_types','`places`.`place_types_id` = `place_types`.`id`')
-                ->where(['place_types.place_section' => $type]);
+                ->where(['place_types.placetype_name' => $type]);
 
         }
+
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -69,6 +72,7 @@ class PlacesController extends BaseController
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
+
         ]);
     }
 
@@ -121,6 +125,7 @@ class PlacesController extends BaseController
                 'countries' => ArrayHelper::map($countries,'id','country_name'),
                 'placetypes' => PlaceRelationAssistance::placeTypesSelectOptions(),
             ],
+            'type'  => $type
         ]);
     }
 
@@ -131,16 +136,26 @@ class PlacesController extends BaseController
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate($id, string $type = '')
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load($this->request()->post()) && $model->addresses->load($this->request()->post()) && $model->addresses->save() &&  $model->save()) {
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
+        // add relations and populate dropdowns
+        $countries      = Countries::find()->all();
+
         return $this->render('update', [
-            'model' => $model,
+            'placesModel'       => $model,
+            'addressesModel'    => $model->addresses,
+            'related'   => [
+                'countries' => ArrayHelper::map($countries,'id','country_name'),
+                'placetypes' => PlaceRelationAssistance::placeTypesSelectOptions(),
+            ],
+            'type'  => $type
         ]);
     }
 
