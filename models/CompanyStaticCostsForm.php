@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\components\ModelTyped\Validators\StaticCostInputValidator;
 use yii\base\Model;
 
 class CompanyStaticCostsForm extends Model
@@ -36,7 +37,7 @@ class CompanyStaticCostsForm extends Model
                     'adm_prev',
                     'adm_buy_thnc',
                     'adm_disp_rbsh'
-                ], 'required'
+                ],StaticCostInputValidator::className()
             ]
         ];
 

@@ -18,6 +18,9 @@ class StaticCostsFormMaker
     protected $model;
     protected $record;
 
+    /** @var  Model */
+    protected $source;
+
     public static function load(Model $model)
     {
         $self = new static();
@@ -34,6 +37,14 @@ class StaticCostsFormMaker
         $this->makeStaticCostForm();
 
         return $this->getRecord();
+    }
+
+    public function withErrors($source)
+    {
+
+        $this->source = $source;
+
+        return $this;
     }
 
     protected function makeStaticCostForm()
@@ -59,10 +70,17 @@ class StaticCostsFormMaker
             $record->frequency_datas_id = $costData->frequency_datas_id;
 
         }
+//dd($this->source);
+        if (array_key_exists($record->short_name,$this->source->getErrors())){
+            $record->value = $this->source->{$record->short_name}['value'];
+            $record->addError($record->short_name, $this->source->getFirstError($record->short_name));
+
+        }
 
         $record->units_id           = $staticCost->units_id;
         $record->unit_name          = $staticCost->units->unit_name;
         $record->frequency_group_name = $staticCost->frequencyGroup->frequency_group_name;
+
 
         $this->setRecord($record);
 

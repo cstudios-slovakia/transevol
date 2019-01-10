@@ -57,25 +57,13 @@ class CompaniesController extends BaseController
     {
         $company = $this->findModel();
 
-//        dd($company->getRelation('companyCostDatas')->all());
+        $companyCostDatas = $company->companyCostDatas;
+        $companyDynamicCosts = $company->companyDynamicCosts;
 
-        $costDatasDataProvider = new ActiveDataProvider([
-            'query' => $company->getRelation('companyCostDatas'),
-//            'pagination' => [
-//                'pageSize' => 20,
-//            ],
-        ]);
-
-        $dynamicCostDataProvider = new ActiveDataProvider([
-            'query' => $company->getRelation('companyDynamicCosts'),
-//            'pagination' => [
-//                'pageSize' => 20,
-//            ],
-        ]);
         return $this->render('view', [
             'model' => $company,
-            'costDatasDataProvider' => $costDatasDataProvider,
-            'dynamicCostDataProvider' => $dynamicCostDataProvider,
+            'companyCostDatas' => $companyCostDatas,
+            'companyDynamicCosts' => $companyDynamicCosts,
         ]);
     }
 
@@ -141,30 +129,54 @@ class CompaniesController extends BaseController
         $company = $this->findModel();
         $companyStaticCostsForm     = new CompanyStaticCostsForm();
 
-
+//        $company->load($this->request()->post(), 'Companies');
+//        $companyStaticCostsForm->load($this->request()->post(),'StaticCostsForm');
 
         $companyStaticCosts = collect(CompanyStaticCostQuery::find()->all())->keyBy('short_name');
 
-        if ($company->load($this->request()->post()) && $companyStaticCostsForm->load($this->request()->post()) &&
-        Model::validateMultiple([$company, $companyStaticCostsForm])) {
 
-            $staticCostsInput = $this->request()->post()['CompanyStaticCostsForm'];
 
-            foreach ($companyStaticCosts as $staticCostShortName => $companyStaticCost) {
-                $companyStaticCost->value   = $staticCostsInput[$staticCostShortName];
-                $companyStaticCost->update();
+//        $valid = $validCompany && $validCosts;
+        if ($company->load($this->request()->post(), 'Companies') &&
+            $companyStaticCostsForm->load($this->request()->post(),'StaticCostsForm')
+        ) {
+            $validCompany = $company->validate();
+            $validCosts = $companyStaticCostsForm->validate();
+            if ($valid = $validCompany && $validCosts){
+                $staticCostsInput = $this->request()->post()['StaticCostsForm'];
+
+                foreach ($companyStaticCosts as $staticCostShortName => $companyStaticCost) {
+                    $companyStaticCost->value   = $staticCostsInput[$staticCostShortName];
+                    $companyStaticCost->update();
+                }
+
+                return $this->redirect(['view', 'id' => $company->id]);
             }
 
-            return $this->redirect(['view', 'id' => $company->id]);
+
         }
 
 
+//        dd(
+//            $this->request()->post(),
+//            $company->load($this->request()->post(),'Companies'),
+//            $company,
+//            $companyStaticCostsForm->load($this->request()->post(),'StaticCostsForm'),
+//            $companyStaticCostsForm,
+//            Model::validateMultiple([$company, $companyStaticCostsForm]),
+//            $company->getErrorSummary(1),
+//            $companyStaticCostsForm->getErrorSummary(1),
+//            $company->getErrors(),
+//            $companyStaticCostsForm->getErrors()
+//
+//        );
 
-        $loadable = $companyStaticCosts->toArray();
-        $companyStaticCostsForm->load($loadable,'');
+//        $loadable = $companyStaticCosts->toArray();
+//        $companyStaticCostsForm->load($loadable,'');
 //        dd($companyStaticCostsForm);
-        $dynPersonal = $company->companyPersonalDynamicCosts;
-        $dynOther = $company->companyOtherDynamicCosts;
+
+
+//dd($company,$companyStaticCostsForm,$valid,$company->getErrors(),$companyStaticCostsForm->getErrors());
 
 
         return $this->render('update', [
@@ -227,7 +239,7 @@ class CompaniesController extends BaseController
         $companyDynamicCostForm->setScenario($action = $this->request()->post('action'));
         $companyDynamicCostForm->companies_id = (int) $this->request()->get('company_id');
         $companyDynamicCostForm->load($ajaxData = $this->request()->post(),'');
-//        dd($companyDynamicCostForm);
+
 
         $valid = $companyDynamicCostForm->validate();
 

@@ -7,7 +7,7 @@ $form = isset($form) ? $form : \yii\widgets\ActiveForm::begin();
 //dd($form);
 
 ?>
-<table>
+<table class="table table-striped m-table">
     <?php foreach ($dynamicCosts as $dynamicCost): ?>
         <?= $this->render('dynamic_cost_record',['dynamicCost' => $dynamicCost,'form' => $form]) ?>
     <?php endforeach; ?>

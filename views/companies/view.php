@@ -15,49 +15,49 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php $this->beginContent('@app/views/layouts/default/common/pages/show.php' ); ?>
 <div class="companies-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-//            'id',
+
             'company_name',
             'email',
             'phone',
             'ico',
             'dic',
             'icdph',
-//            'created_at',
-//            'updated_at',
+
         ],
     ]) ?>
 
-    <h4>Company Static Costs</h4>
-    <?php
-    echo \yii\widgets\ListView::widget([
-        'dataProvider' => $costDatasDataProvider,
-        'itemView' => '@app/views/layouts/default/common/cost_data_list_record',
-    ]);
-    ?>
+    <h4><?= Yii::t('company','Company static costs') ?></h4>
+    <?php foreach ($companyCostDatas as $companyCostData) : ?>
 
-    <h4>Company Dynamic Costs</h4>
-    <?php
-    echo \yii\widgets\ListView::widget([
-        'dataProvider' => $dynamicCostDataProvider,
-        'itemView' => '@app/views/layouts/default/common/dynamic_cost_data_list_record',
-    ]);
-    ?>
+        <div class="m-widget13__item">
+        <span class="m-widget13__desc  m--align-right">
+            <?= Yii::t('static_costs',$companyCostData->staticCosts->short_name) ?>:
+        </span>
+            <span class="m-widget13__text ">
+            <?= $companyCostData->value ?> / <?= $companyCostData->frequencyData->frequency_name ?>
+        </span>
+        </div>
+    <?php endforeach;?>
+
+    <div class="m-separator m-separator--space m-separator--dashed"></div>
+
+
+    <h4><?= Yii::t('company','Company dynamic costs') ?></h4>
+
+    <?php foreach ($companyDynamicCosts as $companyDynamicCost) : ?>
+        <div class="m-widget13__item">
+        <span class="m-widget13__desc  m--align-right">
+            <?= $companyDynamicCost->cost_name ?>:
+        </span>
+            <span class="m-widget13__text ">
+            <?= $companyDynamicCost->value ?> / <?= $companyDynamicCost->frequencyDatas->frequency_name ?>
+        </span>
+        </div>
+    <?php endforeach;?>
 </div>
 
     <?php $this->beginBlock('editButton'); ?>

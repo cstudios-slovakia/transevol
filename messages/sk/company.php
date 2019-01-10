@@ -17,6 +17,15 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'You does not defined your company. Create one!' => '',
+    'Add dynamic cost' => 'Pridať novú položku',
+    'E-mail' => '',
+    'Update' => 'Aktualizovať položku',
     'Company' => 'Firma',
+    'Company name' => 'Názov spoločnosti',
+    'DIC' => 'DIČ',
+    'IC DPH' => 'IČ DPH',
+    'ICO' => 'IČO',
+    'Phone' => 'Tel.číslo',
+    'You does not defined your company. Create one!' => 'Nemáte zadefinované firemné údaje. Vyplňte ich!',
+    'company data for {companyName}' => 'firemné údaje firmu {companyName}',
 ];

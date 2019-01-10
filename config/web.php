@@ -14,11 +14,17 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
 
     ],
+
     'components' => [
-//        'authManager' => [
-//            'class' => 'yii\rbac\DbManager',
-//            // uncomment if you want to cache RBAC items hierarchy
-//            // 'cache' => 'cache',
+//        'assetManager' => [
+//            'bundles' => [
+//                'yii\web\JqueryAsset' => [
+//                    'js'=>[]
+//                ],
+//                'yii\web\YiiAsset' => [
+//                    'depends' => []
+//                ],
+//            ],
 //        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation

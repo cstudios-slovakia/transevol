@@ -25,7 +25,8 @@ $(document).ready(function () {
             value           : currentValue.val(),
             cost_name   : currentCostName.val(),
             action   : 'create',
-            frequency_datas_id : currentFrequencyDataId.val()
+            frequency_datas_id : currentFrequencyDataId.val(),
+            _csrf : $('meta[name="csrf-token"]').attr("content")
         };
 
         ajaxRequest();
@@ -39,6 +40,7 @@ $(document).ready(function () {
     }
 
     function ajaxRequest() {
+        console.log(ajaxUrl);
         $.ajax({
             url: ajaxUrl,
             type: 'post',

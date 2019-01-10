@@ -17,13 +17,5 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Created At' => '',
-    'Delete' => 'Vymazať',
-    'Dátum aktualizácie' => '',
-    'Dátum vytvorenia' => '',
-    'Edit' => 'Editácia',
-    'Updated At' => '',
-    'Your company is:' => 'Ste priradený k firmu:',
-    'created_at' => 'Vytvorený',
-    'updated_at' => 'Aktualizovaný',
+    'Update {updateable}' => 'Aktualizovať {updateable}',
 ];

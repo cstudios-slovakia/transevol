@@ -18,7 +18,8 @@ class StaticCostsForm extends Model
     public function rules()
     {
         return [
-            [[ 'value', 'frequency_datas_id'  ], 'required']
+            [[ 'value', 'frequency_datas_id'  ], 'required'],
+            [[ 'value', 'frequency_datas_id'  ], 'number', 'skipOnEmpty' => false, 'skipOnError' => false]
         ];
 
     }

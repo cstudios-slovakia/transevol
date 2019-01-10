@@ -15,6 +15,7 @@ $dropDownOptions = \app\support\FrequencyDataBuilder::makeType($record->frequenc
     </div>
     <div class="col-md-3">
         <?= $form->field($record, '['.$record->short_name.']value')->textInput(['maxlength' => true])->label(false)  ?>
+        <?= $record->hasErrors($record->short_name) ? $record->getFirstError($record->short_name) : '' ?>
     </div>
     <div class="col-md-1">
         <span class="text-uppercase"><?= $record->unit_name ?></span>

@@ -17,8 +17,8 @@
 
     <td>
         <div class="btn-group" role="group" aria-label="Basic example">
-            <button type="button" class="btn-edit btn btn-secondary" data-dynamics-type="<?= $dynamicCost->cost_type ?>">EDIT</button>
-            <button type="button" class="btn-remove btn btn-secondary" data-dynamics-type="<?= $dynamicCost->cost_type ?>"">REMOVE</button>
+            <button type="button" class="btn-edit btn btn-secondary" data-dynamics-type="<?= $dynamicCost->cost_type ?>"><?= Yii::t('common','Edit') ?></button>
+            <button type="button" class="btn-remove btn btn-secondary" data-dynamics-type="<?= $dynamicCost->cost_type ?>"><?= Yii::t('common','Delete') ?></button>
         </div>
     </td>
 </tr>

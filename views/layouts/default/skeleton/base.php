@@ -13,6 +13,8 @@ use yii\helpers\Url;
 use app\components\ViewTyped\Page\BaseBreadcrumbs;
 
 AppAsset::register($this);
+
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>

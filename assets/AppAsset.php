@@ -23,7 +23,7 @@ class AppAsset extends AssetBundle
         'vendors/base/vendors.bundle.css',
         'demo/default/base/style.bundle.css',
         'demo/default/media/img/logo/favicon.ico',
-        '',
+
     ];
     public $js = [
         'vendors/base/vendors.bundle.js',
@@ -31,7 +31,12 @@ class AppAsset extends AssetBundle
 
     ];
     public $depends = [
-        'yii\web\YiiAsset',
+//        'yii\web\YiiAsset' => [
+//            'depends' => []
+//        ],
+//        'yii\web\JqueryAsset' => [
+//            'js'=>[]
+//        ],
 //        'yii\bootstrap\BootstrapAsset',
     ];
 }

@@ -22,6 +22,8 @@ class BaseCreateFormWidget extends ActiveForm
     protected $cancelUrl = '#';
 
     public $options = ['class' => 'm-form'];
+
+    public $fieldClass = 'app\widgets\BaseActiveField';
     /**
      * Initializes the widget.
      * This renders the form open tag.

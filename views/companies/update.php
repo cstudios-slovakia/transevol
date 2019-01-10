@@ -9,10 +9,15 @@ $this->title = 'Update Companies: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Companies', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
+$this->params['portlet']['title'] = Yii::t('view/pages/update','Update {updateable}',[
+    'updateable'    => Yii::t('company','company data for {companyName}',[
+        'companyName' =>  $model->company_name
+    ])
+]);
 ?>
 <div class="companies-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+
 
     <?= $this->render('_form', [
         'model' => $model,

@@ -56,12 +56,12 @@ class Companies extends AppBasedActiveRecord
     {
         return [
             'id' => 'ID',
-            'company_name' => 'Company Name',
-            'email' => 'Email',
-            'phone' => 'Phone',
-            'ico' => 'Ico',
-            'dic' => 'Dic',
-            'icdph' => 'Icdph',
+            'company_name' => Yii::t('company','Company name'),
+            'email' => Yii::t('company','E-mail'),
+            'phone' => Yii::t('company','Phone'),
+            'ico' => Yii::t('company','ICO'),
+            'dic' =>Yii::t('company','DIC'),
+            'icdph' => Yii::t('company','IC DPH'),
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

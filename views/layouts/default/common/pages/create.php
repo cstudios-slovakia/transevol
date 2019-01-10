@@ -17,7 +17,7 @@ $portletTitle = isset($this->params['portlet']['title']) ? $this->params['portle
                             <span class="m-portlet__head-icon m--hide">
                                 <i class="la la-gear"></i>
                             </span>
-                        <h3 class="m-portlet__head-text text-uppercase">
+                        <h3 class="m-portlet__head-text text-uppercase m--font-primary">
                             <?= $portletTitle ?>
                         </h3>
                     </div>
