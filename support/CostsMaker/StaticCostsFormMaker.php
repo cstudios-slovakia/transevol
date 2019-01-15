@@ -64,14 +64,13 @@ class StaticCostsFormMaker
 
         } else{
             $relations = $this->costDatasForModel();
-//            $costData = $relations->has($record->short_name) ? $relations->get($record->short_name)->value : null;
             $costData = $relations->has($record->short_name) ? $relations->get($record->short_name): null;
             $record->value = $costData ? $costData->value: null;
             $record->frequency_datas_id = $costData->frequency_datas_id;
 
         }
-//dd($this->source);
-        if (array_key_exists($record->short_name,$this->source->getErrors())){
+
+        if (isset($this->source) && array_key_exists($record->short_name,$this->source->getErrors())){
             $record->value = $this->source->{$record->short_name}['value'];
             $record->addError($record->short_name, $this->source->getFirstError($record->short_name));
 
