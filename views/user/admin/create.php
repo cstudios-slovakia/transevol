@@ -21,6 +21,7 @@ use yii\helpers\Url;
 $this->title = Yii::t('user', 'Create a user account');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('user', 'Users'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+$this->params['portlet']['title'] = Yii::t('admin/user', 'Add new company user');
 ?>
 
 <?= $this->render('/_alert', ['module' => Yii::$app->getModule('user'),]) ?>
@@ -38,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <li class="m-nav__item m-nav__item--active">
                     <a href="<?= Url::toRoute('/user/admin/create') ?>" class="m-nav__link">
                         <i class="m-nav__link-icon flaticon-plus"></i>
-                        <span class="m-nav__link-text"><?= Yii::t('admin/user','Add new company user') ?></span>
+                        <span class="m-nav__link-text"><?= Yii::t('admin/user','Add user credentials') ?></span>
                     </a>
                 </li>
                 <li class="m-nav__item m-nav__item--disabled" onclick="return false;">

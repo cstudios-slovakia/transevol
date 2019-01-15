@@ -14,7 +14,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\View;
 use yii\widgets\Pjax;
-
+use app\components\ViewTyped\Page\Index\BaseGridView;
 
 /**
  * @var \yii\web\View $this
@@ -24,33 +24,80 @@ use yii\widgets\Pjax;
 
 $this->title = Yii::t('user', 'Manage users');
 $this->params['breadcrumbs'][] = $this->title;
+
+
+$defaultActionColumn = \app\support\LayoutSupporters\Grid\DefaultActionColumn::renderActionsColumns();
+
+$actionColumnButtons = array_merge($defaultActionColumn['buttons'],[
+    'resend_password' => function ($url, $model, $key) {
+
+        $i = Html::tag('i','',['class' => 'la la-send-o']);
+
+        if (\Yii::$app->user->identity->isAdmin && !$model->isAdmin) {
+            return '
+        <a class="m-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-method="POST" data-confirm="' . Yii::t('user', 'Are you sure?') . '" href="' . Url::to(['resend-password', 'id' => $model->id]) . '">
+        '.$i.' </a>';
+        }
+    },
+    'switch' => function ($url, $model) {
+        $i = Html::tag('i','',['class' => 'la la-exchange']);
+        if(\Yii::$app->user->identity->isAdmin && $model->id != Yii::$app->user->id && Yii::$app->getModule('user')->enableImpersonateUser) {
+            return Html::a($i, ['/user/admin/switch', 'id' => $model->id], [
+                'title' => Yii::t('user', 'Become this user'),
+                'data-confirm' => Yii::t('user', 'Are you sure you want to switch to this user for the rest of this Session?'),
+                'data-method' => 'POST',
+                'class' => 'm-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill'
+            ]);
+        }
+    },
+    'block' => function ($url,$model) {
+        if ($model->isBlocked) {
+            return Html::a(Html::tag('i','',['class' => 'la la-unlock-alt']), ['block', 'id' => $model->id], [
+                'class' => 'm-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill',
+                'data-method' => 'post',
+                'data-confirm' => Yii::t('user', 'Are you sure you want to unblock this user?'),
+            ]);
+        } else {
+            return Html::a(Html::tag('i','',['class' => 'la la-unlock']), ['block', 'id' => $model->id], [
+                'class' => 'm-portlet__nav-link btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill',
+                'data-method' => 'post',
+                'data-confirm' => Yii::t('user', 'Are you sure you want to block this user?'),
+            ]);
+        }
+    },
+]);
+
+$actionColumnOptions = array_merge([
+    'template' => '{block} {switch} {resend_password} {update} {delete}',
+    'buttons' => $actionColumnButtons
+
+]);
+
 ?>
 
 <?= $this->render('/_alert', ['module' => Yii::$app->getModule('user')]) ?>
 
-<?= $this->render('/admin/_menu') ?>
+
+
+<?php $this->beginContent('@app/views/layouts/default/common/tables/base_table.php'); ?>
 
 <?php Pjax::begin() ?>
 
-<?= GridView::widget([
+
+
+<?= BaseGridView::widget([
     'dataProvider' => $dataProvider,
-    'filterModel'  => $searchModel,
     'layout'       => "{items}\n{pager}",
     'columns' => [
-        [
-            'attribute' => 'id',
-            'headerOptions' => ['style' => 'width:90px;'], # 90px is sufficient for 5-digit user ids
-        ],
         'username',
-        'email:email',
-
+        'email',
         [
             'attribute' => 'created_at',
             'value' => function ($model) {
                 if (extension_loaded('intl')) {
                     return Yii::t('user', '{0, date, MMMM dd, YYYY HH:mm}', [$model->created_at]);
                 } else {
-                    return date('Y-m-d G:i:s', $model->created_at);
+                    return date('d.m.Y', $model->created_at);
                 }
             },
         ],
@@ -85,49 +132,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'format' => 'raw',
             'visible' => Yii::$app->getModule('user')->enableConfirmation,
         ],
-        [
-            'header' => Yii::t('user', 'Block status'),
-            'value' => function ($model) {
-                if ($model->isBlocked) {
-                    return Html::a(Yii::t('user', 'Unblock'), ['block', 'id' => $model->id], [
-                        'class' => 'btn btn-xs btn-success btn-block',
-                        'data-method' => 'post',
-                        'data-confirm' => Yii::t('user', 'Are you sure you want to unblock this user?'),
-                    ]);
-                } else {
-                    return Html::a(Yii::t('user', 'Block'), ['block', 'id' => $model->id], [
-                        'class' => 'btn btn-xs btn-danger btn-block',
-                        'data-method' => 'post',
-                        'data-confirm' => Yii::t('user', 'Are you sure you want to block this user?'),
-                    ]);
-                }
-            },
-            'format' => 'raw',
-        ],
-        [
-            'class' => 'yii\grid\ActionColumn',
-            'template' => '{switch} {resend_password} {update} {delete}',
-            'buttons' => [
-                'resend_password' => function ($url, $model, $key) {
-                    if (\Yii::$app->user->identity->isAdmin && !$model->isAdmin) {
-                        return '
-                    <a data-method="POST" data-confirm="' . Yii::t('user', 'Are you sure?') . '" href="' . Url::to(['resend-password', 'id' => $model->id]) . '">
-                    <span title="' . Yii::t('user', 'Generate and send new password to user') . '" class="glyphicon glyphicon-envelope">
-                    </span> </a>';
-                    }
-                },
-                'switch' => function ($url, $model) {
-                    if(\Yii::$app->user->identity->isAdmin && $model->id != Yii::$app->user->id && Yii::$app->getModule('user')->enableImpersonateUser) {
-                        return Html::a('<span class="glyphicon glyphicon-user"></span>', ['/user/admin/switch', 'id' => $model->id], [
-                            'title' => Yii::t('user', 'Become this user'),
-                            'data-confirm' => Yii::t('user', 'Are you sure you want to switch to this user for the rest of this Session?'),
-                            'data-method' => 'POST',
-                        ]);
-                    }
-                }
-            ]
-        ],
+
+        array_merge($defaultActionColumn, $actionColumnOptions)
+
     ],
 ]); ?>
 
 <?php Pjax::end() ?>
+
+<?php $this->endContent(); ?>

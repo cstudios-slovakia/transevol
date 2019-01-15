@@ -10,6 +10,7 @@
  */
 
 use yii\bootstrap\Nav;
+use yii\helpers\Url;
 
 /**
  * @var \yii\web\View $this
@@ -38,71 +39,88 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="row">
     <div class="col-md-3">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <?= Nav::widget([
-                    'options' => [
-                        'class' => 'nav-pills nav-stacked',
-                    ],
-                    'items' => [
-                        [
-                            'label' => Yii::t('user', 'Account details'),
-                            'url' => ['/user/admin/update', 'id' => $user->id]
-                        ],
-                        [
-                            'label' => Yii::t('user', 'Profile details'),
-                            'url' => ['/user/admin/update-profile', 'id' => $user->id]
-                        ],
-                        ['label' => Yii::t('user', 'Information'), 'url' => ['/user/admin/info', 'id' => $user->id]],
-                        [
-                            'label' => Yii::t('user', 'Assignments'),
-                            'url' => ['/user/admin/assignments', 'id' => $user->id],
-                            'visible' => isset(Yii::$app->extensions['dektrium/yii2-rbac']),
-                        ],
-                        '<hr>',
-                        [
-                            'label' => Yii::t('user', 'Confirm'),
-                            'url' => ['/user/admin/confirm', 'id' => $user->id],
-                            'visible' => !$user->isConfirmed,
-                            'linkOptions' => [
-                                'class' => 'text-success',
-                                'data-method' => 'post',
-                                'data-confirm' => Yii::t('user', 'Are you sure you want to confirm this user?'),
-                            ],
-                        ],
-                        [
-                            'label' => Yii::t('user', 'Block'),
-                            'url' => ['/user/admin/block', 'id' => $user->id],
-                            'visible' => !$user->isBlocked,
-                            'linkOptions' => [
-                                'class' => 'text-danger',
-                                'data-method' => 'post',
-                                'data-confirm' => Yii::t('user', 'Are you sure you want to block this user?'),
-                            ],
-                        ],
-                        [
-                            'label' => Yii::t('user', 'Unblock'),
-                            'url' => ['/user/admin/block', 'id' => $user->id],
-                            'visible' => $user->isBlocked,
-                            'linkOptions' => [
-                                'class' => 'text-success',
-                                'data-method' => 'post',
-                                'data-confirm' => Yii::t('user', 'Are you sure you want to unblock this user?'),
-                            ],
-                        ],
-                        [
-                            'label' => Yii::t('user', 'Delete'),
-                            'url' => ['/user/admin/delete', 'id' => $user->id],
-                            'linkOptions' => [
-                                'class' => 'text-danger',
-                                'data-method' => 'post',
-                                'data-confirm' => Yii::t('user', 'Are you sure you want to delete this user?'),
-                            ],
-                        ],
-                    ],
-                ]) ?>
+
+        <div class="m-demo" data-code-preview="true" data-code-html="true" data-code-js="false">
+            <div class="m-demo__preview">
+                <ul class="m-nav">
+                    <li class="m-nav__item">
+                        <a href="<?= Url::toRoute(['/user/admin/update', 'id' => $user->id]) ?>" class="m-nav__link">
+                            <span class="m-nav__link-bullet m-nav__link-bullet--line">
+                                <span></span>
+                            </span>
+                            <span class="m-nav__link-text"><?= Yii::t('user', 'Account details') ?></span>
+                        </a>
+                    </li>
+                    <li class="m-nav__item">
+                        <a href="<?= Url::toRoute(['/user/admin/update-profile', 'id' => $user->id]) ?>" class="m-nav__link">
+                            <span class="m-nav__link-bullet m-nav__link-bullet--line">
+                                <span></span>
+                            </span>
+                            <span class="m-nav__link-text"><?=Yii::t('user', 'Profile details')?></span>
+                        </a>
+                    </li>
+
+                    <li class="m-nav__item">
+                        <a href="<?= Url::toRoute(['/user/admin/info', 'id' => $user->id]) ?>" class="m-nav__link">
+                            <span class="m-nav__link-bullet m-nav__link-bullet--line">
+                                <span></span>
+                            </span>
+                            <span class="m-nav__link-text"><?= Yii::t('user', 'Information') ?></span>
+                        </a>
+                    </li>
+                    <?php if (isset(Yii::$app->extensions['dektrium/yii2-rbac'])) : ?>
+                    <li class="m-nav__item">
+                        <a href="<?= Url::toRoute(['/user/admin/assignments', 'id' => $user->id]) ?>" class="m-nav__link">
+                            <span class="m-nav__link-bullet m-nav__link-bullet--line">
+                                <span></span>
+                            </span>
+                            <span class="m-nav__link-text"><?= Yii::t('user', 'Assignments') ?></span>
+                        </a>
+                    </li>
+                    <?php endif; ?>
+                    <?php if (!$user->isConfirmed) : ?>
+                    <li class="m-nav__item ">
+                        <a href="<?= Url::toRoute(['/user/admin/confirm', 'id' => $user->id]) ?>" class="m-nav__link text-success">
+                            <span class="m-nav__link-bullet m-nav__link-bullet--line">
+                                <span></span>
+                            </span>
+                            <span class="m-nav__link-text"><?= Yii::t('user', 'Confirm') ?></span>
+                        </a>
+                    </li>
+                    <?php endif; ?>
+                    <?php if (!$user->isBlocked) : ?>
+                        <li class="m-nav__item ">
+                            <a href="<?= Url::toRoute(['/user/admin/block', 'id' => $user->id]) ?>" class="m-nav__link text-danger">
+                            <span class="m-nav__link-bullet m-nav__link-bullet--line">
+                                <span></span>
+                            </span>
+                                <span class="m-nav__link-text"><?= Yii::t('user', 'Block') ?></span>
+                            </a>
+                        </li>
+                    <?php endif; ?>
+                    <?php if ($user->isBlocked) : ?>
+                        <li class="m-nav__item ">
+                            <a href="<?= Url::toRoute(['/user/admin/block', 'id' => $user->id]) ?>" class="m-nav__link text-danger">
+                            <span class="m-nav__link-bullet m-nav__link-bullet--line">
+                                <span></span>
+                            </span>
+                                <span class="m-nav__link-text"><?= Yii::t('user', 'Unblock') ?></span>
+                            </a>
+                        </li>
+                    <?php endif; ?>
+                    <li class="m-nav__item ">
+                        <a href="<?= Url::toRoute(['/user/admin/delete', 'id' => $user->id]) ?>" class="m-nav__link text-success" data-method="post" data-confirm="<?= Yii::t('user', 'Are you sure you want to delete this user?') ?>">
+                            <span class="m-nav__link-bullet m-nav__link-bullet--line">
+                                <span></span>
+                            </span>
+                            <span class="m-nav__link-text"><?= Yii::t('user', 'Delete') ?></span>
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
+
+
     </div>
     <div class="col-md-9">
         <div class="panel panel-default">
