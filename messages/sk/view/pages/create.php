@@ -17,6 +17,7 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Create {new}' => '',
     'Create {sectionName}' => '',
     'Cancel' => 'Späť do zoznamu',
     'Save' => 'Uložiť a zobraziť',

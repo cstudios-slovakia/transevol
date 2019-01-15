@@ -6,45 +6,46 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Vehicles */
 
-$this->title = $model->id;
+$this->title = $model->ecv;
 $this->params['breadcrumbs'][] = ['label' => 'Vehicles', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-$this->params['page']['show'] = $model->ecv
+
+$this->params['portlet']['title'] = Yii::t('vehicle', 'Details for {vehicleEcv}',[
+    'vehicleEcv' => $model->ecv
+]);
 ?>
 <?php $this->beginContent('@app/views/layouts/default/common/pages/show.php' ); ?>
 <div class="vehicles-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
+
             'ecv',
             'companies_id',
             'vehicle_types_id',
             'emission_classes_id',
             'weight',
             'shaft',
-            'created_at',
-            'updated_at',
+
         ],
     ]) ?>
 
-    <?= DetailView::widget([
-        'model' => $vehicleStaticCostFormModel,
-    ]) ?>
+    <h4><?= Yii::t('vehicle','Fixné náklady') ?></h4>
+
+    <?php foreach ($model->vehicleStaticCosts as $vehicleStaticCost) : ?>
+
+        <div class="m-widget13__item">
+        <span class="m-widget13__desc  m--align-right">
+            <?= Yii::t('static_costs',$vehicleStaticCost->staticCosts->short_name) ?>:
+        </span>
+            <span class="m-widget13__text ">
+            <?= $vehicleStaticCost->value ?> / <?= $vehicleStaticCost->frequencyData->frequency_name ?>
+        </span>
+        </div>
+    <?php endforeach;?>
 
 </div>
 

@@ -12,10 +12,13 @@ $this->title = 'Update Vehicles: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Vehicles', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
+
+$this->params['portlet']['title'] = Yii::t('vehicle', 'Details for {vehicleEcv}',[
+    'vehicleEcv' => $model->ecv
+]);
 ?>
 <div class="vehicles-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
         'model' => $model,

@@ -17,6 +17,9 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Create new vehicle' => 'Priradiť vozidlo',
+    'Details for {vehicleEcv}' => 'Podrobnosti pre {vehicleEcv}',
+    'Fixné náklady' => '',
     'Companies ID' => 'Názov firmy',
     'ECV' => 'EČV',
     'Emission Classes ID' => 'Emisná trieda',

@@ -17,15 +17,22 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Add dynamic cost' => 'Pridať novú položku',
+    'Company dynamic costs' => '',
+    'Company static costs' => '',
+    'Dynamic cost name' => '',
+    'Dynamic cost value' => '',
     'E-mail' => '',
-    'Update' => 'Aktualizovať položku',
+    'Other expenses' => '',
+    'Personal expenses' => '',
+    'company data' => '',
+    'Add dynamic cost' => 'Pridať novú položku',
     'Company' => 'Firma',
     'Company name' => 'Názov spoločnosti',
     'DIC' => 'DIČ',
     'IC DPH' => 'IČ DPH',
     'ICO' => 'IČO',
     'Phone' => 'Tel.číslo',
+    'Update' => 'Aktualizovať položku',
     'You does not defined your company. Create one!' => 'Nemáte zadefinované firemné údaje. Vyplňte ich!',
     'company data for {companyName}' => 'firemné údaje firmu {companyName}',
 ];

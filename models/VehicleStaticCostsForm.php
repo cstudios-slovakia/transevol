@@ -26,6 +26,7 @@ class VehicleStaticCostsForm extends Model
     public function rules()
     {
         return [
+            ['lsng',StaticCostInputValidator::className(), 'skipOnEmpty' => false, 'skipOnError' => false],
             ['rdtx',StaticCostInputValidator::className(), 'skipOnEmpty' => false, 'skipOnError' => false],
             ['srvs',StaticCostInputValidator::className(), 'skipOnEmpty' => false, 'skipOnError' => false],
             ['otha',StaticCostInputValidator::className(), 'skipOnEmpty' => false, 'skipOnError' => false],

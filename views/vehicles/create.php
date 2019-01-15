@@ -12,6 +12,7 @@ $this->title = 'Create Vehicles';
 $this->params['breadcrumbs'][] = ['label' => 'Vehicles', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
+$this->params['portlet']['title'] = Yii::t('vehicle', 'Create new vehicle');
 
 ?>
 <div class="vehicles-create">

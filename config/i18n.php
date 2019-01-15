@@ -30,7 +30,10 @@ return [
         '.hgignore',
         '.hgkeep',
         '/messages',
+        '/vendor',
         '/BaseYii.php',
+        '/migrations',
+        '/resources'
     ],
     'only' => [
         '*.php',
@@ -41,7 +44,7 @@ return [
 //    'sourceMessageTable' => '{{%source_message}}',
 //    'messageTable' => '{{%message}}',
 //    'catalog' => 'messages',
-//    'ignoreCategories' => [],
+//    'ignoreCategories' => ['yii'],
 //    'phpFileHeader' => '',
 //    'phpDocBlock' => null,
 ];

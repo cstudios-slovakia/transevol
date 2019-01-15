@@ -79,48 +79,46 @@ class VehiclesController extends BaseController
      */
     public function actionCreate()
     {
-//        $timeSelect = FrequencyDataBuilder::makeType('time')->dropDownListOptions();
-//        $lengthSelect = FrequencyDataBuilder::makeType('length')->dropDownListOptions();
-//
-//        dd($timeSelect,$lengthSelect);
+
         $model = new Vehicles();
         $vehicleStaticCostFormModel  = new VehicleStaticCostsForm();
 
         $request = Yii::$app->request;
-//        dd($request->post(),$model->load($request->post(),'Vehicles'),
-//            $vehicleStaticCostFormModel->load($request->post(),'StaticCostsForm'),
-////        $vehicleStaticCostFormModel->validate(),
-////        $vehicleStaticCostFormModel->getErrorSummary(0),
-//            Model::validateMultiple([$model,$vehicleStaticCostFormModel]),
-//            $vehicleStaticCostFormModel->getErrorSummary(1),
-//            $model->getErrorSummary(1),
-//            $model->getErrors(),
-//            $vehicleStaticCostFormModel->getErrors()
-//            );
+
+
 
         $staticCosts = VehicleStaticCost::find()->all();
         $staticCostsCollection = collect($staticCosts)->keyBy('short_name');
 
-        if ($model->load($request->post()) && $vehicleStaticCostFormModel->load($request->post()) &&
-            Model::validateMultiple([$model,$vehicleStaticCostFormModel]) ) {
-
+        if ($model->load($request->post(),'Vehicles') && $vehicleStaticCostFormModel->load($request->post(),'StaticCostsForm')) {
             $company    = self::loggedInUserCompany();
 
-            $model->link('companies', $company);
-            $model->save();
+            $model->companies_id = $company->id;
 
-            $staticCostInputs = $request->post()['VehicleStaticCostsForm'];
+            $validVehicle = $model->validate();
+            $validVehicleStaticCosts = $vehicleStaticCostFormModel->validate();
 
-            foreach ($staticCostInputs as $shortName => $value){
-                $vehicleStaticCost = new VehicleStaticCosts();
-                $vehicleStaticCost->value   = $value;
-                $vehicleStaticCost->vehicles_id     = $model->id;
-                $vehicleStaticCost->link('staticCosts', $staticCostsCollection->get($shortName));
-                $vehicleStaticCost->save();
+            if ($validVehicle && $validVehicleStaticCosts){
+
+                $model->save();
+
+                $staticCostInputs = $request->post()['StaticCostsForm'];
+
+                foreach ($staticCostInputs as $shortName => $staticCostInput){
+                    $vehicleStaticCost = new VehicleStaticCosts();
+                    $vehicleStaticCost->value   = $staticCostInput['value'];
+                    $vehicleStaticCost->vehicles_id     = $model->id;
+                    $vehicleStaticCost->frequency_datas_id = $staticCostInput['frequency_datas_id'];
+                    $vehicleStaticCost->link('staticCosts', $staticCostsCollection->get($shortName));
+                    $vehicleStaticCost->save();
+                }
+
+                return $this->redirect(['view', 'id' => $model->id]);
             }
 
-            return $this->redirect(['view', 'id' => $model->id]);
         }
+
+
 
         return $this->render('create', [
             'model'             => $model,
@@ -152,28 +150,34 @@ class VehiclesController extends BaseController
             return $vehicleStaticCost->staticCosts->short_name;
         });
 
-        if ($model->load($request->post()) && $vehicleStaticCostFormModel->load($request->post()) &&
-            Model::validateMultiple([$model,$vehicleStaticCostFormModel]) ) {
+        if ($model->load($request->post(),'Vehicles') && $vehicleStaticCostFormModel->load($request->post(),'StaticCostsForm')) {
 
-            $model->update();
+            $validModel = $model->validate();
+            $validStaticCosts  = $vehicleStaticCostFormModel->validate();
 
-            $staticCostInputs = $request->post()['VehicleStaticCostsForm'];
-            foreach ($associatedStaticCosts as $shortName => $vehicleStaticCost){
+            if($validModel && $validStaticCosts){
+                $model->update();
 
-                $vehicleStaticCost->value   = $staticCostInputs[$shortName];
-//                $vehicleStaticCost->vehicles_id     = $model->id;
-//                $vehicleStaticCost->link('staticCosts', $staticCostsCollection->get($shortName));
-                $vehicleStaticCost->update();
+                $staticCostInputs = $request->post()['StaticCostsForm'];
+
+                foreach ($associatedStaticCosts as $shortName => $vehicleStaticCost){
+
+                    $vehicleStaticCost->value   = $staticCostInputs[$shortName]['value'];
+                    $vehicleStaticCost->frequency_datas_id   = $staticCostInputs[$shortName]['frequency_datas_id'];
+                    $vehicleStaticCost->update();
+                }
+
+                return $this->redirect(['view', 'id' => $model->id]);
             }
 
-            return $this->redirect(['view', 'id' => $model->id]);
+
         }
 
         $loadable = $associatedStaticCosts->transform(function($vehicleStaticCosts){
             return $vehicleStaticCosts->value;
         })->toArray();
 
-         $vehicleStaticCostFormModel->load($loadable,'');
+//         $vehicleStaticCostFormModel->load($loadable,'');
 
 
         return $this->render('update', [

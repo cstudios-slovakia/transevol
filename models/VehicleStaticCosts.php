@@ -35,7 +35,7 @@ class VehicleStaticCosts extends \yii\db\ActiveRecord
         return [
             [['value', 'static_costs_id', 'vehicles_id' ], 'required'],
             [['value'], 'number'],
-            [['static_costs_id', 'vehicles_id'], 'integer'],
+            [['static_costs_id', 'vehicles_id','frequency_datas_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['static_costs_id'], 'exist', 'skipOnError' => true, 'targetClass' => StaticCost::className(), 'targetAttribute' => ['static_costs_id' => 'id']],
             [['vehicles_id'], 'exist', 'skipOnError' => true, 'targetClass' => Vehicles::className(), 'targetAttribute' => ['vehicles_id' => 'id']],
@@ -71,5 +71,12 @@ class VehicleStaticCosts extends \yii\db\ActiveRecord
     public function getVehicles()
     {
         return $this->hasOne(Vehicles::className(), ['id' => 'vehicles_id']);
+    }
+
+
+    public function getFrequencyData()
+    {
+        return $this->hasOne(FrequencyData::className(), ['id' => 'frequency_datas_id']);
+
     }
 }

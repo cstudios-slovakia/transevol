@@ -17,6 +17,11 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Create driver' => 'Priradiť vodiča',
+    'Details for {driverName}' => 'Podrobnosti pre {driverName}',
+    'Dvojosádka' => '',
+    'Jednoosádka' => '',
+    'Update details for {driverName}' => 'Aktualizovať údaje pre {driverName}',
     'Driver' => 'Vodič',
     'Driver name' => 'Celé meno vodiča',
     'Email' => 'Email',
