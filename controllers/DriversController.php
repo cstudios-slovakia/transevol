@@ -6,6 +6,7 @@ use app\models\Companies;
 use app\models\DriverCostDatas;
 use app\models\DriverForm;
 use app\models\DriverStaticCost;
+use app\models\DriverStaticCostsForm;
 use app\models\StaticCost;
 use app\support\helpers\LoggedInUserTrait;
 use Yii;
@@ -56,7 +57,6 @@ class DriversController extends BaseController
         return $this->render('view', [
             'model' => $model,
             'staticCostDataProvider'    => $staticCostDataProvider
-
         ]);
     }
 
@@ -68,18 +68,30 @@ class DriversController extends BaseController
     public function actionCreate()
     {
         $model = new Drivers();
-        $driverForm = new DriverForm();
 
 
-        if ($model->load(Yii::$app->request->post(),'Drivers') && $driverForm->load(Yii::$app->request->post(),'StaticCostsForm') &&
-        Model::validateMultiple([$model, $driverForm])
+        $driverStaticCostsForm = new DriverStaticCostsForm();
+
+        $request = $this->request();
+
+//        dd(
+//            $model->load($request->post(),'Drivers'),
+//            $driverStaticCostsForm->load($request->post(),'StaticCostsForm'),
+//
+//            Model::validateMultiple([$model, $driverStaticCostsForm]),
+//
+//            $driverStaticCostsForm->getErrors()
+//        );
+
+        if ($model->load($request->post(),'Drivers') && $driverStaticCostsForm->load($request->post(),'StaticCostsForm') &&
+        Model::validateMultiple([$model, $driverStaticCostsForm])
         ) {
 
             $company = self::loggedInUserCompany();
 
             $model->link('companies', $company);
             $model->save();
-            foreach (Yii::$app->request->post('StaticCostsForm') as $shortName => $staticCostValue){
+            foreach ($request->post('StaticCostsForm') as $shortName => $staticCostValue){
                 $staticCost     = StaticCost::findOne(['short_name' => $shortName]);
 
                 $model->link('staticCosts',$staticCost,[
@@ -95,6 +107,7 @@ class DriversController extends BaseController
 
         return $this->render('create', [
             'model' => $model,
+            'driverStaticCostsForm' => $driverStaticCostsForm,
             'costs'     => collect($driverStaticCosts)
         ]);
     }
@@ -110,40 +123,45 @@ class DriversController extends BaseController
     {
         $model = $this->findModel($id);
 
-        $driverForm = new DriverForm();
+        $driverStaticCostsForm = new DriverStaticCostsForm();
 
         // make a costdata collection defined by costdata's type shortname
         $driverCostData = collect($model->driverCostDatas)->keyBy(function($costData){
             return $costData->staticCosts->short_name;
         });
 
+        $request = $this->request();
 
-        if ($model->load(Yii::$app->request->post(),'Drivers') && $driverForm->load(Yii::$app->request->post(),'StaticCosts') &&
-            Model::validateMultiple([$model, $driverForm])
-        ) {
 
-            $model->update();
+        if ($model->load($request->post(),'Drivers') && $driverStaticCostsForm->load($request->post(),'StaticCostsForm')) {
+            $validDriver = $model->validate();
+            $validDriverStaticCostsForm = $driverStaticCostsForm->validate();
 
-            foreach (Yii::$app->request->post('StaticCosts') as $shortName => $staticCostValue){
-                $staticCost     = $driverCostData->get($shortName,null);
+            if($validDriver && $validDriverStaticCostsForm){
 
-                // if cost data does not exists link one
-                if(!$staticCost){
-                    $staticCost     = StaticCost::findOne(['short_name' => $shortName]);
-                    $model->link('staticCosts',$staticCost,['value' => $staticCostValue]);
-                    continue;
+                $model->update();
+                foreach ($request->post('StaticCostsForm') as $shortName => $staticCostsData){
+                    $staticCost     = $driverCostData->get($shortName,null);
+
+                    // if cost data does not exists link one
+                    if(!$staticCost){
+                        $staticCost     = StaticCost::findOne(['short_name' => $shortName]);
+                        $model->link('staticCosts',$staticCost,['value' => $staticCostsData['value']]);
+                        continue;
+                    }
+                    $staticCost->value = $staticCostsData['value'];
+                    $staticCost->update(false);
                 }
-                $staticCost->value = $staticCostValue;
-                $staticCost->update(false);
-            }
 
-            return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['view', 'id' => $model->id]);
+
+            }
         }
 
         $driverStaticCosts = DriverStaticCost::find()->all();
-
         return $this->render('update', [
             'model' => $model,
+            'driverStaticCostsForm' => $driverStaticCostsForm,
             'costs'     => collect($driverStaticCosts)
         ]);
     }

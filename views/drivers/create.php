@@ -14,6 +14,7 @@ $this->params['breadcrumbs']['links'][] = [
 ];
 
 $this->params['breadcrumbs']['links'][] = $this->title;
+$this->params['portlet']['title'] = Yii::t('driver', 'Create driver');
 ?>
 <div class="drivers-create">
 
@@ -25,10 +26,9 @@ $this->params['breadcrumbs']['links'][] = $this->title;
 
     $duals = collect([]);
     $singles = collect([]);
-    $staticCosts->each(function ($cost) use ($singles, $duals, $model){
+    $staticCosts->each(function ($cost) use ($singles, $duals, $model,$driverStaticCostsForm){
 
-        $record = \app\support\CostsMaker\StaticCostsFormMaker::load($model)->make($cost);
-
+        $record = \app\support\CostsMaker\StaticCostsFormMaker::load($model)->withErrors($driverStaticCostsForm)->make($cost);
         if(!str_contains($cost->short_name,'dual')){
             $singles->push($record);
         } else{
@@ -40,10 +40,10 @@ $this->params['breadcrumbs']['links'][] = $this->title;
     ?>
 
     <?= $this->render('_form', [
-        'model' => $model,
-        'singles'  => $singles,
-        'duals'  => $duals,
-//        'costDatas' => $costDatas,
+        'model'     => $model,
+        'singles'   => $singles,
+        'duals'     => $duals,
+        'driverStaticCostsForm' => $driverStaticCostsForm,
     ]) ?>
 
 </div>

@@ -69,7 +69,6 @@ class StaticCostsFormMaker
             $record->frequency_datas_id = $costData->frequency_datas_id;
 
         }
-
         if (isset($this->source) && array_key_exists($record->short_name,$this->source->getErrors())){
             $record->value = $this->source->{$record->short_name}['value'];
             $record->addError($record->short_name, $this->source->getFirstError($record->short_name));

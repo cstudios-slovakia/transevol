@@ -9,10 +9,13 @@ $this->title = 'Update Drivers: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Drivers', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
+$this->params['portlet']['title'] = Yii::t('driver', 'Update details for {driverName}',[
+    'driverName' => $model->driver_name
+]);
 ?>
 <div class="drivers-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+
 
     <?php
     $staticCosts = $costs;
@@ -20,10 +23,9 @@ $this->params['breadcrumbs'][] = 'Update';
 
     $duals = collect([]);
     $singles = collect([]);
-    $staticCosts->each(function ($cost) use ($singles, $duals, $model){
+    $staticCosts->each(function ($cost) use ($singles, $duals, $model, $driverStaticCostsForm){
 
-        $record = \app\support\CostsMaker\StaticCostsFormMaker::load($model)->make($cost);
-
+        $record = \app\support\CostsMaker\StaticCostsFormMaker::load($model)->withErrors($driverStaticCostsForm)->make($cost);
         if(!str_contains($cost->short_name,'dual')){
             $singles->push($record);
         } else{
@@ -32,9 +34,7 @@ $this->params['breadcrumbs'][] = 'Update';
 
     });
 
-//    $costDatas  = collect($model->driverCostDatas)->keyBy(function($costData){
-//        return $costData->staticCosts->short_name;
-//    });
+
 
 
     ?>

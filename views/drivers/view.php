@@ -9,43 +9,63 @@ use yii\widgets\DetailView;
 $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Drivers', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+$this->params['portlet']['title'] = Yii::t('driver', 'Details for {driverName}',[
+    'driverName' => $model->driver_name
+]);
+
+$singleCosts = [];
+$dualCosts = [];
+
+collect($model->driverCostDatas)->each(function ($driverCostData) use (&$singleCosts, &$dualCosts){
+    if(str_contains($driverCostData->staticCosts->short_name, 'dual')){
+        $dualCosts[]    = $driverCostData;
+    } else{
+        $singleCosts[]  = $driverCostData;
+    }
+});
 ?>
 
 <?php $this->beginContent('@app/views/layouts/default/common/pages/show.php' ); ?>
 <div class="drivers-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
             'driver_name',
-//            'companies_id',
-            'email:email',
+            'email',
             'phone',
-            'created_at',
-            'updated_at',
         ],
     ]) ?>
 
-    <?=
-    \yii\widgets\ListView::widget([
-        'dataProvider'  => $staticCostDataProvider,
-        'itemView'  => 'partials/_static_cost_record'
-    ])
-    ?>
+    <h4><?= Yii::t('driver','Jednoosádka') ?></h4>
+
+    <?php foreach ($singleCosts as $driverCostData) : ?>
+
+        <div class="m-widget13__item">
+        <span class="m-widget13__desc  m--align-right">
+            <?= Yii::t('static_costs',$driverCostData->staticCosts->short_name) ?>:
+        </span>
+            <span class="m-widget13__text ">
+            <?= $driverCostData->value ?> / <?= $driverCostData->frequencyData->frequency_name ?>
+        </span>
+        </div>
+    <?php endforeach;?>
+
+    <div class="m-separator m-separator--space m-separator--dashed"></div>
+
+    <h4><?= Yii::t('driver', 'Dvojosádka') ?></h4>
+
+    <?php foreach ($dualCosts as $driverCostData) : ?>
+
+        <div class="m-widget13__item">
+        <span class="m-widget13__desc  m--align-right">
+            <?= Yii::t('static_costs',$driverCostData->staticCosts->short_name) ?>:
+        </span>
+            <span class="m-widget13__text ">
+            <?= $driverCostData->value ?> / <?= $driverCostData->frequencyData->frequency_name ?>
+        </span>
+        </div>
+    <?php endforeach;?>
 
 </div>
 <?php $this->endContent(); ?>
