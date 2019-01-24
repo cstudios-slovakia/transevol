@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\support\helpers\LoggedInUserTrait;
 use Yii;
 
 /**
@@ -112,5 +113,19 @@ class Places extends AppBasedActiveRecord
     public function getTransportPlaces()
     {
         return $this->hasMany(TransportPlace::className(), ['places_id' => 'id']);
+    }
+    /**
+     * {@inheritdoc}
+     * @return ActiveQuery the newly created [[ActiveQuery]] instance.
+     */
+    public static function find()
+    {
+        $find = parent::find();
+
+        $company = LoggedInUserTrait::loggedInUserCompany();
+
+        $find->andWhere(['companies_id' => $company->id]);
+
+        return $find;
     }
 }

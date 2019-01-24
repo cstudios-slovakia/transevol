@@ -35,6 +35,11 @@ class AppParams extends ArrayHelper {
         return self::coreParam('place_types');
     }
 
+    public static function getPlaces() : array
+    {
+        return self::coreParam('places');
+    }
+
     public static function getListings() : array
     {
         return $core = self::coreParam('listings');

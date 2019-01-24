@@ -2,6 +2,7 @@
 
 namespace app\support\Places\Relations;
 
+use app\models\Places;
 use app\models\PlacesPlaceTypesQuery;
 use app\support\helpers\AppParams;
 use Illuminate\Support\Collection;
@@ -35,5 +36,45 @@ class PlaceRelationAssistance
     public function collectionPlaceTypes() : Collection
     {
         return collect($placeTypes = PlacesPlaceTypesQuery::find()->all());
+    }
+
+    /**
+     * Array of company places. Array contains App\Places models.
+     *
+     * @param string $placeType
+     * @return array
+     */
+    public function ownedPlaces(string $placeType = '') : array
+    {
+        // get the query
+        $placesQuery = Places::find();
+
+        if(!empty($placeType)){
+            // get defined place types
+            $placeTypes = AppParams::getPlaces();
+
+            // check needle exists
+            if(in_array($placeType,$placeTypes,true)){
+                $placesQuery->joinWith('placeTypes');
+
+                // filter with placetype condition
+                $placesQuery->andWhere(['place_types.placetype_name' => $placeType]);
+            }
+        }
+        return $placesQuery->all();
+    }
+
+
+    /**
+     * Logged in company places, used in dropdownlist.
+     *
+     * @param string $placeType
+     * @return array
+     */
+    public static function ownedPlacesSelectOptions(string $placeType = '') : array
+    {
+        return collect((new static())->ownedPlaces($placeType))
+            ->pluck('place_name','id')
+            ->toArray();
     }
 }
