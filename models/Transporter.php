@@ -35,7 +35,7 @@ class Transporter extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'companies_id', 'transport_price'], 'required'],
+            [['customer_id', 'transport_price'], 'required'],
             [['customer_id', 'companies_id'], 'integer'],
             [['transport_price', 'transport_other_costs'], 'number'],
             [['created_at', 'updated_at', 'created_at'], 'safe'],
@@ -82,5 +82,12 @@ class Transporter extends \yii\db\ActiveRecord
     public function getTransporterContents()
     {
         return $this->hasMany(TransporterContents::className(), ['transporter_id' => 'id']);
+    }
+
+    public function getTransporterParts()
+    {
+        return $this->hasMany(TransporterParts::className(), ['id' => 'transporter_parts_id'])
+            ->via('transporterContents');
+
     }
 }

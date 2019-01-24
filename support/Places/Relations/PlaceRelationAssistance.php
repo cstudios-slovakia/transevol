@@ -61,6 +61,7 @@ class PlaceRelationAssistance
                 $placesQuery->andWhere(['place_types.placetype_name' => $placeType]);
             }
         }
+
         return $placesQuery->all();
     }
 
@@ -73,6 +74,7 @@ class PlaceRelationAssistance
      */
     public static function ownedPlacesSelectOptions(string $placeType = '') : array
     {
+
         return collect((new static())->ownedPlaces($placeType))
             ->pluck('place_name','id')
             ->toArray();

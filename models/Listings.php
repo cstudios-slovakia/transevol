@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\support\helpers\LoggedInUserTrait;
 use Yii;
 
 /**
@@ -106,5 +107,19 @@ class Listings extends AppBasedActiveRecord
         return $this->hasOne(PlaceTypes::className(), ['id' => 'place_types_id'])
             ->where('placetype_name = :placetype_name', [':placetype_name' => 'services']);
 
+    }
+    /**
+     * {@inheritdoc}
+     * @return ActiveQuery the newly created [[ActiveQuery]] instance.
+     */
+    public static function find()
+    {
+        $find = parent::find();
+
+        $company = LoggedInUserTrait::loggedInUserCompany();
+
+        $find->andWhere(['companies_id' => $company->id]);
+
+        return $find;
     }
 }

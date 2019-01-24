@@ -68,6 +68,13 @@ class TransporterParts extends \yii\db\ActiveRecord
         return $this->hasMany(TransporterContents::className(), ['transporter_parts_id' => 'id']);
     }
 
+    public function getTransporter()
+    {
+        return $this->hasMany(Transporter::className(), ['id' => 'transporter_id'])
+            ->via('transporterContents');
+
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

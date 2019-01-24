@@ -2,19 +2,19 @@
 
 namespace app\controllers\api\v1;
 
-use app\models\Transporter;
+use app\support\helpers\LoggedInUserTrait;
+use app\support\Listings\Relations\CustomerRelationAssistance;
 use Yii;
-use app\models\TransporterParts;
+use app\models\Transporter;
 use yii\data\ActiveDataProvider;
-use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use app\support\Places\Relations\PlaceRelationAssistance;
+
 /**
- * TransporterPartsController implements the CRUD actions for TransporterParts model.
+ * TransporterController implements the CRUD actions for Transporter model.
  */
-class TransporterPartsController extends Controller
+class TransporterController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -32,13 +32,13 @@ class TransporterPartsController extends Controller
     }
 
     /**
-     * Lists all TransporterParts models.
+     * Lists all Transporter models.
      * @return mixed
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => TransporterParts::find(),
+            'query' => Transporter::find(),
         ]);
 
         return $this->render('index', [
@@ -47,57 +47,49 @@ class TransporterPartsController extends Controller
     }
 
     /**
-     * Displays a single TransporterParts model.
+     * Displays a single Transporter model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+
+        $transporterPartsDataProvider = new ActiveDataProvider([
+            'query' => $model->getTransporterParts()
+        ]);
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'transporterPartsDataProvider' => $transporterPartsDataProvider
         ]);
     }
 
     /**
-     * Creates a new TransporterParts model.
+     * Creates a new Transporter model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new TransporterParts();
 
-        $transportType = Yii::$app->request->get('transport-type');
+        $model = new Transporter();
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-
-
-
+            $model->link('companies',LoggedInUserTrait::loggedInUserCompany());
             $model->save(false);
-
-            $transporterId = (int) Yii::$app->request->get('on');
-            if($transporterId){
-                $transporter    = Transporter::findOne(['id' => $transporterId]);
-                $model->link('transporter', $transporter);
-                return $this->redirect(Url::toRoute('/api/v1/transporter/view?id=' . $transporterId));
-
-            }
-
 
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        $placesSelectOptions = PlaceRelationAssistance::ownedPlacesSelectOptions($transportType);
-
         return $this->render('create', [
             'model' => $model,
-            'placesSelectOptions' => $placesSelectOptions
         ]);
     }
 
     /**
-     * Updates an existing TransporterParts model.
+     * Updates an existing Transporter model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -117,7 +109,7 @@ class TransporterPartsController extends Controller
     }
 
     /**
-     * Deletes an existing TransporterParts model.
+     * Deletes an existing Transporter model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -131,15 +123,15 @@ class TransporterPartsController extends Controller
     }
 
     /**
-     * Finds the TransporterParts model based on its primary key value.
+     * Finds the Transporter model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return TransporterParts the loaded model
+     * @return Transporter the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = TransporterParts::findOne($id)) !== null) {
+        if (($model = Transporter::findOne($id)) !== null) {
             return $model;
         }
 

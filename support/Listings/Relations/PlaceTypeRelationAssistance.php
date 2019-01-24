@@ -17,4 +17,6 @@ class PlaceTypeRelationAssistance
 
         return collect($listingPlaceTypes)->pluck('placetype_name','id')->toArray();
     }
+
+
 }

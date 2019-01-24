@@ -3,7 +3,7 @@ use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 
-
+//dd($timelineMetaData);
 ?>
 <?php $this->beginContent('@app/views/layouts/default/common/pages/show.php' ); ?>
 
@@ -15,7 +15,7 @@ use yii\helpers\Url;
         </div>
     </div>
     <div class="m-stack__item m-stack__item--center">
-        <button type="button" class="btn btn-secondary">Pridat prepravu</button>
+        <a href="<?= Url::toRoute('/api/v1/transporter/create')?>" type="button" class="btn btn-secondary">Pridat prepravu</a>
 
     </div>
     <div class="m-stack__item m-stack__item--right">

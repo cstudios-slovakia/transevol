@@ -22,7 +22,7 @@ use app\support\Places\Relations\PlaceRelationAssistance;
 
     <?= $form->field($model, 'part_other_cost')->input('number',['step' => '.01','maxlength' => true] ) ?>
 
-    <?= $form->field($model, 'places_id')->dropDownList(PlaceRelationAssistance::ownedPlacesSelectOptions('loading')) ?>
+    <?= $form->field($model, 'places_id')->dropDownList($placesSelectOptions) ?>
 
 
     <div class="form-group">
