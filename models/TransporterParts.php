@@ -82,4 +82,13 @@ class TransporterParts extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Places::className(), ['id' => 'places_id']);
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPlaceTypes()
+    {
+        return $this->hasOne(PlaceTypes::className(), ['id' => 'place_types_id'])->via('places');
+    }
+
 }

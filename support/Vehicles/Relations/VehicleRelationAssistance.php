@@ -3,6 +3,7 @@
 namespace app\support\Vehicles\Relations;
 
 use app\models\EmissionClasses;
+use app\models\Vehicles;
 use app\models\VehicleTypes;
 
 class VehicleRelationAssistance
@@ -23,5 +24,10 @@ class VehicleRelationAssistance
         return collect($emissions)->pluck('emission_name','id')->toArray();
     }
 
+    public static function ownedVehicles() : array
+    {
+        $vehicles = Vehicles::find()->all();
 
+        return collect($vehicles)->pluck('ecv','id')->toArray();
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\support\helpers\LoggedInUserTrait;
 use Yii;
 
 /**
@@ -115,5 +116,16 @@ class Vehicles extends \yii\db\ActiveRecord
     public function getVehicleTypes()
     {
         return $this->hasOne(VehicleTypes::className(), ['id' => 'vehicle_types_id']);
+    }
+
+    public static function find()
+    {
+        $find = parent::find();
+
+        $company = LoggedInUserTrait::loggedInUserCompany();
+
+        $find->andWhere(['vehicles.companies_id' => $company->id]);
+
+        return $find;
     }
 }

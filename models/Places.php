@@ -107,6 +107,14 @@ class Places extends AppBasedActiveRecord
         return $this->hasOne(PlaceTypes::className(), ['id' => 'place_types_id']);
     }
 
+    public function getLoadingsPlaceTypes()
+    {
+        return $this->hasOne(PlaceTypes::className(), ['id' => 'place_types_id'])
+            ->andOnCondition(['placetype_name' => 'loading'])
+            ->andOnCondition(['placetype_name' => 'unloading']);
+
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -124,7 +132,7 @@ class Places extends AppBasedActiveRecord
 
         $company = LoggedInUserTrait::loggedInUserCompany();
 
-        $find->andWhere(['companies_id' => $company->id]);
+        $find->andWhere(['places.companies_id' => $company->id]);
 
         return $find;
     }

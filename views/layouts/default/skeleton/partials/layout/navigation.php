@@ -203,6 +203,27 @@ $user = Yii::$app->user;
                 </ul>
             </div>
         </li>
+
+        <li class="m-menu__section ">
+            <h4 class="m-menu__section-text"><?= Yii::t('navigation','Transporter') ?></h4>
+            <i class="m-menu__section-icon flaticon-more-v2"></i>
+        </li>
+        <li class="m-menu__item " aria-haspopup="true">
+            <?php
+            $intervalParts = new \app\support\Transporter\IntervalParts();
+            $tFrom = $intervalParts->getStart()->format('d.m.Y');
+            $tUntil = $intervalParts->getEnd()->format('d.m.Y');
+            ?>
+            <a href="<?= Url::toRoute(['/transporter/viewer','tfrom' => $tFrom, 'tuntil' => $tUntil]) ?>" class="m-menu__link ">
+                <i class="m-menu__link-icon flaticon-line-graph"></i>
+                <span class="m-menu__link-title">
+                    <span class="m-menu__link-wrap">
+                        <span class="m-menu__link-text"><?= Yii::t('navigation','Timeline viewer') ?></span>
+
+                    </span>
+                </span>
+            </a>
+        </li>
         <li class="m-menu__section ">
             <h4 class="m-menu__section-text"><?= Yii::t('navigation','Company admin') ?></h4>
             <i class="m-menu__section-icon flaticon-more-v2"></i>
