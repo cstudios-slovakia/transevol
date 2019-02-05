@@ -50,13 +50,13 @@ class Transporter extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', 'ID'),
-            'customer_id' => Yii::t('app', 'Customer ID'),
-            'companies_id' => Yii::t('app', 'Companies ID'),
-            'transport_price' => Yii::t('app', 'Transport Price'),
-            'transport_other_costs' => Yii::t('app', 'Transport Other Costs'),
-            'created_at' => Yii::t('app', 'Created At'),
-            'updated_at' => Yii::t('app', 'Updated At'),
+            'id' => Yii::t('transporter', 'ID'),
+            'customer_id' => Yii::t('transporter', 'Customer ID'),
+            'companies_id' => Yii::t('transporter', 'Companies ID'),
+            'transport_price' => Yii::t('transporter', 'Transport Price'),
+            'transport_other_costs' => Yii::t('transporter', 'Transport Other Costs'),
+            'created_at' => Yii::t('transporter', 'Created At'),
+            'updated_at' => Yii::t('transporter', 'Updated At'),
         ];
     }
 

@@ -107,6 +107,7 @@ $this->params['portlet']['title'] = Yii::t('transporter','Main timeline')
                         }
                     })->first();
 
+
                     $filteredUnLoading = $transporterPart->sortBy('event_time')->filter(function ($transporterPart) {
                         if ($transporterPart->placeTypes->placetype_name === 'unloading') {
                             return $transporterPart;

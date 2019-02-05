@@ -32,7 +32,12 @@ $cancelUrl  = isset($cancelUrl) ? $cancelUrl : Url::toRoute('/'.$sectionName.'/i
                 </h3>
             </div>
         </div>
+        <div class="m-portlet__head-tools">
+            <?php if (isset($this->blocks['headActions']) ): ?>
+                <?= $this->blocks['headActions'] ?>
+            <?php endif; ?>
 
+        </div>
     </div>
     <div class="m-portlet__body">
         <div class="m-widget13">

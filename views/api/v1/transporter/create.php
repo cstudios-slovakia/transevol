@@ -9,6 +9,8 @@ use yii\helpers\Html;
 $this->title = Yii::t('app', 'Create Transporter');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Transporters'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+$this->params['portlet']['title']   = Yii::t('transporter_parts','Create new transport');
+
 ?>
 <div class="transporter-create">
 

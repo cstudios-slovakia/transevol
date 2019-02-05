@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\support\Listings\Relations\CustomerRelationAssistance;
-
+use app\components\ViewTyped\Form\BaseCreateFormWidget;
 /* @var $this yii\web\View */
 /* @var $model app\models\Transporter */
 /* @var $form yii\widgets\ActiveForm */
@@ -11,7 +11,8 @@ use app\support\Listings\Relations\CustomerRelationAssistance;
 
 <div class="transporter-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $this->beginContent('@app/views/layouts/default/common/pages/create.php'); ?>
+    <?php $form = BaseCreateFormWidget::begin(); ?>
 
     <?= $form->field($model, 'customer_id')->dropDownList(CustomerRelationAssistance::ownedCustomersSelectOptions()) ?>
 
@@ -20,11 +21,7 @@ use app\support\Listings\Relations\CustomerRelationAssistance;
     <?= $form->field($model, 'transport_other_costs')->input('number',['maxlength' => true,'step' => '.01']) ?>
 
 
-
-    <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
-    </div>
-
-    <?php ActiveForm::end(); ?>
+    <?php BaseCreateFormWidget::end(); ?>
+    <?php $this->endContent(); ?>
 
 </div>

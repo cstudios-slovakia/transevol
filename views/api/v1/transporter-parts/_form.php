@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\support\Places\Relations\PlaceRelationAssistance;
+use app\components\ViewTyped\Form\BaseCreateFormWidget;
 /* @var $this yii\web\View */
 /* @var $model app\models\TransporterParts */
 /* @var $form yii\widgets\ActiveForm */
@@ -11,8 +12,8 @@ use app\support\Places\Relations\PlaceRelationAssistance;
 ?>
 
 <div class="transporter-parts-form">
-
-    <?php $form = ActiveForm::begin(); ?>
+<?php $this->beginContent('@app/views/layouts/default/common/pages/create.php'); ?>
+    <?php $form = BaseCreateFormWidget::begin(); ?>
 
     <?= $form->field($model, 'event_time')->input('datetime-local') ?>
 
@@ -25,10 +26,8 @@ use app\support\Places\Relations\PlaceRelationAssistance;
     <?= $form->field($model, 'places_id')->dropDownList($placesSelectOptions) ?>
 
 
-    <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
-    </div>
+    <?php BaseCreateFormWidget::end(); ?>
+<?php $this->endContent(); ?>
 
-    <?php ActiveForm::end(); ?>
 
 </div>

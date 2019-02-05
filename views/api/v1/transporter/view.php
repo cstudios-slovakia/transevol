@@ -3,51 +3,42 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\helpers\Url;
+use app\components\ViewTyped\Page\Index\BaseGridView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Transporter */
 
 $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Transporters'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-
-//dd($model->transporterParts);
+$this->params['portlet']['title']   = Yii::t('transporter','Transport '.$model->id);
 ?>
+
 <div class="transporter-view">
+<?php $this->beginContent('@app/views/layouts/default/common/pages/show.php' ); ?>
 
-    <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
-    <div>
-        <div class="btn-group m-btn-group" role="group" aria-label="...">
-            <a href="<?= Url::toRoute('/api/v1/transporter-parts/create?transport-type=loading&on='.$model->id) ?>" type="button" class="btn btn-brand">Pridat nakladku</a>
-            <a href="<?= Url::toRoute('/api/v1/transporter-parts/create?transport-type=toll&on='.$model->id) ?>" type="button" class="btn btn-accent">Pridat colnicu</a>
-            <a href="<?= Url::toRoute('/api/v1/transporter-parts/create?transport-type=unloading&on='.$model->id) ?>" type="button" class="btn btn-info">Pridat vykladku</a>
-        </div>
-    </div>
 
     <?=
 
-    \app\components\ViewTyped\Page\Index\BaseGridView::widget([
+    BaseGridView::widget([
         'dataProvider' => $transporterPartsDataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             // Simple columns defined by the data contained in $dataProvider.
             // Data from the model's column will be used.
             [
+                'attribute' => 'event_time',
+                'value' => function($model){
+                    return $model->event_time;
+                },
+
+            ],
+            [
                 'attribute' => 'places_id',
                 'value' => function($model){
                     return $model->places->placeTypes->placetype_name;
-                }
+                },
+
             ],
             [
                 'attribute' => 'place_name',
@@ -84,4 +75,19 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
+
+
+        <?php $this->beginBlock('headActions') ?>
+
+        <div>
+            <div class="btn-group m-btn-group" role="group" aria-label="...">
+                <a href="<?= Url::toRoute('/api/v1/transporter-parts/create?transport-type=loading&on='.$model->id) ?>"  class="m-btn btn btn-brand">Pridat nakladku</a>
+                <a href="<?= Url::toRoute('/api/v1/transporter-parts/create?transport-type=toll&on='.$model->id) ?>"  class="m-btn btn btn-accent">Pridat colnicu</a>
+                <a href="<?= Url::toRoute('/api/v1/transporter-parts/create?transport-type=unloading&on='.$model->id) ?>" class="m-btn btn btn-info">Pridat vykladku</a>
+            </div>
+        </div>
+
+        <?php $this->endBlock() ?>
+
+<?php $this->endContent(); ?>
 </div>

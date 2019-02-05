@@ -83,6 +83,8 @@ class GoingsController extends BaseController
 
             $model->link('vehicles',$vehicle);
 
+            return $this->redirect(Url::toRoute('/transporter/viewer'));
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -102,7 +104,12 @@ class GoingsController extends BaseController
     {
         $model = $this->findModel($id);
 
+        $model->setScenario($model::SCENARIO_FINNISH);
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            return $this->redirect(Url::toRoute('/transporter/viewer'));
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

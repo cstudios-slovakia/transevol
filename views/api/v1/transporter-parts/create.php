@@ -9,10 +9,11 @@ use yii\helpers\Html;
 $this->title = Yii::t('app', 'Create Transporter Parts');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Transporter Parts'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+$this->params['portlet']['title']   = Yii::t('transporter_parts','Create new transport part');
+
 ?>
 <div class="transporter-parts-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
         'model' => $model,

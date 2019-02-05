@@ -49,14 +49,14 @@ class TransporterParts extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', 'ID'),
-            'event_time' => Yii::t('app', 'Event Time'),
-            'load_meter' => Yii::t('app', 'Load Meter'),
-            'load_weight' => Yii::t('app', 'Load Weight'),
-            'part_other_cost' => Yii::t('app', 'Part Other Cost'),
-            'places_id' => Yii::t('app', 'Places ID'),
-            'created_at' => Yii::t('app', 'Created At'),
-            'updated_at' => Yii::t('app', 'Updated At'),
+            'id' => Yii::t('transporter_parts', 'ID'),
+            'event_time' => Yii::t('transporter_parts', 'Event Time'),
+            'load_meter' => Yii::t('transporter_parts', 'Load Meter'),
+            'load_weight' => Yii::t('transporter_parts', 'Load Weight'),
+            'part_other_cost' => Yii::t('transporter_parts', 'Part Other Cost'),
+            'places_id' => Yii::t('transporter_parts', 'Places ID'),
+            'created_at' => Yii::t('transporter_parts', 'Created At'),
+            'updated_at' => Yii::t('transporter_parts', 'Updated At'),
         ];
     }
 
