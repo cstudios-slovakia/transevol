@@ -2,24 +2,21 @@
 
 namespace app\controllers\api\v1;
 
-use app\controllers\BaseController;
-use app\models\Vehicles;
-use app\support\helpers\LoggedInUserTrait;
+use app\support\Vehicles\Relations\VehicleRelationAssistance;
+use app\support\Vehicles\UseCurrentVehicle;
 use Yii;
-use app\models\Goings;
+use app\models\TimelineVehicle;
 use yii\data\ActiveDataProvider;
-use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * GoingsController implements the CRUD actions for Goings model.
+ * TimelineVehicleController implements the CRUD actions for TimelineVehicle model.
  */
-class GoingsController extends BaseController
+class TimelineVehicleController extends Controller
 {
-    use LoggedInUserTrait;
-
+    use UseCurrentVehicle;
     /**
      * {@inheritdoc}
      */
@@ -36,13 +33,13 @@ class GoingsController extends BaseController
     }
 
     /**
-     * Lists all Goings models.
+     * Lists all TimelineVehicle models.
      * @return mixed
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Goings::find(),
+            'query' => TimelineVehicle::find(),
         ]);
 
         return $this->render('index', [
@@ -51,7 +48,7 @@ class GoingsController extends BaseController
     }
 
     /**
-     * Displays a single Goings model.
+     * Displays a single TimelineVehicle model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -64,35 +61,33 @@ class GoingsController extends BaseController
     }
 
     /**
-     * Creates a new Goings model.
+     * Creates a new TimelineVehicle model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Goings();
+        $model = new TimelineVehicle();
 
-        $model->setScenario($model::SCENARIO_START);
+        $ownedVehicles  = VehicleRelationAssistance::ownedVehicles();
 
-        $company = LoggedInUserTrait::loggedInUserCompany();
+        if ($model->load(Yii::$app->request->post())) {
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model->save();
 
-            $vehicleId = Yii::$app->session->get('vehicleId');
-            $vehicle = Vehicles::findOne(['id' => $vehicleId]);
-
-            $model->link('vehicles',$vehicle);
+            $model->link('timelineVehicle',$this->getVehicle());
 
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
             'model' => $model,
+            'ownedVehicles'     => $ownedVehicles,
         ]);
     }
 
     /**
-     * Updates an existing Goings model.
+     * Updates an existing TimelineVehicle model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -102,17 +97,27 @@ class GoingsController extends BaseController
     {
         $model = $this->findModel($id);
 
+        $ownedVehicles  = VehicleRelationAssistance::ownedVehicles();
+
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $timelineVehicle = $model->timelineVehicle;
+
+            $model->link('timelineVehicle',$this->getVehicle());
+
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'ownedVehicles'     => $ownedVehicles,
+
         ]);
     }
 
     /**
-     * Deletes an existing Goings model.
+     * Deletes an existing TimelineVehicle model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -126,49 +131,18 @@ class GoingsController extends BaseController
     }
 
     /**
-     * Finds the Goings model based on its primary key value.
+     * Finds the TimelineVehicle model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Goings the loaded model
+     * @return TimelineVehicle the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Goings::findOne($id)) !== null) {
+        if (($model = TimelineVehicle::findOne($id)) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
-    }
-
-    public function actionEnding()
-    {
-        $company = static::loggedInUserCompany();
-
-        $goingsSelectOptions = collect(Goings::findAll(['companies_id' => $company->id]))
-            ->pluck('going_from','id')
-            ->toArray();
-
-        return $this->render('ending',[
-            'goingsSelectOptions' => $goingsSelectOptions
-        ]);
-    }
-
-    public function actionCloseOne()
-    {
-
-        $closeableId = $this->request()->post('goings_id');
-        $model = $this->findModel((int) $closeableId);
-
-        $model->setScenario($model::SCENARIO_FINNISH);
-
-        $model->going_until = $this->request()->post('going_until');
-
-        $model->validate();
-
-        $model->save();
-
-        return $this->redirect(Url::toRoute('/transporter/viewer'));
-        dd($closeableId,$model,$this->request()->post());
     }
 }

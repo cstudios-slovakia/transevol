@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\support\helpers\LoggedInUserTrait;
 use Yii;
 
 /**
@@ -87,11 +88,14 @@ class Drivers extends \yii\db\ActiveRecord
         return $this->hasOne(Companies::className(), ['id' => 'companies_id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTransportDrivers()
+    public static function find()
     {
-        return $this->hasMany(TransportDriver::className(), ['drivers_id' => 'id']);
+        $find = parent::find();
+
+        $company = LoggedInUserTrait::loggedInUserCompany();
+
+        $find->andWhere(['drivers.companies_id' => $company->id]);
+
+        return $find;
     }
 }

@@ -3,43 +3,30 @@
 namespace app\models;
 
 use app\support\helpers\LoggedInUserTrait;
-use Carbon\Carbon;
 use Yii;
 
 /**
- * This is the model class for table "goings".
+ * This is the model class for table "timeline_vehicle".
  *
  * @property int $id
- * @property string $going_from
- * @property string $going_until
+ * @property string $vehicle_record_from
+ * @property string $vehicle_record_until
  * @property int $companies_id
+ * @property int $vehicle_id
  * @property string $created_at
  * @property string $updated_at
  *
  * @property Companies $companies
+ * @property Vehicles $vehicle
  */
-class Goings extends AppBasedActiveRecord
+class TimelineVehicle extends \yii\db\ActiveRecord
 {
-    const SCENARIO_START = 'start';
-    const SCENARIO_FINNISH = 'finnish';
-
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'goings';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function scenarios()
-    {
-        return [
-            self::SCENARIO_START => ['going_from','companies_id'],
-            self::SCENARIO_FINNISH => ['going_until','companies_id'],
-        ];
+        return 'timeline_vehicle';
     }
 
     /**
@@ -48,10 +35,11 @@ class Goings extends AppBasedActiveRecord
     public function rules()
     {
         return [
-            [['going_from', 'going_until'], 'required'],
-            [['going_from', 'going_until', 'created_at', 'updated_at'], 'safe'],
-            [['companies_id'], 'integer'],
+            [['vehicle_record_from', 'vehicle_id'], 'required'],
+            [['vehicle_record_from', 'vehicle_record_until', 'created_at', 'updated_at'], 'safe'],
+            [['companies_id', 'vehicle_id'], 'integer'],
             [['companies_id'], 'exist', 'skipOnError' => true, 'targetClass' => Companies::className(), 'targetAttribute' => ['companies_id' => 'id']],
+            [['vehicle_id'], 'exist', 'skipOnError' => true, 'targetClass' => Vehicles::className(), 'targetAttribute' => ['vehicle_id' => 'id']],
         ];
     }
 
@@ -62,9 +50,10 @@ class Goings extends AppBasedActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'going_from' => Yii::t('app', 'Going From'),
-            'going_until' => Yii::t('app', 'Going Until'),
+            'vehicle_record_from' => Yii::t('app', 'Vehicle Record From'),
+            'vehicle_record_until' => Yii::t('app', 'Vehicle Record Until'),
             'companies_id' => Yii::t('app', 'Companies ID'),
+            'vehicle_id' => Yii::t('app', 'Vehicle ID'),
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
         ];
@@ -78,10 +67,19 @@ class Goings extends AppBasedActiveRecord
         return $this->hasOne(Companies::className(), ['id' => 'companies_id']);
     }
 
-    public function getVehicles()
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVehicle()
+    {
+        return $this->hasOne(Vehicles::className(), ['id' => 'vehicle_id']);
+    }
+
+    public function getTimelineVehicle()
     {
         return $this->hasOne(Vehicles::className(),['id' => 'vehicle_id'])
-            ->viaTable('going__vehicle',['going_id'=> 'id']);
+            ->viaTable('timeline_vehicle__vehicle',['timeline_vehicle_id'=> 'id']);
+
     }
 
     public function beforeSave($insert)
@@ -97,19 +95,14 @@ class Goings extends AppBasedActiveRecord
         return true;
     }
 
-    public function getSpentHours()
+    public static function find()
     {
-        $from = $this->getAttribute('going_from');
-        $until = $this->getAttribute('going_until');
+        $find = parent::find();
 
-        if (! $from || !$until){
-            return 0;
-        }
-        $intervalFrom = Carbon::createFromFormat('Y-m-d H:i:s',$from);
-        $intervalUntil = Carbon::createFromFormat('Y-m-d H:i:s',$until);
+        $company = LoggedInUserTrait::loggedInUserCompany();
 
-        $difference  = $intervalFrom->diffAsCarbonInterval($intervalUntil);
+        $find->andWhere(['timeline_vehicle.companies_id' => $company->id]);
 
-        return $difference->hours .':'.$difference->minutes;
+        return $find;
     }
 }

@@ -15,7 +15,7 @@ $sectionName = $this->context->id;
 $headText = isset($this->params['page']) && isset($this->params['page']['show']) ? $this->params['page']['show']['portlet_title'] : $this->title;
 $editIdParam = array_key_exists('id', $this->context->actionParams) ? (int) $this->context->actionParams['id'] : 0;
 
-$portletTitle = isset($this->params['portlet']['title']) ? Yii::t('view/pages/show','Details for&nbsp;<strong>{sectionName}</strong>', [
+$portletTitle = isset($this->params['portlet']['title']) ? Yii::t('view/pages/show','{sectionName}', [
     'sectionName' => $this->params['portlet']['title']
 ]) : Yii::t('view/pages/show','Details for {sectionName}', [
     'sectionName' => $sectionName
@@ -41,17 +41,10 @@ $cancelUrl  = isset($cancelUrl) ? $cancelUrl : Url::toRoute('/'.$sectionName.'/i
             <?= $content ?>
 
             <div class="m-widget13__action m--align-right">
-                <?php if (isset($this->blocks['editButton']) || $editIdParam < 1): ?>
-                    <?= $this->blocks['editButton'] ?>
-                <?php else: ?>
-                    <?= $this->render('@app/views/layouts/default/common/buttons/detail_edit_btn.php',['url' => Url::toRoute([$sectionName.'/update','id' => $editIdParam],true)]) ?>
+                <?php if ( isset($this->blocks['actionButtonRow']) ): ?>
+                    <?= $this->blocks['actionButtonRow'] ?>
                 <?php endif; ?>
 
-                <?php if (isset($this->blocks['cancelButton'])): ?>
-                    <?= $this->blocks['cancelButton'] ?>
-                <?php else: ?>
-                    <?= $this->render('@app/views/layouts/default/common/buttons/detail_cancel_btn.php',['cancelUrl' => $cancelUrl]) ?>
-                <?php endif; ?>
             </div>
         </div>
     </div>

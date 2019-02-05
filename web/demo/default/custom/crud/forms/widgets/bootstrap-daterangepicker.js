@@ -1,5 +1,5 @@
 //== Class definition
-
+var dp;
 var BootstrapDaterangepicker = function () {
     
     //== Private functions
@@ -8,7 +8,7 @@ var BootstrapDaterangepicker = function () {
         $('#m_daterangepicker_2 .form-control').val( timelineFrom + ' / ' + timelineUntil );
 
         // input group and left alignment setup
-        $('#m_daterangepicker_2').daterangepicker({
+        dp =  $('#m_daterangepicker_2').daterangepicker({
             buttonClasses: 'm-btn btn',
             applyClass: 'btn-primary',
             cancelClass: 'btn-secondary',
