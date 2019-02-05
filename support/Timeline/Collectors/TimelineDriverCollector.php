@@ -30,15 +30,18 @@ class TimelineDriverCollector
 
             $recordUntil = Carbon::createFromFormat('Y-m-d H:i:s',$timelineDriver->driver_record_until);
             if ($recordUntil->year < 0){
-                $recordUntil = Carbon::today()->timestamp * 1000;
+                $recordUntil = Carbon::today();
             } else{
-                $recordUntil = $recordUntil->timestamp * 1000;
+                $recordUntil = $recordUntil;
             }
 
             return [
-                $timelineDriver->drivers->driver_name,
-                Carbon::createFromFormat('Y-m-d H:i:s',$timelineDriver->driver_record_from)->timestamp * 1000,
-                $recordUntil,
+                'id' => $timelineDriver->id,
+                'content' => $timelineDriver->drivers->driver_name,
+//                Carbon::createFromFormat('Y-m-d H:i:s',$timelineDriver->driver_record_from)->timestamp * 1000,
+//                date('d-m-Y G:H', strtotime($phpDateVariable));
+                'start' => Carbon::createFromFormat('Y-m-d H:i:s',$timelineDriver->driver_record_from)->format('c'),
+                'end' => $recordUntil->format('c'),
             ];
 
 

@@ -152,8 +152,9 @@ class TransporterController extends BaseController
             'selectedVehicleId' => $requestVehicleId
         ];
 
-
-//        dd();
+//        $x = $timelineDriverCollector->mapToJson();
+//
+//        dd($x);
 
         return $this->render('viewer',[
             'timelineMetaData' => $timelineMetaData,

@@ -1,7 +1,7 @@
-google.charts.load('current', {'packages':['timeline']});
-google.charts.setOnLoadCallback(drawChart);
-
-var x  = JSON.parse(driversData);
+// google.charts.load('current', {'packages':['timeline']});
+// google.charts.setOnLoadCallback(drawChart);
+//
+// var x  = JSON.parse(driversData);
 // var x  = driversData;
 
 function drawChart() {
@@ -40,7 +40,7 @@ function transform(item){
 
     return [
         item[0],
-        new Date(item[1]),
-        new Date(item[2])
+        item[1],
+        item[2]
     ];
 }

@@ -7,7 +7,7 @@ use yii\helpers\Url;
 $this->registerJsVar('driversData',$timelineData['drivers']);
 $this->registerJsVar('timelineFrom',$timelineMetaData['timelineFrom']);
 $this->registerJsVar('timelineUntil',$timelineMetaData['timelineUntil']);
-$this->registerJsVar('vehicleDefiniatorUrl',Url::toRoute('/api/v1/vehicle-definiator/vehicle'));
+$this->registerJsVar('modificatorUrl',Url::toRoute('/api/v1/vehicle-definiator/timeline-modificator'));
 
 $this->params['portlet']['title'] = Yii::t('transporter','Main timeline')
 
@@ -64,6 +64,9 @@ $this->params['portlet']['title'] = Yii::t('transporter','Main timeline')
 <div>
 
     <div id="timeline" style="height: auto;"></div>
+
+    <div id="visualization"></div>
+
 
     <div class="m-form">
         <div class="m-form__section m-form__section--first">
