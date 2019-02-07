@@ -217,4 +217,12 @@ class VehiclesController extends BaseController
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionStatistics(int $id)
+    {
+        $model = $this->findModel($id);
+        $model->vehicleStaticCosts;
+
+        return $this->render('statistics/show',['model' => $model]);
+    }
 }
