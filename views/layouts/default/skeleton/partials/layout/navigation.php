@@ -83,6 +83,14 @@ $user = Yii::$app->user;
                             <span class="m-menu__link-text"><?= Yii::t('navigation','Create vehicle') ?></span>
                         </a>
                     </li>
+                    <li class="m-menu__item " aria-haspopup="true">
+                        <a href="<?= Url::toRoute('/vehicles/statistics-index') ?>" class="m-menu__link ">
+                            <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                <span></span>
+                            </i>
+                            <span class="m-menu__link-text"><?= Yii::t('navigation','Vehicles statistics') ?></span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </li>

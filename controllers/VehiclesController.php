@@ -8,13 +8,21 @@ use app\models\VehicleStaticCosts;
 use app\models\VehicleStaticCostsForm;
 use app\support\FrequencyDataBuilder;
 use app\support\helpers\LoggedInUserTrait;
+use app\support\StaticCostsCalculators\DaylyGoingsCalculator;
+use app\support\StaticCostsCalculators\DaylyStaticCosts;
+use app\support\StaticCostsCalculators\DaylyStaticCostsCalculator;
+use app\support\StaticCostsCalculators\HourlyCostCalculator;
+use app\support\StaticCostsCalculators\MonthlyStaticCosts;
+use app\support\StaticCostsCalculators\MonthlyStaticCostsCalculator;
 use app\support\Vehicles\Relations\RelationAssistance;
 use app\support\Vehicles\Relations\VehicleRelationAssistance;
 use Yii;
 use app\models\Vehicles;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
 use yii\db\Expression;
+use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -218,11 +226,110 @@ class VehiclesController extends BaseController
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionStatistics(int $id)
+    public function actionStatisticsIndex()
     {
-        $model = $this->findModel($id);
-        $model->vehicleStaticCosts;
+        $vehicles = Vehicles::find()->with('vehicleStaticCosts')->with('vehicleStaticCosts.frequencyData')->all();
+        $data   = [];
 
-        return $this->render('statistics/show',['model' => $model]);
+        foreach ($vehicles as $vehicle) {
+            $statistics = $this->oneVehicleStatistics($vehicle->id, $vehicle);
+
+            $record     = array_merge(['ecv' => $vehicle->ecv,'id'=> $vehicle->id],$statistics['statistics']);
+
+            $data[] = $record;
+        }
+
+        $dataProvider   = new ArrayDataProvider([
+            'allModels' => $data
+        ]);
+
+        return $this->render('statistics/index', [
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+//actionStatistics
+    public function oneVehicleStatistics(int $id, Model $model = null)
+    {
+        if (!$model){
+            $model = $this->findModel($id);
+        }
+        $staticCosts = $model->vehicleStaticCosts;
+
+
+        $monthlyStaticCosts = [];
+        $daylyStaticCosts   = [];
+        $daylyGoingsCosts   = [];
+
+
+        $workDays = $this->request()->post('work_days', 20);
+        $workHour = $this->request()->post('work_hours', 13);
+
+        foreach ($staticCosts as $staticCost) {
+            $monthlyStaticCostCalculator     = new MonthlyStaticCostsCalculator();
+            $monthlyStaticCostCalculator->setStaticCost($staticCost);
+            $monthlyStaticCosts[]   = $monthlyStaticCostCalculator->costResult(true);
+
+            $daylyStaticCostCalculator  = new DaylyStaticCostsCalculator();
+            $daylyStaticCostCalculator->setStaticCost($staticCost);
+            $daylyStaticCosts[] = $daylyStaticCostCalculator->costResult(true);
+
+            if ($workDays) {
+                $daylyGoingsCalculator  = new DaylyGoingsCalculator();
+                $daylyGoingsCalculator->setWorkDays($workDays);
+                $daylyGoingsCalculator->setMonthlyStaticCostsCalculator($monthlyStaticCostCalculator);
+                $daylyGoingsCosts[] = $daylyGoingsCalculator->costResult(true);
+            }
+        }
+
+        $daysInMonth = MonthlyStaticCostsCalculator::getMonthDays();
+
+        $monthlyStaticCostsSum = array_sum($monthlyStaticCosts);
+
+        $daylyStaticCostSum = array_sum($daylyStaticCosts);
+
+        $daylyGoingsCostSum = array_sum($daylyGoingsCosts);
+
+        $hourlyStaticCostCalculator = new HourlyCostCalculator(24, $daysInMonth, $monthlyStaticCostsSum);
+
+        $hourlyStaticCostSum    = $hourlyStaticCostCalculator->costResult(true);
+
+        $hourlyGoingsSum = 0;
+
+        if ($workDays){
+            $hourlyGoingsCalculator     = new HourlyCostCalculator($workHour, $workDays, $monthlyStaticCostsSum);
+            $hourlyGoingsSum = $hourlyGoingsCalculator->costResult(true);
+        }
+
+        return [
+            'model' => $model,
+            'statistics' => [
+                'monthly'   => $monthlyStaticCostsSum,
+                'monthDays' => $daysInMonth,
+                'dayly'     => $daylyStaticCostSum,
+                'workDays'  => $workDays,
+                'daylyWorks'    => $daylyGoingsCostSum,
+                'hourly'    => $hourlyStaticCostSum,
+                'hourlyGoings'  => $hourlyGoingsSum,
+                'workHour'  => $workHour,
+            ]
+
+        ];
+
+//        return $this->render('statistics/show',[
+//            'model' => $model,
+//            'statistics' => [
+//                'monthly'   => $monthlyStaticCostsSum,
+//                'monthDays' => $daysInMonth,
+//                'dayly'     => $daylyStaticCostSum,
+//                'workDays'  => $workDays,
+//                'daylyWorks'    => $daylyGoingsCostSum,
+//                'hourly'    => $hourlyStaticCostSum,
+//                'hourlyGoings'  => $hourlyGoingsSum,
+//                'workHour'  => $workHour,
+//            ]
+//
+//        ]);
+
     }
 }

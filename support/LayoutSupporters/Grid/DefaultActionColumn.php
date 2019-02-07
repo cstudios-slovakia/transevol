@@ -60,9 +60,11 @@ class DefaultActionColumn
         $instance = self::getInstance();
         $instance->composeActionButtons();
 
-        return array_merge($instance->actionColumnSettings,[
+        $options = array_merge($instance->actionColumnSettings,[
             'buttons'   => $instance->buttons
         ],$instance->actionColumnOptions);
+
+        return $options;
     }
 
     protected function composeActionButtons() : self
