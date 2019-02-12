@@ -2,9 +2,9 @@
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
+//dd($timelineData['groupped']);
 
-
-$this->registerJsVar('driversData',$timelineData['drivers']);
+$this->registerJsVar('driversData',$timelineData['groupped']);
 $this->registerJsVar('timelineFrom',$timelineMetaData['timelineFrom']);
 $this->registerJsVar('timelineUntil',$timelineMetaData['timelineUntil']);
 $this->registerJsVar('modificatorUrl',Url::toRoute('/api/v1/vehicle-definiator/timeline-modificator'));

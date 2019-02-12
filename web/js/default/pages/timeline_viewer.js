@@ -108,7 +108,7 @@ $(document).ready(function () {
             data.timelineFrom   = this.getTimelineInterval().getTimelineFrom();
             data.timelineUntil  = this.getTimelineInterval().getTimelineUntil();
 
-            console.log('data',data);
+            console.log('timelineBuilder sent data',data);
 
             $.post(this.uri,data);
         }
@@ -141,6 +141,8 @@ $(document).ready(function () {
 
         timelineBuilder.defineTimeline();
 
+        window.location.reload(false);
+
     });
 
     vehiclesSelector.on('change',function(){
@@ -153,8 +155,14 @@ $(document).ready(function () {
 
         // addVehicleParameterToUrl('',vehicleId);
 
-        // window.location.reload(false);
+        window.location.reload(false);
     });
+
+
+    ////////////////
+    ///////////////
+    //////////////////////
+
 
 
     /*
@@ -185,9 +193,25 @@ $(document).ready(function () {
         // console.log(driversData);
         c.push(x);
     }
-    console.log(x);
+    console.log('x',x);
+
+    var groups = [
+        {
+            id: 1,
+            content: 'Vodic'
+            // Optional: a field 'className', 'style', 'order', [properties]
+        },
+        {
+            id: 2,
+            content: 'Vozidlo'
+        }
+    ];
+
     // DOM element where the Timeline will be attached
     var container = document.getElementById('visualization');
+
+    var items = new vis.DataSet(x);
+
 
     // Create a DataSet (allows two way data-binding)
     // var items = new vis.DataSet([
@@ -199,7 +223,6 @@ $(document).ready(function () {
     //     {id: 6, content: 'item 6', start: '2014-04-27', type: 'point'}
     // ]);
 
-    var items = new vis.DataSet(x);
 
     // Configuration for the Timeline
     var options = {
@@ -208,10 +231,10 @@ $(document).ready(function () {
         // horizontalscroll        : false,
         moveable                : false
     };
-
+    console.log('items',items);
     // Create a Timeline
     var timeline = new vis.Timeline(container, items, options);
-
+    timeline.setGroups(groups);
 
     /*
     Helper Functions

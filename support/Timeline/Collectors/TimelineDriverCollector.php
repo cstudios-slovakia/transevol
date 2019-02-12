@@ -5,6 +5,7 @@ namespace app\support\Timeline\Collectors;
 use app\models\TimelineDriver;
 use app\support\Vehicles\UseCurrentVehicle;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 
 class TimelineDriverCollector
 {
@@ -24,9 +25,9 @@ class TimelineDriverCollector
         return $drivers;
     }
 
-    public function mapToJson()
+    public function collectable() : Collection
     {
-        $drivers = collect($this->collection())->map(function($timelineDriver){
+        return $drivers = collect($this->collection())->map(function($timelineDriver){
 
             $recordUntil = Carbon::createFromFormat('Y-m-d H:i:s',$timelineDriver->driver_record_until);
             if ($recordUntil->year < 0){
@@ -42,10 +43,16 @@ class TimelineDriverCollector
 //                date('d-m-Y G:H', strtotime($phpDateVariable));
                 'start' => Carbon::createFromFormat('Y-m-d H:i:s',$timelineDriver->driver_record_from)->format('c'),
                 'end' => $recordUntil->format('c'),
+                'group' => 1
             ];
 
 
         });
+    }
+
+    public function mapToJson()
+    {
+        $drivers = $this->collectable();
 
         return $drivers->toJson();
     }
