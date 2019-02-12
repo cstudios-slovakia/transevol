@@ -11,6 +11,7 @@ use app\support\helpers\LoggedInUserTrait;
 use app\support\StaticCostsCalculators\DaylyGoingsCalculator;
 use app\support\StaticCostsCalculators\DaylyStaticCosts;
 use app\support\StaticCostsCalculators\DaylyStaticCostsCalculator;
+use app\support\StaticCostsCalculators\HourlyAbsoluteCostsCalculator;
 use app\support\StaticCostsCalculators\HourlyCostCalculator;
 use app\support\StaticCostsCalculators\MonthlyStaticCosts;
 use app\support\StaticCostsCalculators\MonthlyStaticCostsCalculator;
@@ -252,11 +253,11 @@ class VehiclesController extends BaseController
     {
         $options = [];
 
-        if ($this->request()->isPost) {
-            $workDaysInput = $this->request()->post('work_days');
-            $workDaysNumber = count(explode('|',$workDaysInput));
-            $options['work_days'] = $workDaysNumber;
-        }
+//        if ($this->request()->isPost) {
+//            $workDaysInput = $this->request()->post('work_days');
+//            $workDaysNumber = count(explode('|',$workDaysInput));
+//            $options['work_days'] = $workDaysNumber;
+//        }
 
 
         return $this->render('statistics/show',$this->oneVehicleStatistics($id,null,$options));
@@ -279,6 +280,19 @@ class VehiclesController extends BaseController
         $monthlyStaticCosts = [];
         $daylyStaticCosts   = [];
         $daylyGoingsCosts   = [];
+
+        foreach ($staticCosts as $staticCost){
+
+
+
+            $month  = new MonthlyStaticCostsCalculator();
+            $month->setStaticCost($staticCost);
+            $monthlyStaticCosts[]   = $month->costResult(true);
+
+        }
+        $monthCostsSum = array_sum($monthlyStaticCosts);
+        $x  = new HourlyAbsoluteCostsCalculator(20,$monthCostsSum);
+dd($monthCostsSum,$x->costResult());
 
         $workDays = $this->request()->post('work_days', 20);
         $workHour = $this->request()->post('work_hours', 13);

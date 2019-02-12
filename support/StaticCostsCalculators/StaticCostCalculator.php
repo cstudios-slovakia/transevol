@@ -43,7 +43,7 @@ class StaticCostCalculator
         $minutesInPeriod     = $this->periodInMinutes();
 //        dump($this->getStaticCost());
         $periodTime     = $this->getCostFrequencyData()->frequency_value;
-
+//dd($minutesInPeriod,$periodTime);
         $this->calculus = $minutesInPeriod / $periodTime;
     }
 
