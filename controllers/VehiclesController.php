@@ -248,14 +248,18 @@ class VehiclesController extends BaseController
         ]);
     }
 
-//actionStatistics
+
     public function oneVehicleStatistics(int $id, Model $model = null)
     {
         if (!$model){
             $model = $this->findModel($id);
         }
-        $staticCosts = $model->vehicleStaticCosts;
-
+        $staticCosts = $model->getVehicleStaticCosts()
+            ->with(['staticCosts'])
+            ->joinWith('staticCosts')
+            ->andWhere(['NOT REGEXP', 'static_costs.short_name','^mnvhcl'])
+            ->with('frequencyData')
+            ->all();
 
         $monthlyStaticCosts = [];
         $daylyStaticCosts   = [];
