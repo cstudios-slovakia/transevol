@@ -2,6 +2,7 @@
 
 use app\components\ViewTyped\Form\BaseCreateFormWidget;
 use yii\helpers\Html;
+use app\assets\VehicleStatisticsAsset;
 /* @var $this yii\web\View */
 /* @var $model app\models\Vehicles */
 
@@ -12,6 +13,9 @@ $this->params['breadcrumbs'][] = $this->title;
 $this->params['portlet']['title'] = Yii::t('vehicle', 'Details for {vehicleEcv}',[
     'vehicleEcv' => $model->ecv
 ]);
+
+VehicleStatisticsAsset::register($this);
+
 ?>
 <?php $this->beginContent('@app/views/layouts/default/common/pages/show.php' ); ?>
     <div class="vehicles-view">
@@ -20,11 +24,15 @@ $this->params['portlet']['title'] = Yii::t('vehicle', 'Details for {vehicleEcv}'
                 <?php $form = \yii\widgets\ActiveForm::begin(); ?>
 
                 <?= Html::label('Pracovne dni','work_days' ) ?>
-                <?= Html::input('number','work_days' ) ?>
+                <div class="container--datepicker">
+                    <?= Html::input('text','work_days' ) ?>
+
+                </div>
+                <button id="btn-calendar" type="button">Kalendar</button>
                 <br>
                 <?= Html::label('Vykon hodiny','work_hours' ) ?>
 
-                <?= Html::input('number','work_hours' ) ?>
+                <?= Html::input('number','work_hours',13 ) ?>
                 <br>
                 <?= Html::submitButton('Set') ?>
 

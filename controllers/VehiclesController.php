@@ -248,8 +248,23 @@ class VehiclesController extends BaseController
         ]);
     }
 
+    public function actionStatistics(int $id)
+    {
+        $options = [];
 
-    public function oneVehicleStatistics(int $id, Model $model = null)
+        if ($this->request()->isPost) {
+            $workDaysInput = $this->request()->post('work_days');
+            $workDaysNumber = count(explode('|',$workDaysInput));
+            $options['work_days'] = $workDaysNumber;
+        }
+
+
+        return $this->render('statistics/show',$this->oneVehicleStatistics($id,null,$options));
+
+    }
+
+
+    public function oneVehicleStatistics(int $id, Model $model = null,array $options = [])
     {
         if (!$model){
             $model = $this->findModel($id);
@@ -265,9 +280,13 @@ class VehiclesController extends BaseController
         $daylyStaticCosts   = [];
         $daylyGoingsCosts   = [];
 
-
         $workDays = $this->request()->post('work_days', 20);
         $workHour = $this->request()->post('work_hours', 13);
+
+        if (!empty($options) && array_key_exists('work_days',$options)){
+            $workDays   = $options['work_days'];
+        }
+
 
         foreach ($staticCosts as $staticCost) {
             $monthlyStaticCostCalculator     = new MonthlyStaticCostsCalculator();
