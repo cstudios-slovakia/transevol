@@ -8,11 +8,15 @@ use app\models\VehicleStaticCosts;
 use app\models\VehicleStaticCostsForm;
 use app\support\FrequencyDataBuilder;
 use app\support\helpers\LoggedInUserTrait;
+use app\support\StaticCostsCalculators\CostsSummarizer;
 use app\support\StaticCostsCalculators\DaylyGoingsCalculator;
 use app\support\StaticCostsCalculators\DaylyStaticCosts;
 use app\support\StaticCostsCalculators\DaylyStaticCostsCalculator;
 use app\support\StaticCostsCalculators\HourlyAbsoluteCostsCalculator;
 use app\support\StaticCostsCalculators\HourlyCostCalculator;
+use app\support\StaticCostsCalculators\MakesStaticCostsCalculation;
+use app\support\StaticCostsCalculators\MinutelyCostsCalculator;
+use app\support\StaticCostsCalculators\MinutelyWorkCostsCalculator;
 use app\support\StaticCostsCalculators\MonthlyStaticCosts;
 use app\support\StaticCostsCalculators\MonthlyStaticCostsCalculator;
 use app\support\Vehicles\Relations\RelationAssistance;
@@ -229,144 +233,161 @@ class VehiclesController extends BaseController
 
     public function actionStatisticsIndex()
     {
-        $vehicles = Vehicles::find()->with('vehicleStaticCosts')->with('vehicleStaticCosts.frequencyData')->all();
-        $data   = [];
+        $mainVehicleShortName = 'tahac';
+
+        $vehicles = Vehicles::find()
+            ->with('vehicleStaticCosts')
+            ->with('vehicleTypes')
+            ->with('vehicleStaticCosts.frequencyData')->all();
+
+        $mainVehicleRecords = [];
+        $notMainVehicleRecords = [];
 
         foreach ($vehicles as $vehicle) {
+
             $statistics = $this->oneVehicleStatistics($vehicle->id, $vehicle);
 
             $record     = array_merge(['ecv' => $vehicle->ecv,'id'=> $vehicle->id],$statistics['statistics']);
 
-            $data[] = $record;
+            if ($vehicle->vehicleTypes->type_shortly === $mainVehicleShortName){
+                $mainVehicleRecords[] = $record;
+            } else{
+                $notMainVehicleRecords[]    = $record;
+            }
+
         }
 
-        $dataProvider   = new ArrayDataProvider([
-            'allModels' => $data
+
+        $mainVehicleDataProvider = new ArrayDataProvider([
+            'allModels' => $mainVehicleRecords
+        ]);
+
+        $notMainVehicleDataProvider     = new ArrayDataProvider([
+            'allModels' => $notMainVehicleRecords
+        ]);
+
+        // we need to calculate company static costs too
+        $workDays = 20;
+        $monthDays = 30;
+        $company = LoggedInUserTrait::loggedInUserCompany();
+        $companyStaticCosts    = $company->getCompanyCostDatas()
+            ->with('staticCosts')
+            ->joinWith('staticCosts')
+            ->with('frequencyData')
+            ->all();
+        $companyStaticCostsCalculator = new MakesStaticCostsCalculation($companyStaticCosts, $monthDays, $workDays);
+
+        $companyStatistics = $companyStaticCostsCalculator->makeCalculation();
+        $companyStatistics['col_name']   = $company->company_name;
+        $companyStatistics['id']   = $company->id;
+
+
+
+
+
+        // amount of main vehicles
+        $mainVehicleAmount = (int) $mainVehicleDataProvider->getTotalCount();
+
+        // one company has one collection of static costs
+        $companyCostsDividedIntoMainVehicles = [];
+        $companyCostsDividedIntoMainVehicles['col_name']    = 'Per vozidlo';
+
+        // we are interested in costs only
+        foreach ($companyStatistics as $columnName => $columnValue){
+            if(str_contains($columnName,'costs')){
+                $companyCostsDividedIntoMainVehicles[$columnName] =  $columnValue / $mainVehicleAmount;
+            }
+        }
+
+        $companyCostsDividedIntoAddedVehicles = [];
+        $companyCostsDividedIntoAddedVehicles['col_name']    = 'na vozidlo s privesom';
+
+        // we have to sum added vehicles all types of costs
+        $addedVehiclesCollection    = collect($notMainVehicleRecords);
+
+        foreach ($companyCostsDividedIntoMainVehicles as $columnName => $columnValue){
+            if(str_contains($columnName,'costs')){
+                $companyCostsDividedIntoAddedVehicles[$columnName] =  ($columnValue + $addedVehiclesCollection->sum($columnName)) / $mainVehicleAmount;
+            }
+        }
+
+        $companyDataProvider    = new ArrayDataProvider([
+            'allModels' => [$companyStatistics,$companyCostsDividedIntoMainVehicles, $companyCostsDividedIntoAddedVehicles]
+
+        ]);
+
+
+        // we have re-calculate main vehicles cost because of added vehicles
+        $reCalculatedMainVehicleRecords = [];
+        foreach ($mainVehicleRecords as $mainVehicleRecord){
+
+            $record = [];
+            foreach ($mainVehicleRecord as $costName => $costValue){
+                if(str_contains($costName,'costs')){
+                    $record[$costName] =  $companyCostsDividedIntoAddedVehicles[$costName] + $costValue;
+                } else{
+                    $record[$costName] = $costValue;
+                }
+            }
+
+            $reCalculatedMainVehicleRecords[] = $record;
+        }
+    ;
+
+
+        $reCalculatedMainVehicleDataProvider = new ArrayDataProvider([
+            'allModels' => $reCalculatedMainVehicleRecords
         ]);
 
         return $this->render('statistics/index', [
-            'dataProvider' => $dataProvider,
+            'mainVehicleDataProvider' => $mainVehicleDataProvider,
+            'notMainVehicleDataProvider' => $notMainVehicleDataProvider,
+            'companyDataProvider' => $companyDataProvider,
+            'reCalculatedMainVehicleDataProvider'   => $reCalculatedMainVehicleDataProvider
         ]);
     }
 
     public function actionStatistics(int $id)
     {
-        $options = [];
 
-//        if ($this->request()->isPost) {
-//            $workDaysInput = $this->request()->post('work_days');
-//            $workDaysNumber = count(explode('|',$workDaysInput));
-//            $options['work_days'] = $workDaysNumber;
-//        }
-
-
-        return $this->render('statistics/show',$this->oneVehicleStatistics($id,null,$options));
+        return $this->render('statistics/show',$this->oneVehicleStatistics($id));
 
     }
 
 
     public function oneVehicleStatistics(int $id, Model $model = null,array $options = [])
     {
-        if (!$model){
-            $model = $this->findModel($id);
-        }
-        $staticCosts = $model->getVehicleStaticCosts()
-            ->with(['staticCosts'])
-            ->joinWith('staticCosts')
-            ->andWhere(['NOT REGEXP', 'static_costs.short_name','^mnvhcl'])
-            ->with('frequencyData')
-            ->all();
-
-        $monthlyStaticCosts = [];
-        $daylyStaticCosts   = [];
-        $daylyGoingsCosts   = [];
-
-        foreach ($staticCosts as $staticCost){
-
-
-
-            $month  = new MonthlyStaticCostsCalculator();
-            $month->setStaticCost($staticCost);
-            $monthlyStaticCosts[]   = $month->costResult(true);
-
-        }
-        $monthCostsSum = array_sum($monthlyStaticCosts);
-        $x  = new HourlyAbsoluteCostsCalculator(20,$monthCostsSum);
-dd($monthCostsSum,$x->costResult());
-
-        $workDays = $this->request()->post('work_days', 20);
-        $workHour = $this->request()->post('work_hours', 13);
+        $workDays = 20;
+        $monthDays = 30;
 
         if (!empty($options) && array_key_exists('work_days',$options)){
             $workDays   = $options['work_days'];
         }
 
-
-        foreach ($staticCosts as $staticCost) {
-            $monthlyStaticCostCalculator     = new MonthlyStaticCostsCalculator();
-            $monthlyStaticCostCalculator->setStaticCost($staticCost);
-            $monthlyStaticCosts[]   = $monthlyStaticCostCalculator->costResult(true);
-
-            $daylyStaticCostCalculator  = new DaylyStaticCostsCalculator();
-            $daylyStaticCostCalculator->setStaticCost($staticCost);
-            $daylyStaticCosts[] = $daylyStaticCostCalculator->costResult(true);
-
-            if ($workDays) {
-                $daylyGoingsCalculator  = new DaylyGoingsCalculator();
-                $daylyGoingsCalculator->setWorkDays($workDays);
-                $daylyGoingsCalculator->setMonthlyStaticCostsCalculator($monthlyStaticCostCalculator);
-                $daylyGoingsCosts[] = $daylyGoingsCalculator->costResult(true);
-            }
+        if (!empty($options) && array_key_exists('month_days',$options)){
+            $monthDays   = $options['month_days'];
         }
 
-        $daysInMonth = MonthlyStaticCostsCalculator::getMonthDays();
-
-        $monthlyStaticCostsSum = array_sum($monthlyStaticCosts);
-
-        $daylyStaticCostSum = array_sum($daylyStaticCosts);
-
-        $daylyGoingsCostSum = array_sum($daylyGoingsCosts);
-
-        $hourlyStaticCostCalculator = new HourlyCostCalculator(24, $daysInMonth, $monthlyStaticCostsSum);
-
-        $hourlyStaticCostSum    = $hourlyStaticCostCalculator->costResult(true);
-
-        $hourlyGoingsSum = 0;
-
-        if ($workDays){
-            $hourlyGoingsCalculator     = new HourlyCostCalculator($workHour, $workDays, $monthlyStaticCostsSum);
-            $hourlyGoingsSum = $hourlyGoingsCalculator->costResult(true);
+        if (!$model){
+            $model = $this->findModel($id);
         }
+
+        $staticCosts = $model->getVehicleStaticCosts()
+            ->with(['staticCosts'])
+            ->joinWith('staticCosts')
+            // we dont need "main vehicle added costs"
+            ->andWhere(['NOT REGEXP', 'static_costs.short_name','^mnvhcl'])
+            ->with('frequencyData')
+            ->all();
+
+        $staticCostsCalculationMaker    = new MakesStaticCostsCalculation($staticCosts, $monthDays, $workDays);
+
+        $statistics = $staticCostsCalculationMaker->makeCalculation();
 
         return [
             'model' => $model,
-            'statistics' => [
-                'monthly'   => $monthlyStaticCostsSum,
-                'monthDays' => $daysInMonth,
-                'dayly'     => $daylyStaticCostSum,
-                'workDays'  => $workDays,
-                'daylyWorks'    => $daylyGoingsCostSum,
-                'hourly'    => $hourlyStaticCostSum,
-                'hourlyGoings'  => $hourlyGoingsSum,
-                'workHour'  => $workHour,
-            ]
-
+            'statistics' => $statistics
         ];
-
-//        return $this->render('statistics/show',[
-//            'model' => $model,
-//            'statistics' => [
-//                'monthly'   => $monthlyStaticCostsSum,
-//                'monthDays' => $daysInMonth,
-//                'dayly'     => $daylyStaticCostSum,
-//                'workDays'  => $workDays,
-//                'daylyWorks'    => $daylyGoingsCostSum,
-//                'hourly'    => $hourlyStaticCostSum,
-//                'hourlyGoings'  => $hourlyGoingsSum,
-//                'workHour'  => $workHour,
-//            ]
-//
-//        ]);
 
     }
 }

@@ -2,6 +2,7 @@
 
 namespace app\support\StaticCostsCalculators;
 
+use app\models\CompanyCostDatas;
 use app\models\VehicleStaticCosts;
 
 
@@ -11,7 +12,7 @@ class StaticCostCalculator
     /** @var int  */
     protected $days = 30;
 
-    /** @var VehicleStaticCosts */
+    /** @var VehicleStaticCosts|CompanyCostDatas */
     protected $staticCost;
 
     protected $calculus = 0;
@@ -41,9 +42,9 @@ class StaticCostCalculator
     protected function defineCalculus()
     {
         $minutesInPeriod     = $this->periodInMinutes();
-//        dump($this->getStaticCost());
+
         $periodTime     = $this->getCostFrequencyData()->frequency_value;
-//dd($minutesInPeriod,$periodTime);
+
         $this->calculus = $minutesInPeriod / $periodTime;
     }
 
@@ -71,20 +72,22 @@ class StaticCostCalculator
     }
 
     /**
-     * @return VehicleStaticCosts
+     * @return CompanyCostDatas|VehicleStaticCosts
      */
-    public function getStaticCost(): VehicleStaticCosts
+    public function getStaticCost()
     {
         return $this->staticCost;
     }
 
     /**
-     * @param VehicleStaticCosts $staticCost
+     * @param CompanyCostDatas|VehicleStaticCosts $staticCost
      */
-    public function setStaticCost(VehicleStaticCosts $staticCost)
+    public function setStaticCost($staticCost)
     {
         $this->staticCost = $staticCost;
     }
+
+
 
     /**
      * @return int

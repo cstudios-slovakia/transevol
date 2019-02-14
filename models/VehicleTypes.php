@@ -30,7 +30,7 @@ class VehicleTypes extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['vehicle_type_name', 'created_at'], 'required'],
+            [['vehicle_type_name','type_shortly'], 'required'],
             [['created_at', 'updated_at'], 'safe'],
             [['vehicle_type_name'], 'string', 'max' => 50],
         ];
