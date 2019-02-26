@@ -24,6 +24,7 @@ class CostsSummarizer
             }
 
             $this->costsSum += $countable->costResult();
+
         });
 
         return $this;

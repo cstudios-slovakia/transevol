@@ -6,6 +6,7 @@ use app\models\Companies;
 use app\models\VehicleStaticCost;
 use app\models\VehicleStaticCosts;
 use app\models\VehicleStaticCostsForm;
+use app\support\Converters\BusinessDays;
 use app\support\FrequencyDataBuilder;
 use app\support\helpers\LoggedInUserTrait;
 use app\support\StaticCostsCalculators\CostsSummarizer;
@@ -19,8 +20,13 @@ use app\support\StaticCostsCalculators\MinutelyCostsCalculator;
 use app\support\StaticCostsCalculators\MinutelyWorkCostsCalculator;
 use app\support\StaticCostsCalculators\MonthlyStaticCosts;
 use app\support\StaticCostsCalculators\MonthlyStaticCostsCalculator;
+use app\support\Timeline\DaysOfMonthPeriod;
+use app\support\Timeline\PickerPeriodMaker;
 use app\support\Vehicles\Relations\RelationAssistance;
 use app\support\Vehicles\Relations\VehicleRelationAssistance;
+use app\support\Vehicles\VehicleStaticCostCalculators\PeriodCostCalculator;
+use app\support\Vehicles\VehicleStaticCostCalculators\VehicleStaticCostsCalculator;
+use Illuminate\Support\Carbon;
 use Yii;
 use app\models\Vehicles;
 use yii\base\Model;
@@ -32,6 +38,8 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\support\Converters\StaticCostsUnitConverter;
+use yii\web\Response;
 
 /**
  * VehiclesController implements the CRUD actions for Vehicles model.
@@ -233,22 +241,92 @@ class VehiclesController extends BaseController
 
     public function actionStatisticsIndex()
     {
-        $mainVehicleShortName = 'tahac';
+
+        $workDaysInput = [];
+        $workDays = collect($workDaysInput);
+
+        if ($ajax = Yii::$app->request->isAjax){
+            // get the ajax post
+            $workDaysInput = Yii::$app->request->post('input');
+
+            // map over the items
+            $workDays = collect($workDaysInput)
+                ->map(function ($record){
+
+                    $identification = $record['identification'];
+
+                    $re = '/^work_days\[(.*?)\]/';
+                    $str = $identification;
+
+                    preg_match_all($re, $str, $matches, PREG_SET_ORDER, 0);
+
+                    $recordId   = preg_replace('/\D/','',$identification);
+                    $recordType = $matches[0][1];
+
+                    $record['type'] = $recordType;
+                    $record['id'] = $recordId;
+
+                    // change record and populate with id and type
+                    return $record;
+                })
+                // simply sort by type for easier search
+                ->groupBy('type');
+
+        }
+
+
+        $mainVehicleShortName = Vehicles::MAIN_VEHICLE_SHORT_NAME;
 
         $vehicles = Vehicles::find()
             ->with('vehicleStaticCosts')
             ->with('vehicleTypes')
             ->with('vehicleStaticCosts.frequencyData')->all();
 
+
         $mainVehicleRecords = [];
         $notMainVehicleRecords = [];
-
+        $choosedWorkDatesOnVehicles = '';
         foreach ($vehicles as $vehicle) {
+            $wd = 20;
 
-            $statistics = $this->oneVehicleStatistics($vehicle->id, $vehicle);
+            $daysOfMonth = new DaysOfMonthPeriod();
 
-            $record     = array_merge(['ecv' => $vehicle->ecv,'id'=> $vehicle->id],$statistics['statistics']);
+            $pickerPeriodMaker = new PickerPeriodMaker();
+            $pickerPeriodMaker->setPeriod($daysOfMonth);
+            $pickerBusinessDays  = $pickerPeriodMaker->makePeriodDays();
 
+            // check input contains main vehicle
+            if($workDays->has('main_vehicle')){
+                // sort vehicle data by ID
+                $mainVehicleInputs = collect($workDays->get('main_vehicle'))->keyBy('id');
+
+                // change work days number if exists
+                if ($mainVehicleInputs->has($vehicle->id)){
+                    $choosedWorkDatesOnMainVehicles   = $mainVehicleInputs->get($vehicle->id)['workDates'];
+                    $choosedWorkDatesOnMainVehiclesExploded   = explode('|',$choosedWorkDatesOnMainVehicles);
+                    $wd = (int) count($choosedWorkDatesOnMainVehiclesExploded);
+                }
+            }
+
+            // check input contains main vehicle
+            if($workDays->has('not_main_vehicle')){
+                // sort vehicle data by ID
+                $notMainVehicleInputs = collect($workDays->get('not_main_vehicle'))->keyBy('id');
+
+                // change work days number if exists
+                if ($notMainVehicleInputs->has($vehicle->id)){
+                    $choosedWorkDatesOnVehicles = $notMainVehicleInputs->get($vehicle->id)['workDates'];
+                    $choosedWorkDatesOnVehiclesExploded = explode('|', $choosedWorkDatesOnVehicles);
+                    $wd = (int) count($choosedWorkDatesOnVehiclesExploded);
+                }
+            }
+
+            $statistics = $this->oneVehicleStatistics($vehicle->id, $vehicle, ['work_days' => $wd] );
+            $statistics['statistics']['work_days']=  $choosedWorkDatesOnVehicles;
+//            var_dump($statistics);
+            $record     = array_merge(['ecv' => $vehicle->ecv,'id'=> $vehicle->id, 'specified_work_dates' => $pickerBusinessDays], $statistics['statistics']);
+
+            // split not main vehicles into another collection
             if ($vehicle->vehicleTypes->type_shortly === $mainVehicleShortName){
                 $mainVehicleRecords[] = $record;
             } else{
@@ -267,23 +345,40 @@ class VehiclesController extends BaseController
         ]);
 
         // we need to calculate company static costs too
-        $workDays = 20;
+        // define some defaults
+        $wd = 20;
         $monthDays = 30;
+
+        // company is logged in, grab it
         $company = LoggedInUserTrait::loggedInUserCompany();
+
+        if($workDays->has('company_data')){
+            // sort vehicle data by ID
+            $companyDatas = collect($workDays->get('company_data'))->keyBy('id');
+
+            // change work days number if exists
+            if ($companyDatas->has($company->id)){
+                $choosedWorkDatesOnCompany = explode('|',$companyDatas->get($company->id)['workDates']);
+                $wd = (int) count($choosedWorkDatesOnCompany);
+            }
+        }
+
+        // query for company costs
         $companyStaticCosts    = $company->getCompanyCostDatas()
             ->with('staticCosts')
             ->joinWith('staticCosts')
             ->with('frequencyData')
             ->all();
-        $companyStaticCostsCalculator = new MakesStaticCostsCalculation($companyStaticCosts, $monthDays, $workDays);
+
+        // calculate static costs with calculator
+        $companyStaticCostsCalculator = new MakesStaticCostsCalculation($companyStaticCosts, $monthDays, $wd);
 
         $companyStatistics = $companyStaticCostsCalculator->makeCalculation();
-        $companyStatistics['col_name']   = $company->company_name;
+
+
+        $companyStatistics['col_name']   = 'Administratívne náklady';
         $companyStatistics['id']   = $company->id;
-
-
-
-
+        $companyStatistics['specified_work_dates']   = $pickerBusinessDays;
 
         // amount of main vehicles
         $mainVehicleAmount = (int) $mainVehicleDataProvider->getTotalCount();
@@ -300,7 +395,7 @@ class VehiclesController extends BaseController
         }
 
         $companyCostsDividedIntoAddedVehicles = [];
-        $companyCostsDividedIntoAddedVehicles['col_name']    = 'na vozidlo s privesom';
+        $companyCostsDividedIntoAddedVehicles['col_name']    = 'Na vozidlo s privesom';
 
         // we have to sum added vehicles all types of costs
         $addedVehiclesCollection    = collect($notMainVehicleRecords);
@@ -339,12 +434,41 @@ class VehiclesController extends BaseController
             'allModels' => $reCalculatedMainVehicleRecords
         ]);
 
-        return $this->render('statistics/index', [
+        $providers  = [
             'mainVehicleDataProvider' => $mainVehicleDataProvider,
             'notMainVehicleDataProvider' => $notMainVehicleDataProvider,
             'companyDataProvider' => $companyDataProvider,
             'reCalculatedMainVehicleDataProvider'   => $reCalculatedMainVehicleDataProvider
-        ]);
+        ];
+
+        if ($ajax = Yii::$app->request->isAjax) {
+
+            $response   = [
+                'status'    => 'ok',
+                'data'      => [
+                    'mainVehicleDataProvider' => $this->renderPartial('statistics/_partial/main_vehicle_grid',['mainVehicleDataProvider' => $providers['mainVehicleDataProvider']]),
+                    'notMainVehicleDataProvider' => $this->renderPartial('statistics/_partial/not_main_vehicle_grid',['notMainVehicleDataProvider' => $providers['notMainVehicleDataProvider']]),
+                    'companyDataProvider' => $this->renderPartial('statistics/_partial/company_data_grid',['companyDataProvider'  => $providers['companyDataProvider']]),
+                    'reCalculatedMainVehicleDataProvider'   => $this->renderPartial('statistics/_partial/recalculated_main_vehicle_grid',['reCalculatedMainVehicleDataProvider'  => $providers['reCalculatedMainVehicleDataProvider']]),
+                ],
+                'request'   => $workDaysInput
+            ];
+
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return  $response;
+        }
+
+//        $businessDays = new BusinessDays();
+//        $businessDaysInMonth = $businessDays->daysBetween($firstDayOfMonth->toMutable(),$lastDayOfMonth->toMutable());
+
+
+
+
+
+//        dd($pickerPeriodMaker,$pickerBusinessDays);
+
+
+        return $this->render('statistics/index', $providers);
     }
 
     public function actionStatistics(int $id)

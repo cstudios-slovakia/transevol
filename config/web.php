@@ -18,12 +18,7 @@ $config = [
     'components' => [
 //        'assetManager' => [
 //            'bundles' => [
-//                'yii\web\JqueryAsset' => [
-//                    'js'=>[]
-//                ],
-//                'yii\web\YiiAsset' => [
-//                    'depends' => []
-//                ],
+//                'yii\web\JqueryAsset' => false,
 //            ],
 //        ],
         'request' => [

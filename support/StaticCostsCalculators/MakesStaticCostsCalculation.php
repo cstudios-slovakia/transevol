@@ -1,6 +1,14 @@
 <?php
 namespace app\support\StaticCostsCalculators;
 
+use app\support\Converters\StaticCostsUnitConverter;
+use app\support\Vehicles\VehicleStaticCostCalculators\MonthlyCostsPerDayCalculator;
+use app\support\Vehicles\VehicleStaticCostCalculators\MonthlyCostsPerHourCalculator;
+use app\support\Vehicles\VehicleStaticCostCalculators\MonthlyCostsPerMinuteCalculator;
+use app\support\Vehicles\VehicleStaticCostCalculators\PeriodCostCalculator;
+use app\support\Vehicles\VehicleStaticCostCalculators\VehicleStaticCostsCalculator;
+use app\support\Vehicles\VehicleStaticCostCalculators\WorkDayPerHourCalculator;
+
 class MakesStaticCostsCalculation
 {
     /** @var array */
@@ -28,48 +36,53 @@ class MakesStaticCostsCalculation
 
         foreach ($this->staticCosts as $staticCost){
 
-            $month  = new MonthlyStaticCostsCalculator();
+            $converter  = new StaticCostsUnitConverter();
+            $converter->setStaticCosts($staticCost);
+            $converter->convert('monthly');
+
+
+
+            $month  = new VehicleStaticCostsCalculator();
             $month->setStaticCost($staticCost);
-            $monthlyStaticCosts[]   = $month;
+            $month->setConverter($converter);
 
-            $daylyStaticCostCalculator = new DaylyStaticCostsCalculator();
-            $daylyStaticCostCalculator->setStaticCost($staticCost);
-            $daylyStaticCosts[] = $daylyStaticCostCalculator;
+            $monthlyCostValue  = $month->calculateCost();
 
-            $minutelyCostsCalculator = new MinutelyCostsCalculator();
-            $minutelyCostsCalculator->setStaticCost($staticCost);
-            $minutelyCosts[]    = $minutelyCostsCalculator;
+            $monthlyStaticCosts[]   = $monthlyCostValue;
+
+            $costPerDayCalculator   = new MonthlyCostsPerDayCalculator();
+            $costPerDayCalculator->setDays($this->workDays);
+            $costPerDayCalculator->setMonthlyCost($monthlyCostValue);
+            $daylyStaticCosts[]     = $costPerDayCalculator->costPerDay();
+
 
         }
-        $monthlyCostsSummarizer     = new CostsSummarizer();
-        $monthlyCostsSummarizer->setCountables($monthlyStaticCosts);
 
-        $dailyCostsSummarizer       = new CostsSummarizer();
-        $dailyCostsSummarizer->setCountables($daylyStaticCosts);
+        $monthCostsSum = array_sum($monthlyStaticCosts);
+        $dailyCostsSum = array_sum($daylyStaticCosts);
 
-        $minutelyCostsSummarizer    = new CostsSummarizer();
-        $minutelyCostsSummarizer->setCountables($minutelyCosts);
-
-        $monthCostsSum = $monthlyCostsSummarizer->sum();
-        $dailyCostsSum = $dailyCostsSummarizer->sum();
-        $minutelyCostsSum   = $minutelyCostsSummarizer->sum();
 
         // TODO amount days should be dynamic
-        $hourlyAbsCostsCalculator = new HourlyAbsoluteCostsCalculator(30,$monthCostsSum);
-        $hourlyAbsCostsSum = $hourlyAbsCostsCalculator->costResult(true);
 
-        $hourlyWorkCostsCalculator  = new HourlyAbsoluteCostsCalculator(20,$monthCostsSum);
-        $hourlyWorkCostsSum = $hourlyWorkCostsCalculator->costResult(true);
+        $monthlyCostPerHourSumCalculator    = new MonthlyCostsPerHourCalculator($dailyCostsSum);
+        $monthlyCostPerHourSum  = $monthlyCostPerHourSumCalculator->costPerHour();
 
-        $minutelyWorkCostsCalculator    = new MinutelyWorkCostsCalculator(20, $monthCostsSum);
-        $minutelyWorkCostsSum = $minutelyWorkCostsCalculator->costResult(true);
+        $workDayCostPerHourCalculator = new WorkDayPerHourCalculator($dailyCostsSum);
+        $hourlyWorkCostsSum = $workDayCostPerHourCalculator->costPerHour();
+
+        $minutelyMonthCostsCalculator = new MonthlyCostsPerMinuteCalculator($monthlyCostPerHourSum);
+        $minutelyCostsSum = $minutelyMonthCostsCalculator->costPerMinute();
+
+        $minutelyWorkCostsCalculator = new MonthlyCostsPerMinuteCalculator($hourlyWorkCostsSum);
+        $minutelyWorkCostsSum = $minutelyWorkCostsCalculator->costPerMinute();
+
 
         return [
             'month_days' => $this->monthDays,
             'work_days' => $this->workDays,
             'monthly_costs' => $monthCostsSum,
             'daily_costs' => $dailyCostsSum,
-            'hourly_abs_costs' => $hourlyAbsCostsSum,
+            'hourly_abs_costs' => $monthlyCostPerHourSum,
             'hourly_work_costs' => $hourlyWorkCostsSum,
             'minutely_abs_costs' => $minutelyCostsSum,
             'minutely_work_costs' => $minutelyWorkCostsSum

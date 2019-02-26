@@ -9,6 +9,9 @@ use app\support\LayoutSupporters\Grid\DefaultActionColumn;
 
 $this->title = 'Vehicles';
 $this->params['breadcrumbs'][] = $this->title;
+
+
+//dd(Yii::$app->getAssetManager());
 ?>
 
 <?php $this->beginContent('@app/views/layouts/default/common/tables/base_table.php'); ?>

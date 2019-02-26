@@ -131,7 +131,8 @@ class CompaniesController extends BaseController
 
 //        $company->load($this->request()->post(), 'Companies');
 //        $companyStaticCostsForm->load($this->request()->post(),'StaticCostsForm');
-
+        $company = self::loggedInUserCompany();
+        dd($company->find()->with('companyCostDatas')->one());
         $companyStaticCosts = collect(CompanyStaticCostQuery::find()->all())->keyBy('short_name');
 
 
@@ -146,8 +147,9 @@ class CompaniesController extends BaseController
                 $staticCostsInput = $this->request()->post()['StaticCostsForm'];
 
                 foreach ($companyStaticCosts as $staticCostShortName => $companyStaticCost) {
-                    $companyStaticCost->value   = $staticCostsInput[$staticCostShortName];
-                    $companyStaticCost->update();
+                    dd($companyStaticCost->companyCostDatas);
+                    $companyStaticCost->companyCostDatas->value   = $staticCostsInput[$staticCostShortName];
+                    $companyStaticCost->companyCostDatas->update();
                 }
 
                 return $this->redirect(['view', 'id' => $company->id]);

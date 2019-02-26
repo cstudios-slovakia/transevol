@@ -27,6 +27,8 @@ use Yii;
  */
 class Vehicles extends \yii\db\ActiveRecord
 {
+    CONST MAIN_VEHICLE_SHORT_NAME = 'tahac';
+
     /**
      * {@inheritdoc}
      */

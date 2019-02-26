@@ -10,210 +10,22 @@ use app\support\StaticCostsCalculators\CostFormatter;
 
 $this->title = 'Vehicles';
 $this->params['breadcrumbs'][] = $this->title;
+\app\assets\VehicleStatisticsAsset::register($this);
+$this->registerJsVar('statisticsUrl',\yii\helpers\Url::toRoute('/vehicles/statistics-index'));
+
 ?>
 
+
+
 <?php $this->beginContent('@app/views/layouts/default/common/tables/base_table.php'); ?>
-<?= BaseGridView::widget([
-    'dataProvider' => $mainVehicleDataProvider,
-    'columns' => [
-        ['class' => 'yii\grid\SerialColumn'],
 
-        [
-            'attribute' => 'ecv',
-            'label' => Yii::t('statistics/vehicle','ECV'),
-            'value' => function($model){
-                return Html::a($model['ecv'],\yii\helpers\Url::toRoute(['/vehicles/view','id' => $model['id']]));
-            },
-            "format" => 'html'
-        ],
-        [
-            'attribute' => 'monthly_costs',
-            'label' => Yii::t('statistics/vehicle','Mesačné náklady'),
-            'value' => function($model){
-                return CostFormatter::format($model['monthly_costs']).' €';
-            }
-        ],
-        ['attribute' => 'daily_costs',
-            'label' => Yii::t('statistics/vehicle','Náklady na deň'),
-            'value' => function($model){
-            return CostFormatter::format($model['daily_costs']).' €';
-        }]    ,
-        ['attribute' => 'hourly_abs_costs',
-            'label' => Yii::t('statistics/vehicle','Náklady na hodinu (abs)'),
-            'value' => function($model){
-            return $model['hourly_abs_costs'].' €';
-        }],
-        ['attribute' => 'hourly_work_costs',
-            'label' => Yii::t('statistics/vehicle','Náklady na hodinu (výkon)'),
-            'value' => function($model){
-                return $model['hourly_work_costs'].' €';
-            }]
-        ,
-        ['attribute' => 'minutely_abs_costs',
-            'label' => Yii::t('statistics/vehicle','Náklady na minutu (abs)'),
-            'value' => function($model){
-                return CostFormatter::format($model['minutely_abs_costs']).' €';
-            }],
-        ['attribute' => 'minutely_work_costs',
-            'label' => Yii::t('statistics/vehicle','Náklady na minutu (výkon)'),
-            'value' => function($model){
-                return $model['minutely_work_costs'].' €';
-            }]
-        ,
-    ]
-]); ?>
+<!--<a class="btn btn-outline-accent m-btn m-btn--custom m-btn--outline-2x" href="#" id="costs-calculation">Kalkulácia</a>-->
 
-<?= BaseGridView::widget([
-    'dataProvider' => $notMainVehicleDataProvider,
-    'columns' => [
-        ['class' => 'yii\grid\SerialColumn'],
 
-        [
-            'attribute' => 'ecv',
-            'label' => Yii::t('statistics/vehicle','ECV'),
-            'value' => function($model){
-                return Html::a($model['ecv'],\yii\helpers\Url::toRoute(['/vehicles/view','id' => $model['id']]));
-            },
-            "format" => 'html'
-        ],
-        [
-            'attribute' => 'monthly_costs',
-            'label' => Yii::t('statistics/vehicle','Mesačné náklady'),
-            'value' => function($model){
-                return CostFormatter::format($model['monthly_costs']).' €';
-            }
-        ],
-        ['attribute' => 'daily_costs',
-            'label' => Yii::t('statistics/vehicle','Náklady na deň'),
-            'value' => function($model){
-                return CostFormatter::format($model['daily_costs']).' €';
-            }]    ,
-        ['attribute' => 'hourly_abs_costs',
-            'label' => Yii::t('statistics/vehicle','Náklady na hodinu (abs)'),
-            'value' => function($model){
-                return $model['hourly_abs_costs'].' €';
-            }],
-        ['attribute' => 'hourly_work_costs',
-            'label' => Yii::t('statistics/vehicle','Náklady na hodinu (výkon)'),
-            'value' => function($model){
-                return $model['hourly_work_costs'].' €';
-            }]
-        ,
-        ['attribute' => 'minutely_abs_costs',
-            'label' => Yii::t('statistics/vehicle','Náklady na minutu (abs)'),
-            'value' => function($model){
-                return CostFormatter::format($model['minutely_abs_costs']).' €';
-            }],
-        ['attribute' => 'minutely_work_costs',
-            'label' => Yii::t('statistics/vehicle','Náklady na minutu (výkon)'),
-            'value' => function($model){
-                return $model['minutely_work_costs'].' €';
-            }]
-        ,
-    ]
-]); ?>
-
-<?= BaseGridView::widget([
-    'dataProvider' => $companyDataProvider,
-    'columns' => [
-        ['class' => 'yii\grid\SerialColumn'],
-
-        [
-            'attribute' => 'col_name',
-            'label' => Yii::t('statistics/vehicle',''),
-            'value' => function($model){
-//                return Html::a($model['col_name'],\yii\helpers\Url::toRoute(['/companies/view','id' => $model['id']]));
-                return $model['col_name'];
-            },
-            "format" => 'html'
-        ],
-        [
-            'attribute' => 'monthly_costs',
-            'label' => Yii::t('statistics/vehicle','Mesačné náklady'),
-            'value' => function($model){
-
-                return CostFormatter::format($model['monthly_costs']).' €';
-            }
-        ],
-        ['attribute' => 'daily_costs',
-            'label' => Yii::t('statistics/vehicle','Náklady na deň'),
-            'value' => function($model){
-                return CostFormatter::format($model['daily_costs']).' €';
-            }]    ,
-        ['attribute' => 'hourly_abs_costs',
-            'label' => Yii::t('statistics/vehicle','Náklady na hodinu (abs)'),
-            'value' => function($model){
-                return CostFormatter::format($model['hourly_abs_costs']).' €';
-            }],
-        ['attribute' => 'hourly_work_costs',
-            'label' => Yii::t('statistics/vehicle','Náklady na hodinu (výkon)'),
-            'value' => function($model){
-                return CostFormatter::format($model['hourly_work_costs']).' €';
-            }]
-        ,
-        ['attribute' => 'minutely_abs_costs',
-            'label' => Yii::t('statistics/vehicle','Náklady na minutu (abs)'),
-            'value' => function($model){
-                return CostFormatter::format($model['minutely_abs_costs']).' €';
-            }],
-        ['attribute' => 'minutely_work_costs',
-            'label' => Yii::t('statistics/vehicle','Náklady na minutu (výkon)'),
-            'value' => function($model){
-                return CostFormatter::format($model['minutely_work_costs']).' €';
-            }]
-        ,
-    ]
-]); ?>
-
-<?= BaseGridView::widget([
-    'dataProvider' => $reCalculatedMainVehicleDataProvider,
-    'columns' => [
-        ['class' => 'yii\grid\SerialColumn'],
-
-        [
-            'attribute' => 'ecv',
-            'label' => Yii::t('statistics/vehicle','ECV'),
-            'value' => function($model){
-                return Html::a($model['ecv'],\yii\helpers\Url::toRoute(['/vehicles/view','id' => $model['id']]));
-            },
-            "format" => 'html'
-        ],
-        [
-            'attribute' => 'monthly_costs',
-            'label' => Yii::t('statistics/vehicle','Mesačné náklady'),
-            'value' => function($model){
-                return CostFormatter::format($model['monthly_costs']).' €';
-            }
-        ],
-        ['attribute' => 'daily_costs',
-            'label' => Yii::t('statistics/vehicle','Náklady na deň'),
-            'value' => function($model){
-                return CostFormatter::format($model['daily_costs']).' €';
-            }]    ,
-        ['attribute' => 'hourly_abs_costs',
-            'label' => Yii::t('statistics/vehicle','Náklady na hodinu (abs)'),
-            'value' => function($model){
-                return CostFormatter::format($model['hourly_abs_costs']).' €';
-            }],
-        ['attribute' => 'hourly_work_costs',
-            'label' => Yii::t('statistics/vehicle','Náklady na hodinu (výkon)'),
-            'value' => function($model){
-                return CostFormatter::format($model['hourly_work_costs']).' €';
-            }]
-        ,
-        ['attribute' => 'minutely_abs_costs',
-            'label' => Yii::t('statistics/vehicle','Náklady na minutu (abs)'),
-            'value' => function($model){
-                return CostFormatter::format($model['minutely_abs_costs']).' €';
-            }],
-        ['attribute' => 'minutely_work_costs',
-            'label' => Yii::t('statistics/vehicle','Náklady na minutu (výkon)'),
-            'value' => function($model){
-                return CostFormatter::format($model['minutely_work_costs']).' €';
-            }]
-        ,
-    ]
-]); ?>
+<?= $this->render('_partial/main_vehicle_grid',['mainVehicleDataProvider' => $mainVehicleDataProvider]) ?>
+<?= $this->render('_partial/not_main_vehicle_grid',['notMainVehicleDataProvider' => $notMainVehicleDataProvider]) ?>
+<?= $this->render('_partial/company_data_grid',['companyDataProvider' => $companyDataProvider]) ?>
+<?= $this->render('_partial/recalculated_main_vehicle_grid',['reCalculatedMainVehicleDataProvider' => $reCalculatedMainVehicleDataProvider]) ?>
 
 <?php $this->beginBlock('customIndexHeadText') ?>
 Statistika vozidiel
