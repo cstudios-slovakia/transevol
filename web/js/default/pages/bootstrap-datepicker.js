@@ -26,6 +26,11 @@ var BootstrapDatepicker = function () {
             multidateSeparator: "|"
         });
 
+        $('#define-month').datepicker({
+            startView: 1,
+            minViewMode: 1,
+            autoclose: true
+        });
     };
 
     return {
@@ -38,5 +43,7 @@ var BootstrapDatepicker = function () {
 
 jQuery(document).ready(function() {
     BootstrapDatepicker.init();
+
+
 
 });

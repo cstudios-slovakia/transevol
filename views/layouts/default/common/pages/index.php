@@ -25,10 +25,10 @@ $portletTitle = isset($this->params['portlet']['title']) ? $this->params['portle
             </div>
             <div class="m-portlet__head-tools">
                 <ul class="m-portlet__nav">
-                    <li class="m-portlet__nav-item">
-                        <?php if (isset($this->blocks['customNavItems']) ): ?>
-                            <?= $this->blocks['customNavItems'] ?>
-                        <?php else: ?>
+                    <?php if (isset($this->blocks['customNavItems']) ): ?>
+                        <?= $this->blocks['customNavItems'] ?>
+                    <?php else: ?>
+                        <li class="m-portlet__nav-item">
                             <a href="<?= Url::toRoute($sectionName.'/create') ?>"
                                class="btn btn-accent m-btn m-btn--custom m-btn--pill m-btn--icon m-btn--air">
                             <span>
@@ -36,10 +36,8 @@ $portletTitle = isset($this->params['portlet']['title']) ? $this->params['portle
                                 <span><?= $portletTitle ?></span>
                             </span>
                             </a>
-                        <?php endif; ?>
-
-                    </li>
-
+                        </li>
+                    <?php endif; ?>
                 </ul>
             </div>
         </div>

@@ -33,7 +33,23 @@ Statistika vozidiel
 
 
 <?php $this->beginBlock('customNavItems') ?>
+<li class="m-portlet__nav-item">
+<?=
 
+    Html::label('Predefinovať mesiac','define-month',[
+        'class'=> 'btn btn-secondary m-btn m-btn--custom m-btn--label-primary m-btn--bolder'
+    ]);
+
+
+
+?>
+<?=
+Html::input('text','define-month',null,[
+    'id' => 'define-month',
+    'style'=> 'border:none;width:0;height:0'
+]);
+?>
+</li>
 <?php $this->endBlock() ?>
 
 <?php $this->endContent(); ?>

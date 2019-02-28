@@ -4,8 +4,16 @@ $("document").ready(function(){
     });
 
 
-    $('.vehicles-index').on('click','.work-days-input',function(){
+    $('.vehicles-index').on('change','.work-days-input',function(){
         $(this).datepicker().on('hide', function(e) {
+            $('#define-month').val('');
+            calculateCosts();
+        });
+    });
+
+
+    $('#define-month').on('change',function (e) {
+        $(this).datepicker().on('hide',function (e) {
             calculateCosts();
         });
     });
@@ -13,6 +21,10 @@ $("document").ready(function(){
 
 
 
+
+    function getPickerDefiniatorDate() {
+        return definedDate = $('#define-month').val();
+    }
 
     function calculateCosts() {
         var workDays            = $('.work-days-input');
@@ -24,6 +36,7 @@ $("document").ready(function(){
         var url     = statisticsUrl;
         var data    = {
             input   : inputs,
+            definedDate   : getPickerDefiniatorDate(),
             _csrf   : $('meta[name="csrf-token"]').attr("content")
         };
 
@@ -48,10 +61,6 @@ $("document").ready(function(){
             companyDataGrid.html(tables.companyDataProvider);
             recalculatedMainVehicleGrid.html(tables.reCalculatedMainVehicleDataProvider);
 
-            $.each(inputs, function (k,input) {
-                $('input[name="'+input.identification+'"]').val(input.workDates);
-
-            });
             BootstrapDatepicker.init();
 
             unBlockManipulation();

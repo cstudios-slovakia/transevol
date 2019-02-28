@@ -26,6 +26,7 @@ use app\support\Vehicles\Relations\RelationAssistance;
 use app\support\Vehicles\Relations\VehicleRelationAssistance;
 use app\support\Vehicles\VehicleStaticCostCalculators\PeriodCostCalculator;
 use app\support\Vehicles\VehicleStaticCostCalculators\VehicleStaticCostsCalculator;
+use Carbon\CarbonImmutable;
 use Illuminate\Support\Carbon;
 use Yii;
 use app\models\Vehicles;
@@ -245,9 +246,11 @@ class VehiclesController extends BaseController
         $workDaysInput = [];
         $workDays = collect($workDaysInput);
 
+        $postInput  = Yii::$app->request->post('input');
+
         if ($ajax = Yii::$app->request->isAjax){
             // get the ajax post
-            $workDaysInput = Yii::$app->request->post('input');
+            $workDaysInput = $postInput;
 
             // map over the items
             $workDays = collect($workDaysInput)
@@ -286,10 +289,21 @@ class VehiclesController extends BaseController
         $mainVehicleRecords = [];
         $notMainVehicleRecords = [];
         $choosedWorkDatesOnVehicles = '';
+
+//        $definedDate = CarbonImmutable::now();
+//
+//        $postDefinedDate  = Yii::$app->request->post('definedDate');
+//
+//        if($resetToDefinedMonth = $ajax && $postDefinedDate){
+//            $definedDate  = CarbonImmutable::createFromFormat('m/d/Y',$postDefinedDate);
+//        }
+
+        $definedDate = DaysOfMonthPeriod::defineMonth();
+
         foreach ($vehicles as $vehicle) {
             $wd = 20;
 
-            $daysOfMonth = new DaysOfMonthPeriod();
+            $daysOfMonth = new DaysOfMonthPeriod($definedDate);
 
             $pickerPeriodMaker = new PickerPeriodMaker();
             $pickerPeriodMaker->setPeriod($daysOfMonth);
@@ -302,9 +316,15 @@ class VehiclesController extends BaseController
 
                 // change work days number if exists
                 if ($mainVehicleInputs->has($vehicle->id)){
-                    $choosedWorkDatesOnMainVehicles   = $mainVehicleInputs->get($vehicle->id)['workDates'];
-                    $choosedWorkDatesOnMainVehiclesExploded   = explode('|',$choosedWorkDatesOnMainVehicles);
+
+                    if (! DaysOfMonthPeriod::isPostDefinedDate()){
+                        $pickerBusinessDays = $mainVehicleInputs->get($vehicle->id)['workDates'];
+                    }
+
+                    $choosedWorkDatesOnMainVehiclesExploded   = explode('|',$pickerBusinessDays);
+
                     $wd = (int) count($choosedWorkDatesOnMainVehiclesExploded);
+
                 }
             }
 
@@ -315,15 +335,21 @@ class VehiclesController extends BaseController
 
                 // change work days number if exists
                 if ($notMainVehicleInputs->has($vehicle->id)){
-                    $choosedWorkDatesOnVehicles = $notMainVehicleInputs->get($vehicle->id)['workDates'];
-                    $choosedWorkDatesOnVehiclesExploded = explode('|', $choosedWorkDatesOnVehicles);
+
+                    if( ! DaysOfMonthPeriod::isPostDefinedDate()){
+                        $pickerBusinessDays = $notMainVehicleInputs->get($vehicle->id)['workDates'];
+                    }
+
+                    $choosedWorkDatesOnVehiclesExploded = explode('|', $pickerBusinessDays);
+
                     $wd = (int) count($choosedWorkDatesOnVehiclesExploded);
+
                 }
             }
 
             $statistics = $this->oneVehicleStatistics($vehicle->id, $vehicle, ['work_days' => $wd] );
             $statistics['statistics']['work_days']=  $choosedWorkDatesOnVehicles;
-//            var_dump($statistics);
+
             $record     = array_merge(['ecv' => $vehicle->ecv,'id'=> $vehicle->id, 'specified_work_dates' => $pickerBusinessDays], $statistics['statistics']);
 
             // split not main vehicles into another collection
@@ -349,6 +375,12 @@ class VehiclesController extends BaseController
         $wd = 20;
         $monthDays = 30;
 
+        $daysOfMonth = new DaysOfMonthPeriod($definedDate);
+
+        $pickerPeriodMaker = new PickerPeriodMaker();
+        $pickerPeriodMaker->setPeriod($daysOfMonth);
+        $pickerBusinessDays  = $pickerPeriodMaker->makePeriodDays();
+
         // company is logged in, grab it
         $company = LoggedInUserTrait::loggedInUserCompany();
 
@@ -358,8 +390,15 @@ class VehiclesController extends BaseController
 
             // change work days number if exists
             if ($companyDatas->has($company->id)){
-                $choosedWorkDatesOnCompany = explode('|',$companyDatas->get($company->id)['workDates']);
-                $wd = (int) count($choosedWorkDatesOnCompany);
+
+                if( ! DaysOfMonthPeriod::isPostDefinedDate()){
+                    $pickerBusinessDays = $companyDatas->get($company->id)['workDates'];
+
+                    $choosedWorkDatesOnCompanyExploded = explode('|',$companyDatas->get($company->id)['workDates']);
+                    $wd = (int) count($choosedWorkDatesOnCompanyExploded);
+
+                }
+
             }
         }
 
@@ -375,10 +414,12 @@ class VehiclesController extends BaseController
 
         $companyStatistics = $companyStaticCostsCalculator->makeCalculation();
 
+//        dd($pickerBusinessDays);
 
+        $companySpecifiedWorkDates  = $pickerBusinessDays;
         $companyStatistics['col_name']   = 'Administratívne náklady';
         $companyStatistics['id']   = $company->id;
-        $companyStatistics['specified_work_dates']   = $pickerBusinessDays;
+        $companyStatistics['specified_work_dates']   = $companySpecifiedWorkDates;
 
         // amount of main vehicles
         $mainVehicleAmount = (int) $mainVehicleDataProvider->getTotalCount();
@@ -401,9 +442,11 @@ class VehiclesController extends BaseController
         $addedVehiclesCollection    = collect($notMainVehicleRecords);
 
         foreach ($companyCostsDividedIntoMainVehicles as $columnName => $columnValue){
+
             if(str_contains($columnName,'costs')){
                 $companyCostsDividedIntoAddedVehicles[$columnName] =  ($columnValue + $addedVehiclesCollection->sum($columnName)) / $mainVehicleAmount;
             }
+
         }
 
         $companyDataProvider    = new ArrayDataProvider([
@@ -427,7 +470,7 @@ class VehiclesController extends BaseController
 
             $reCalculatedMainVehicleRecords[] = $record;
         }
-    ;
+
 
 
         $reCalculatedMainVehicleDataProvider = new ArrayDataProvider([
@@ -457,16 +500,6 @@ class VehiclesController extends BaseController
             Yii::$app->response->format = Response::FORMAT_JSON;
             return  $response;
         }
-
-//        $businessDays = new BusinessDays();
-//        $businessDaysInMonth = $businessDays->daysBetween($firstDayOfMonth->toMutable(),$lastDayOfMonth->toMutable());
-
-
-
-
-
-//        dd($pickerPeriodMaker,$pickerBusinessDays);
-
 
         return $this->render('statistics/index', $providers);
     }
