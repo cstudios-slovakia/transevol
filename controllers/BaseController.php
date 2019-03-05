@@ -37,8 +37,7 @@ class BaseController extends Controller
                         'allow' => true,
                         'roles' => ['@'],
                     ],
-
-                    // ...
+                   
                 ],
             ],
         ];

@@ -69,6 +69,7 @@ class TransporterPartsController extends Controller
         $model = new TransporterParts();
 
         $transportType = Yii::$app->request->get('transport-type');
+        $transporterId = (int) Yii::$app->request->get('on');
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
@@ -76,7 +77,7 @@ class TransporterPartsController extends Controller
 
             $model->save(false);
 
-            $transporterId = (int) Yii::$app->request->get('on');
+
             if($transporterId){
                 $transporter    = Transporter::findOne(['id' => $transporterId]);
                 $model->link('transporter', $transporter);
@@ -92,7 +93,8 @@ class TransporterPartsController extends Controller
 
         return $this->render('create', [
             'model' => $model,
-            'placesSelectOptions' => $placesSelectOptions
+            'placesSelectOptions' => $placesSelectOptions,
+            'transporterId' => $transporterId
         ]);
     }
 

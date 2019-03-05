@@ -11,3 +11,20 @@ if (! function_exists('dd')) {
         die;
     }
 }
+
+if (! function_exists('cost_format')) {
+    function cost_format ($cost, bool $displayCurrency = true)
+    {
+        if ( ! $cost){
+            $cost = 0;
+        }
+
+        $formatted  = \app\support\StaticCostsCalculators\CostFormatter::format($cost);
+
+        if ($displayCurrency){
+            return $formatted . '€';
+        }
+
+        return $formatted;
+    }
+}

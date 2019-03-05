@@ -25,7 +25,7 @@ return [
     'Place name' => 'Označenie miesta',
     'Place types id' => 'Typ miesta',
     'Position' => 'Pozícia miesta',
-    'loading' => 'Miesto nakládky',
+    'loading' => 'Nakládka',
     'toll' => 'Colnica',
-    'unloading' => 'Miesto vykládky',
+    'unloading' => 'Vvykládka',
 ];

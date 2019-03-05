@@ -32,20 +32,20 @@ class GoingsController extends BaseController
         return $baseBehaviors;
     }
 
-    /**
-     * Lists all Goings models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Goings::find(),
-        ]);
-
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
-        ]);
-    }
+//    /**
+//     * Lists all Goings models.
+//     * @return mixed
+//     */
+//    public function actionIndex()
+//    {
+//        $dataProvider = new ActiveDataProvider([
+//            'query' => Goings::find(),
+//        ]);
+//
+//        return $this->render('index', [
+//            'dataProvider' => $dataProvider,
+//        ]);
+//    }
 
     /**
      * Displays a single Goings model.

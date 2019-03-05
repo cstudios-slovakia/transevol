@@ -255,32 +255,31 @@ $this->params['portlet']['title'] = Yii::t('transporter','Main timeline')
     <div class="m-stack__item m-stack__item--left">
         <div class="btn-group m-btn-group" role="group" aria-label="...">
             <a href="<?= Url::toRoute('/api/v1/goings/create')?>" class="btn btn-metal"><?= Yii::t('transporter','Nahrať výkon') ?></a>
+            <a href="<?= Url::toRoute('/api/v1/transporter/create')?>"  class="btn btn-accent"><?= Yii::t('transporter','Pridať prepravu') ?> </a>
+            <a  href="<?= Url::toRoute('/api/v1/timeline-vehicle/create')?>" class="btn btn-metal"><?= Yii::t('transporter','Vozidlo') ?></a>
+            <a  href="<?= Url::toRoute('/api/v1/timeline-driver/create')?>" class="btn btn-metal"><?= Yii::t('transporter','Vodič') ?></a>
+
         </div>
     </div>
-    <div class="m-stack__item m-stack__item--center">
-        <a href="<?= Url::toRoute('/api/v1/transporter/create')?>"  class="btn btn-accent"><?= Yii::t('transporter','Pridať prepravu') ?> </a>
-
-    </div>
-    <div class="m-stack__item m-stack__item--right">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="btn-group m-btn-group" role="group" aria-label="...">
-                    <a  href="<?= Url::toRoute('/api/v1/timeline-vehicle/create')?>" class="btn btn-metal"><?= Yii::t('transporter','Vozidlo') ?></a>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="btn-group m-btn-group" role="group" aria-label="...">
-                    <a  href="<?= Url::toRoute('/api/v1/timeline-driver/create')?>" class="btn btn-metal"><?= Yii::t('transporter','Pridať vodič') ?></a>
-                    <a  href="<?= Url::toRoute('/api/v1/timeline-driver/create')?>" class="btn btn-metal"><?= Yii::t('transporter','Odobrať vodič (?)') ?></a>
-                </div>
-
-            </div>
-        </div>
-
-
-
-
-    </div>
+<!--    <div class="m-stack__item m-stack__item--center">-->
+<!--        <a href="--><?//= Url::toRoute('/api/v1/transporter/create')?><!--"  class="btn btn-accent">--><?//= Yii::t('transporter','Pridať prepravu') ?><!-- </a>-->
+<!---->
+<!--    </div>-->
+<!--    <div class="m-stack__item m-stack__item--right">-->
+<!--        <div class="row">-->
+<!--            <div class="col-md-6">-->
+<!--                <div class="btn-group m-btn-group" role="group" aria-label="...">-->
+<!--                    <a  href="--><?//= Url::toRoute('/api/v1/timeline-vehicle/create')?><!--" class="btn btn-metal">--><?//= Yii::t('transporter','Vozidlo') ?><!--</a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-md-6">-->
+<!--                <div class="btn-group m-btn-group" role="group" aria-label="...">-->
+<!--                    <a  href="--><?//= Url::toRoute('/api/v1/timeline-driver/create')?><!--" class="btn btn-metal">--><?//= Yii::t('transporter','Vodič') ?><!--</a>-->
+<!--                </div>-->
+<!---->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
 </div>
 <?php $this->endBlock() ?>
 

@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\support\helpers\AppParams;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
@@ -59,4 +60,11 @@ class PlaceTypes extends AppBasedActiveRecord
         return $this->hasMany(Places::className(), ['place_types_id' => 'id']);
     }
 
+
+    public function getTransPlaceTypeName() : string
+    {
+        $translatedPlaceTypeNames = AppParams::coreParam('options_translation')['place_types'];
+
+        return Yii::t('place',$translatedPlaceTypeNames[$this->placetype_name]);
+    }
 }

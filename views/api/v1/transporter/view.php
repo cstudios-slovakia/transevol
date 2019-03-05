@@ -4,17 +4,20 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\helpers\Url;
 use app\components\ViewTyped\Page\Index\BaseGridView;
+use app\support\StaticCostsCalculators\CostFormatter;
 /* @var $this yii\web\View */
 /* @var $model app\models\Transporter */
+
+$this->params['portlet']['title'] = Yii::t('transporter', 'Transport');
+
 
 $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Transporters'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-$this->params['portlet']['title']   = Yii::t('transporter','Transport '.$model->id);
 ?>
 
 <div class="transporter-view">
-<?php $this->beginContent('@app/views/layouts/default/common/pages/show.php' ); ?>
+    <?php $this->beginContent('@app/views/layouts/default/common/pages/show.php'); ?>
 
 
 
@@ -28,27 +31,33 @@ $this->params['portlet']['title']   = Yii::t('transporter','Transport '.$model->
             // Data from the model's column will be used.
             [
                 'attribute' => 'event_time',
-                'value' => function($model){
-                    return $model->event_time;
+                'value' => function ($model) {
+                    return $model->getLocaleEventTime();
                 },
 
             ],
             [
                 'attribute' => 'places_id',
-                'value' => function($model){
-                    return $model->places->placeTypes->placetype_name;
+                'value' => function ($model) {
+                    return $model->places->placeTypes->getTransPlaceTypeName();
                 },
 
             ],
             [
                 'attribute' => 'place_name',
-                'value' => function($model){
+                'value' => function ($model) {
                     return $model->places->place_name;
                 }
             ],
             'load_meter',
             'load_weight',
-            'part_other_cost',
+            [
+                'attribute'  => 'part_other_cost',
+                'value' => function($model){
+                    return cost_format($model->part_other_cost);
+                }
+            ]
+
 //            'username',
             // More complex one.
 //            [
@@ -77,17 +86,20 @@ $this->params['portlet']['title']   = Yii::t('transporter','Transport '.$model->
 
 
 
-        <?php $this->beginBlock('headActions') ?>
+    <?php $this->beginBlock('headActions') ?>
 
-        <div>
-            <div class="btn-group m-btn-group" role="group" aria-label="...">
-                <a href="<?= Url::toRoute('/api/v1/transporter-parts/create?transport-type=loading&on='.$model->id) ?>"  class="m-btn btn btn-brand">Pridat nakladku</a>
-                <a href="<?= Url::toRoute('/api/v1/transporter-parts/create?transport-type=toll&on='.$model->id) ?>"  class="m-btn btn btn-accent">Pridat colnicu</a>
-                <a href="<?= Url::toRoute('/api/v1/transporter-parts/create?transport-type=unloading&on='.$model->id) ?>" class="m-btn btn btn-info">Pridat vykladku</a>
-            </div>
+    <div>
+        <div class="btn-group m-btn-group" role="group" aria-label="...">
+            <a href="<?= Url::toRoute('/api/v1/transporter-parts/create?transport-type=loading&on=' . $model->id) ?>"
+               class="m-btn btn btn-brand">Pridat nakladku</a>
+            <a href="<?= Url::toRoute('/api/v1/transporter-parts/create?transport-type=toll&on=' . $model->id) ?>"
+               class="m-btn btn btn-accent">Pridat colnicu</a>
+            <a href="<?= Url::toRoute('/api/v1/transporter-parts/create?transport-type=unloading&on=' . $model->id) ?>"
+               class="m-btn btn btn-info">Pridat vykladku</a>
         </div>
+    </div>
 
-        <?php $this->endBlock() ?>
+    <?php $this->endBlock() ?>
 
-<?php $this->endContent(); ?>
+    <?php $this->endContent(); ?>
 </div>

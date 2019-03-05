@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use Carbon\Carbon;
 use Yii;
 
 /**
@@ -54,7 +55,7 @@ class TransporterParts extends \yii\db\ActiveRecord
             'load_meter' => Yii::t('transporter_parts', 'Load Meter'),
             'load_weight' => Yii::t('transporter_parts', 'Load Weight'),
             'part_other_cost' => Yii::t('transporter_parts', 'Part Other Cost'),
-            'places_id' => Yii::t('transporter_parts', 'Places ID'),
+            'places_id' => Yii::t('transporter_parts', 'Event Type'),
             'created_at' => Yii::t('transporter_parts', 'Created At'),
             'updated_at' => Yii::t('transporter_parts', 'Updated At'),
         ];
@@ -89,6 +90,11 @@ class TransporterParts extends \yii\db\ActiveRecord
     public function getPlaceTypes()
     {
         return $this->hasOne(PlaceTypes::className(), ['id' => 'place_types_id'])->via('places');
+    }
+
+    public function getLocaleEventTime(string $format = 'd.m.Y H:i') : string
+    {
+        return Carbon::createFromFormat('Y-m-d H:i:s', $this->event_time)->format($format);
     }
 
 }

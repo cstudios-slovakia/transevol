@@ -7,6 +7,7 @@ use yii\helpers\Html;
 /* @var $model app\models\TransporterParts */
 
 $this->title = Yii::t('app', 'Create Transporter Parts');
+
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Transporter Parts'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 $this->params['portlet']['title']   = Yii::t('transporter_parts','Create new transport part');
@@ -17,7 +18,8 @@ $this->params['portlet']['title']   = Yii::t('transporter_parts','Create new tra
 
     <?= $this->render('_form', [
         'model' => $model,
-        'placesSelectOptions' => $placesSelectOptions
+        'placesSelectOptions' => $placesSelectOptions,
+        'transporterId' => $transporterId
     ]) ?>
 
 </div>
