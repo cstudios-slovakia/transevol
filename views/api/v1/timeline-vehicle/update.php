@@ -1,10 +1,10 @@
 <?php
 
 use yii\helpers\Html;
-
+use app\assets\DateTimePicker;
 /* @var $this yii\web\View */
 /* @var $model app\models\TimelineVehicle */
-
+DateTimePicker::register($this);
 $this->title = Yii::t('app', 'Update Timeline Vehicle: ' . $model->id, [
     'nameAttribute' => '' . $model->id,
 ]);

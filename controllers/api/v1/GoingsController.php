@@ -25,14 +25,11 @@ class GoingsController extends BaseController
      */
     public function behaviors()
     {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
+        $baseBehaviors  = parent::behaviors();
+
+        $baseBehaviors['access']['only']    = ['update'];
+
+        return $baseBehaviors;
     }
 
     /**

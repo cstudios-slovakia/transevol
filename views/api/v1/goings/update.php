@@ -1,10 +1,10 @@
 <?php
 
 use yii\helpers\Html;
-
+use app\assets\DateTimePicker;
 /* @var $this yii\web\View */
 /* @var $model app\models\Goings */
-
+DateTimePicker::register($this);
 $this->title = Yii::t('app', 'Update Goings: ' . $model->id, [
     'nameAttribute' => '' . $model->id,
 ]);

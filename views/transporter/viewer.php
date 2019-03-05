@@ -265,8 +265,7 @@ $this->params['portlet']['title'] = Yii::t('transporter','Main timeline')
         <div class="row">
             <div class="col-md-6">
                 <div class="btn-group m-btn-group" role="group" aria-label="...">
-                    <a  href="<?= Url::toRoute('/api/v1/timeline-vehicle/create')?>" class="btn btn-metal"><?= Yii::t('transporter','Pridať náves/príves') ?></a>
-                    <button type="button" class="btn btn-metal"><?= Yii::t('transporter','Odobrať (?)') ?></button>
+                    <a  href="<?= Url::toRoute('/api/v1/timeline-vehicle/create')?>" class="btn btn-metal"><?= Yii::t('transporter','Vozidlo') ?></a>
                 </div>
             </div>
             <div class="col-md-6">
