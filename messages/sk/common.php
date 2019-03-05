@@ -23,7 +23,7 @@ return [
     'Dátum vytvorenia' => '',
     'Edit' => 'Editácia',
     'Updated At' => '',
-    'Your company is:' => 'Ste priradený k firmu:',
+    'Your company is:' => 'Vaša firma:',
     'created_at' => 'Vytvorený',
     'updated_at' => 'Aktualizovaný',
 ];

@@ -126,28 +126,37 @@ class CompaniesController extends BaseController
      */
     public function actionUpdate()
     {
-        $company = $this->findModel();
-        $companyStaticCostsForm     = new CompanyStaticCostsForm();
+       $companyStaticCostsForm     = new CompanyStaticCostsForm();
 
 //        $company->load($this->request()->post(), 'Companies');
 //        $companyStaticCostsForm->load($this->request()->post(),'StaticCostsForm');
+
+        // get the owned company
         $company = self::loggedInUserCompany();
-        dd($company->find()->with('companyCostDatas')->one());
-        $companyStaticCosts = collect(CompanyStaticCostQuery::find()->all())->keyBy('short_name');
 
+        // preload company costs
+        $company->find()
+            ->with('companyCostDatas')
+            ->one();
 
+        // index companyCostDatas by staticCost type / name
+        $companyStaticCosts = collect($company->companyCostDatas)->keyBy('staticCosts.short_name')->map(function ($companyCostData){
+            return $companyCostData->staticCosts;
+        });
 
-//        $valid = $validCompany && $validCosts;
         if ($company->load($this->request()->post(), 'Companies') &&
             $companyStaticCostsForm->load($this->request()->post(),'StaticCostsForm')
         ) {
+            // validate company and company costs
             $validCompany = $company->validate();
             $validCosts = $companyStaticCostsForm->validate();
+
             if ($valid = $validCompany && $validCosts){
+                // update with correctly filled form data
                 $staticCostsInput = $this->request()->post()['StaticCostsForm'];
 
                 foreach ($companyStaticCosts as $staticCostShortName => $companyStaticCost) {
-                    dd($companyStaticCost->companyCostDatas);
+//                    dd($companyStaticCosts,$companyStaticCost);
                     $companyStaticCost->companyCostDatas->value   = $staticCostsInput[$staticCostShortName];
                     $companyStaticCost->companyCostDatas->update();
                 }
@@ -157,28 +166,6 @@ class CompaniesController extends BaseController
 
 
         }
-
-
-//        dd(
-//            $this->request()->post(),
-//            $company->load($this->request()->post(),'Companies'),
-//            $company,
-//            $companyStaticCostsForm->load($this->request()->post(),'StaticCostsForm'),
-//            $companyStaticCostsForm,
-//            Model::validateMultiple([$company, $companyStaticCostsForm]),
-//            $company->getErrorSummary(1),
-//            $companyStaticCostsForm->getErrorSummary(1),
-//            $company->getErrors(),
-//            $companyStaticCostsForm->getErrors()
-//
-//        );
-
-//        $loadable = $companyStaticCosts->toArray();
-//        $companyStaticCostsForm->load($loadable,'');
-//        dd($companyStaticCostsForm);
-
-
-//dd($company,$companyStaticCostsForm,$valid,$company->getErrors(),$companyStaticCostsForm->getErrors());
 
 
         return $this->render('update', [

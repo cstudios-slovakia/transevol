@@ -62,6 +62,7 @@ $this->params['portlet']['title'] = Yii::t('transporter','Main timeline')
 
 
 <div>
+    <button type="button" data-toggle="modal" data-target="#m_modal_4">MODAL</button>
 
     <div id="timeline" style="height: auto;"></div>
 
@@ -215,6 +216,35 @@ $this->params['portlet']['title'] = Yii::t('transporter','Main timeline')
 
     </div>
 
+    <div class="modal fade" id="m_modal_4" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="recipient-name" class="form-control-label">Recipient:</label>
+                            <input type="text" class="form-control" id="recipient-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="form-control-label">Message:</label>
+                            <textarea class="form-control" id="message-text"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Send message</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </div>
 
@@ -224,8 +254,7 @@ $this->params['portlet']['title'] = Yii::t('transporter','Main timeline')
 <div class="m-stack m-stack--ver m-stack--general ">
     <div class="m-stack__item m-stack__item--left">
         <div class="btn-group m-btn-group" role="group" aria-label="...">
-            <a href="<?= Url::toRoute('/api/v1/goings/create')?>" class="btn btn-metal"><?= Yii::t('transporter','Začať výkon') ?></a>
-            <a href="<?= Url::toRoute('/api/v1/goings/ending') ?>" class="btn btn-metal"><?= Yii::t('transporter','Ukončiť výkon') ?> </a>
+            <a href="<?= Url::toRoute('/api/v1/goings/create')?>" class="btn btn-metal"><?= Yii::t('transporter','Nahrať výkon') ?></a>
         </div>
     </div>
     <div class="m-stack__item m-stack__item--center">

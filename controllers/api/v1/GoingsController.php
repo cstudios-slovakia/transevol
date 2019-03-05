@@ -70,6 +70,7 @@ class GoingsController extends BaseController
      */
     public function actionCreate()
     {
+
         $model = new Goings();
 
         $model->setScenario($model::SCENARIO_START);

@@ -20,6 +20,7 @@ class BaseCreateFormWidget extends ActiveForm
     protected $defaultLayoutPath        = '@app/views/layouts/default/common/forms/base_form.php';
     protected $defaultFooterLayoutPath  = '@app/views/layouts/default/common/pages/_submit_buttons.php';
     protected $cancelUrl = '#';
+    protected $cancelUrlText = null;
 
     public $options = ['class' => 'm-form'];
 
@@ -95,7 +96,7 @@ class BaseCreateFormWidget extends ActiveForm
             return $this->footer;
         }
 
-        return $this->render($this->defaultFooterLayoutPath,['cancelUrl' => $this->cancelUrl]);
+        return $this->render($this->defaultFooterLayoutPath,['cancelUrl' => $this->cancelUrl, 'cancelUrlText' => $this->cancelUrlText]);
     }
 
     public function getViewPath()
@@ -123,4 +124,14 @@ class BaseCreateFormWidget extends ActiveForm
     {
         $this->cancelUrl = $cancelUrl;
     }
+
+    /**
+     * @param string $cancelUrlText
+     */
+    public function setCancelUrlText(string $cancelUrlText)
+    {
+        $this->cancelUrlText = $cancelUrlText;
+    }
+
+
 }

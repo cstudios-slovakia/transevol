@@ -248,4 +248,8 @@ $(document).ready(function () {
         return parseInt($(option).val());
     }
 
+    // MODAL
+
+
+
 });
