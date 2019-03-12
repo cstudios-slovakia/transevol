@@ -39,11 +39,10 @@ class TimelineDriverCollector
             return [
                 'id' => $timelineDriver->id,
                 'content' => $timelineDriver->drivers->driver_name,
-//                Carbon::createFromFormat('Y-m-d H:i:s',$timelineDriver->driver_record_from)->timestamp * 1000,
-//                date('d-m-Y G:H', strtotime($phpDateVariable));
+                'className' => 'item--driver',
                 'start' => Carbon::createFromFormat('Y-m-d H:i:s',$timelineDriver->driver_record_from)->format('c'),
                 'end' => $recordUntil->format('c'),
-                'group' => 1
+                'group' => 3
             ];
 
 

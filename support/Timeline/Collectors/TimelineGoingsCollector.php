@@ -35,7 +35,7 @@ class TimelineGoingsCollector
                 'content'   => $tlItemContent,
                 'start'     => $start->format('c'),
                 'end'       => $end->format('c'),
-                'group'     => 3,
+                'group'     => 1,
                 'className' => 'item--going'
             ];
 

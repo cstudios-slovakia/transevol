@@ -134,18 +134,20 @@ $(document).ready(function () {
     var groups = [
         {
             id: 1,
-            content: 'Vodic'
-            // Optional: a field 'className', 'style', 'order', [properties]
+            content: 'Výkony'
         },
-
         {
             id: 2,
             content: 'Vozidlo'
         },
         {
             id: 3,
-            content: 'Vykony'
-        }
+            content: 'Vodič'
+            // Optional: a field 'className', 'style', 'order', [properties]
+        },
+
+
+
     ];
 
     // DOM element where the Timeline will be attached

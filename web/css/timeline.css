@@ -1,3 +1,13 @@
+.vis-left {
+  background-color: #cacaca;
+}
+
+.vis-left .vis-content {
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: right;
+}
+
 .vis-item.item--going {
   background-color: transparent;
   border-width: 2px;
@@ -33,6 +43,16 @@
 }
 
 .vis-item.item--vehicle .vis-item-content {
+  font-weight: bold;
+}
+
+.vis-item.item--driver {
+  border-color: #000;
+  background-color: #fff;
+  border-radius: 0px;
+}
+
+.vis-item.item--driver .vis-item-content {
   font-weight: bold;
 }
 

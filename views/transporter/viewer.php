@@ -62,9 +62,9 @@ $this->params['portlet']['title'] = Yii::t('transporter','Main timeline')
 
 
 <div>
-    <button type="button" data-toggle="modal" data-target="#m_modal_4">MODAL</button>
+<!--    <button type="button" data-toggle="modal" data-target="#m_modal_4">MODAL</button>-->
 
-    <div id="timeline" ></div>
+<!--    <div id="timeline" ></div>-->
 
     <div id="visualization"></div>
 
@@ -110,7 +110,7 @@ $this->params['portlet']['title'] = Yii::t('transporter','Main timeline')
 //                            return $transporterPart;
 //                        }
 //                    })->first();
-//                 
+//
 //
 //                    $filteredUnLoading = $transporterPart->sortBy('event_time')->filter(function ($transporterPart) {
 //                        if ($transporterPart->placeTypes->placetype_name === 'unloading') {
