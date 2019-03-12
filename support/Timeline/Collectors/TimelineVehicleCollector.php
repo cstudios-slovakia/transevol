@@ -38,11 +38,11 @@ class TimelineVehicleCollector
             return [
                 'id' => $timelineVehicle->id,
                 'content' => $timelineVehicle->vehicle->ecv,
-//                Carbon::createFromFormat('Y-m-d H:i:s',$timelineDriver->driver_record_from)->timestamp * 1000,
-//                date('d-m-Y G:H', strtotime($phpDateVariable));
+
                 'start' => Carbon::createFromFormat('Y-m-d H:i:s',$timelineVehicle->vehicle_record_from)->format('c'),
                 'end' => $recordUntil->format('c'),
-                'group' => 2
+                'group' => 2,
+                'className' => 'item--vehicle'
             ];
 
 
