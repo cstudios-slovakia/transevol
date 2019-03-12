@@ -24,20 +24,19 @@ class TimelineGoingsCollector
     {
         return $collectable = collect($this->collection())->map(function($record){
 
-//            $recordUntil = Carbon::createFromFormat('Y-m-d H:i:s',$timelineVehicle->vehicle_record_until);
-//            if ($recordUntil->year < 0){
-//                $recordUntil = Carbon::today();
-//            } else{
-//                $recordUntil = $recordUntil;
-//            }
+            $start  = Carbon::createFromFormat('Y-m-d H:i:s',$record->going_from);
+            $end    = Carbon::createFromFormat('Y-m-d H:i:s',$record->going_until);
+
+            $diffInHour     = $start->diff($end);
+            $tlItemContent = "<span>$record->id</span> ".\Yii::t('timeline/item/goings','Výkon')." ". $diffInHour->format('%h:%i')." h";
 
             return [
-                'id' => $record->id,
-                'content' => "$record->id",
-
-                'start' => Carbon::createFromFormat('Y-m-d H:i:s',$record->going_from)->format('c'),
-                'end' => Carbon::createFromFormat('Y-m-d H:i:s',$record->going_until)->format('c'),
-                'group' => 3
+                'id'        => $record->id,
+                'content'   => $tlItemContent,
+                'start'     => $start->format('c'),
+                'end'       => $end->format('c'),
+                'group'     => 3,
+                'className' => 'item--going'
             ];
 
 

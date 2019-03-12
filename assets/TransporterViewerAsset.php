@@ -12,7 +12,7 @@ class TransporterViewerAsset extends AppAsset
         'demo/default/base/style.bundle.css',
         'demo/default/media/img/logo/favicon.ico',
         'vendors/plugins/timeline/vis.css',
-
+        'css/timeline.css'
     ];
 
     public $js = [

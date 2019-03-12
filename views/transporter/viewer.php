@@ -64,7 +64,7 @@ $this->params['portlet']['title'] = Yii::t('transporter','Main timeline')
 <div>
     <button type="button" data-toggle="modal" data-target="#m_modal_4">MODAL</button>
 
-    <div id="timeline" style="height: auto;"></div>
+    <div id="timeline" ></div>
 
     <div id="visualization"></div>
 

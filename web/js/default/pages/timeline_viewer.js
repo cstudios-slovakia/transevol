@@ -170,7 +170,10 @@ $(document).ready(function () {
         selectable              : false,
         zoomable                : false,
         // horizontalscroll        : false,
-        moveable                : false
+        moveable                : false,
+        maxHeight : '600px',
+        stack : true,
+        stackSubgroups : true,
     };
     console.log('items',items);
     // Create a Timeline
