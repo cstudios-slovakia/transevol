@@ -9,7 +9,15 @@ use app\models\TimelineVehicle;
 use app\models\Transporter;
 use app\models\TransporterParts;
 use app\support\Timeline\Collectors\TimelineDriverCollector;
+use app\support\Timeline\Collectors\TimelineGoingsCollector;
+use app\support\Timeline\Collectors\TimelineTransportCollector;
 use app\support\Timeline\Collectors\TimelineVehicleCollector;
+use app\support\Timeline\Filter\TimeLineGoings;
+use app\support\Timeline\Filter\TimeLineTrasporterParts;
+use app\support\Timeline\Intervals\SessionDefinedIntervals;
+use app\support\Timeline\SessionDefinedVehicle;
+use app\support\Timeline\TimeLineIntervalBuilder;
+use app\support\Timeline\TimeLineVehicleBuilder;
 use app\support\Transporter\DateTimeIntervalDetector;
 use app\support\Transporter\IntervalFormatter;
 use app\support\Transporter\IntervalParts;
@@ -21,6 +29,7 @@ use yii\db\ActiveQuery;
 use yii\db\Expression;
 use yii\db\Query;
 
+
 class TransporterController extends BaseController
 {
 
@@ -28,136 +37,45 @@ class TransporterController extends BaseController
 
     public function actionViewer()
     {
-
-        $sessionVehicleId    = \Yii::$app->session->get('vehicleId');
-        $sessionTimelineFrom    = \Yii::$app->session->get('timelineFrom');
-        $sessionTimelineUntil    = \Yii::$app->session->get('timelineUntil');
-
-
-        $timelineFrom  = $sessionTimelineFrom;
-        $timelineUntil  = $sessionTimelineUntil;
-
-        // TODO if session keys dont exists
-
-
-        $transporterParts = TransporterParts::find()
-            ->joinWith('transporter')
-            ->joinWith([
-                'places' => function (\yii\db\ActiveQuery $query) {
-                    $query->joinWith('placeTypes');
-                    $query->where(['placetype_name' => 'loading']);
-                    $query->orWhere(['placetype_name' => 'unloading']);
-                },
-            ])
-            ->with('placeTypes')
-            ->with('places')
-//            ->where(new Expression('SELECT place_types.id FROM place_types WHERE placetype_name = "loading" OR placetype_name= "unloading"'))
-
-            ->andWhere(['between','event_time', $timelineFrom .' 00:00:00', $timelineUntil.' 23:59:59'])
-
-
-//            ->groupBy(['transporter.id'])
-            ->orderBy('event_time')
-            ->all();
-
-
-//        dd($transporterParts,$sessionVehicleId,$sessionTimelineFrom,$sessionTimelineUntil);
-
-
-        $intervalFormatter = new IntervalFormatter();
-//        $intervalFormatter->setProcessFormat('d.m.Y');
-
-        $intervalDetector = new DateTimeIntervalDetector();
-        $intervalDetector->setFormatter($intervalFormatter);
-
-        $timelineFrom = $intervalDetector->getTimelineFrom();
-        $timelineUntil = $intervalDetector->getTimelineUntil();
-
-
-
-        $intervalParts = new IntervalParts();
-
-//        if(empty($timelineFrom)){
-//            $timelineFrom = $intervalFormatter->formatter($intervalParts->getStart());
-//        }
-//
-//        if(empty($timelineUntil)){
-//            $timelineUntil = $intervalFormatter->formatter($intervalParts->getEnd());
-//
-//        }
-
-
-
+        // collect every owned vehicles, used in time line
         $vehicleSelectOptions = VehicleRelationAssistance::ownedVehicles();
 
-        $selectedVehicleId = (int) $sessionVehicleId;
+        // we check vehicleId in first time too,
+        // first vehicle should be used
+        $definedVehicleId = array_first(array_keys($vehicleSelectOptions));
 
-        $goings     = Goings::find()
-            ->joinWith([
-                'vehicles'  => function (\yii\db\ActiveQuery $query) use ($selectedVehicleId){
-                    $query->andWhere(['vehicles.id' => $selectedVehicleId]);
-                 }
-            ])
-        ->all();
+        // session must have defined vehicleID
+        $sessionDefinedVehicle  = new SessionDefinedVehicle();
+        $sessionDefinedVehicle->defineVehicleId($definedVehicleId);
 
-
-
-//
-//
-//        $requestTimelineFrom = \Yii::$app->request->get(DateTimeIntervalDetector::TIMELINE_FROM, null);
-//        $requestTimelineUntil = \Yii::$app->request->get(DateTimeIntervalDetector::TIMELINE_UNTIL, null);
-//        $requestVehicleId = \Yii::$app->request->get('vehicleId', null);
-
-//
-//        if (! $requestTimelineFrom || !$requestTimelineUntil || !$requestVehicleId ){
-//            $redirectIntervalFormatter = new IntervalFormatter();
-//            $redirectIntervalFormatter->setLocaleFormat('Y-m-d');
-//            $redirectIntervalFormatter->setProcessFormat('d.m.Y');
-//
-//            $redirectIntervalDetector = new DateTimeIntervalDetector();
-//            $redirectIntervalDetector->setFormatter($redirectIntervalFormatter);
-////dd($redirectIntervalDetector);
-//
-//            $redirectIntervalParts = new IntervalParts();
-//
-//            $timelineFrom = $redirectIntervalFormatter->formatter($redirectIntervalParts->getStart());
-//            $timelineUntil = $redirectIntervalFormatter->formatter($redirectIntervalParts->getEnd());
-//
-//
-//            $timelineFrom = !$requestTimelineFrom ? $timelineFrom : $requestTimelineFrom;
-//            $timelineUntil = !$requestTimelineUntil ? $timelineUntil : $requestTimelineUntil;
-//
-//            $requestVehicleId = $selectedVehicleId;
-//
-//            if ($requestVehicleId < 1){
-//
-//                $requestVehicleId = each($vehicleSelectOptions)['key'];
-//                \Yii::$app->session->set('vehicleId', $requestVehicleId);
-//            }
-//
-//            return $this->viewerRedirector([
-//                'tfrom' => $timelineFrom,
-//                'tuntil'=> $timelineUntil,
-//                'vehicleId' => $requestVehicleId
-//            ]);
-//        }
-
-//
-//        if ($requestVehicleId != $selectedVehicleId){
-//
-//            return $this->viewerRedirector([
-//                'tfrom' => $requestTimelineFrom,
-//                'tuntil'=> $requestTimelineUntil,
-//                'vehicleId' => $selectedVehicleId
-//            ]);
-//        }
+        // for timeline define start and end date/datetime
+        // if session does not contains timeline interval data, last 2 days should be used
+        $timeLineIntervalDetector = new TimeLineIntervalBuilder(new IntervalParts(), new SessionDefinedIntervals());
+        $timeLineFrom   = $timeLineIntervalDetector->getTimeLineInterval($timeLineIntervalDetector::TIMELINE_FROM_KEY,true);
+        $timeLineTo     =  $timeLineIntervalDetector->getTimeLineInterval($timeLineIntervalDetector::TIMELINE_UNTIL_KEY,true);
 
 
-//        $vehicles = TimelineVehicle::find()->joinWith([
-//            'vehicle' => function($query) use ($selectedVehicleId){
-//                $query->andWhere(['vehicles.id' => $selectedVehicleId]);
-//            }
-//        ])->all();
+
+        $tlTransporterParts = new TimeLineTrasporterParts();
+        $tlTransporterParts->setTimeLineFrom($timeLineFrom);
+        $tlTransporterParts->setTimeLineUntil($timeLineTo);
+
+        $transporterParts = $tlTransporterParts->getTransporterRecords();
+
+        $timeLineGoings = new TimeLineGoings();
+        $timeLineGoings->setTimeLineFrom($timeLineFrom);
+        $timeLineGoings->setTimeLineUntil($timeLineTo);
+        $timeLineGoings->setVehicleId($definedVehicleId);
+//        dd($timeLineGoings,$transporterParts,$timeLineFrom, $timeLineTo);
+
+        $goings     = $timeLineGoings->getTimeLineGoingsRecords();
+
+        $tlTransporterPartsCollector = new TimelineTransportCollector();
+        $tlTransporterPartsCollector->setTimeLineTransportQuery($transporterParts);
+
+        $tlGoingsCollector = new TimelineGoingsCollector();
+        $tlGoingsCollector->setTimeLineGoingsQuery($timeLineGoings);
+
 
         $timelineDriverCollector = new TimelineDriverCollector();
 
@@ -168,18 +86,22 @@ class TransporterController extends BaseController
         $vehicles   = $timelineVehicleCollector->collection();
 
         $timelineMetaData = [
-            'timelineFrom' => $timelineFrom,
-            'timelineUntil' => $timelineUntil,
+//            'timeLineFrom' => $timeLineIntervalDetector->getTimeLineInterval($timeLineIntervalDetector::TIMELINE_FROM_KEY,true, 'd.m.Y'),
+//            'timeLineTo' =>$timeLineIntervalDetector->getTimeLineInterval($timeLineIntervalDetector::TIMELINE_UNTIL_KEY,true, 'd.m.Y'),,
             'vehicleSelectOptions' => $vehicleSelectOptions,
-            'selectedVehicleId' => $sessionVehicleId
+            'selectedVehicleId' => $sessionDefinedVehicle->getDefinedVehicleId(),
+            'DateTime'  => [
+                'from'  =>  $timeLineIntervalDetector->getTimeLineInterval($timeLineIntervalDetector::TIMELINE_FROM_KEY,true, 'd.m.Y'),
+                'to'    => $timeLineIntervalDetector->getTimeLineInterval($timeLineIntervalDetector::TIMELINE_UNTIL_KEY,true, 'd.m.Y')
+            ]
         ];
 //
-//        $x = $timelineDriverCollector->mapToJson();
-//
-//        dd($x);
 
 
-        $grouppedTimeline = $timelineDriverCollector->collectable()->merge($timelineVehicleCollector->collectable());
+        $grouppedTimeline = $timelineDriverCollector->collectable()
+            ->merge($timelineVehicleCollector->collectable())
+            ->merge($tlGoingsCollector->collectable())
+        ->merge($tlTransporterPartsCollector->collectable());
 
         return $this->render('viewer',[
             'timelineMetaData' => $timelineMetaData,
@@ -190,6 +112,7 @@ class TransporterController extends BaseController
             'timelineData'  => [
                 'drivers'   => $timelineDriverCollector->mapToJson(),
                 'vehicles'  => $timelineDriverCollector->mapToJson(),
+                'goings'    => $tlGoingsCollector->mapToJson(),
                 'groupped'  => $grouppedTimeline->toJson()
             ]
         ]);

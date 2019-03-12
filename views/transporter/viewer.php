@@ -5,8 +5,8 @@ use yii\helpers\Url;
 //dd($timelineData['groupped']);
 
 $this->registerJsVar('driversData',$timelineData['groupped']);
-$this->registerJsVar('timelineFrom',$timelineMetaData['timelineFrom']);
-$this->registerJsVar('timelineUntil',$timelineMetaData['timelineUntil']);
+$this->registerJsVar('timeLineFrom',$timelineMetaData['DateTime']['from']);
+$this->registerJsVar('timeLineUntil',$timelineMetaData['DateTime']['to']);
 $this->registerJsVar('modificatorUrl',Url::toRoute('/api/v1/vehicle-definiator/timeline-modificator'));
 
 $this->params['portlet']['title'] = Yii::t('transporter','Main timeline')

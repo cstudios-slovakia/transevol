@@ -16,75 +16,17 @@ $(document).ready(function () {
         getTimelineUntil : function getTimelineUntil(){
             return this.timelineUntil;
         },
-//         formatToDate : function formatToDate(format) {
-//             var date = new Date(this.getTimelineFrom()).toLocaleDateString('sk-SK', {
-//                 day : 'numeric',
-//                 month : 'numeric',
-//                 year : 'numeric'
-//             });
-// console.log(date);
-//             return new Date(date.year,date.month, date.day)
-//         }
+
 
     };
-
-    // function redirectViewer(href) {
-    //     const modificator = new URLSearchParams(url);
-    //
-    //     var location    = window.location;
-    //     if (!href) href = location.href;
-    //     var baseUri     = locationBuilder()+'?';
-    //     var url         = href.replace(baseUri,'');
-    //     var parameterized;
-    //
-    //     /**
-    //      * build query parameters
-    //      */
-    //     modificator.set('tfrom',timelineInterval.getTimelineFrom());
-    //     modificator.set('tuntil',timelineInterval.getTimelineUntil());
-    //
-    //     parameterized = modificator.toString();
-    //
-    //     return addVehicleParameterToUrl(baseUri + parameterized);
-    // }
-
-
-
-    // function addVehicleParameterToUrl(href,vehicleId) {
-    //     var parameterized;
-    //     var location = window.location;
-    //     if (!href) href = location.href;
-    //     var baseUri = locationBuilder()+'?';
-    //     var url = href.replace(baseUri,'');
-    //
-    //     const modificator = new URLSearchParams(url);
-    //
-    //     if(!vehicleId){
-    //         vehicleId = getSelectedVehicleId(selectedVehicle());
-    //     }
-    //     modificator.set('vehicleId', vehicleId);
-    //     parameterized = modificator.toString();
-    //
-    //     redirector(baseUri+parameterized);
-    //
-    // }
-
-    // function locationBuilder() {
-    //     var location = window.location;
-    //     return location.origin + location.pathname;
-    // }
-    //
-    // function redirector(toUri) {
-    //     window.location.href = toUri;
-    // }
-
-    // function defineVehicleId(vehicleId) {
-    //     var uri = modificatorUrl;
-    //     if(!vehicleId){
-    //         vehicleId = getSelectedVehicleId(selectedVehicle());
-    //     }
-    //     $.post(uri,{vehicleId : vehicleId,_csrf : $('meta[name="csrf-token"]').attr("content")});
-    // }
+    var dateTimePickerOptions = {
+        buttonClasses   : 'm-btn btn',
+        applyClass      : 'btn-primary',
+        cancelClass     : 'btn-secondary',
+        locale          : {
+            format: 'DD.MM.YYYY'
+        }
+    };
 
     /*
     Timeline Builder
@@ -105,8 +47,8 @@ $(document).ready(function () {
             };
 
             data.vehicleId      = this.timelineVehicleId;
-            data.timelineFrom   = this.getTimelineInterval().getTimelineFrom();
-            data.timelineUntil  = this.getTimelineInterval().getTimelineUntil();
+            data.timeLineFrom   = this.getTimelineInterval().getTimelineFrom();
+            data.timeLineUntil  = this.getTimelineInterval().getTimelineUntil();
 
             console.log('timelineBuilder sent data',data);
 
@@ -119,19 +61,13 @@ $(document).ready(function () {
     /*
     Daterange selector
      */
-    var tFrom = new Date(timelineFrom);
-    console.log(tFrom,tFrom.toLocaleDateString('sk-SK'));
-    dateRangeSelector.val( timelineFrom + ' --- ' + timelineUntil );
 
+    console.log('timeLineFrom',timeLineFrom);
+    console.log('timeLineUntil',timeLineUntil);
+    dateRangeSelector.val( timeLineFrom + ' - ' + timeLineUntil );
+    console.log('dateRangeSelector',dateRangeSelector.val());
     // input group and left alignment setup
-    dp =  dateRangeSelector.daterangepicker({
-        buttonClasses: 'm-btn btn',
-        applyClass: 'btn-primary',
-        cancelClass: 'btn-secondary',
-        locale: {
-            format: 'DD.MM.YYYY'
-        }
-    }, function(start, end, label) {
+    dp =  dateRangeSelector.daterangepicker(dateTimePickerOptions, function(start, end, label) {
         dateRangeSelector.val( start.format('DD.MM.YYYY') + ' --- ' + end.format('DD.MM.YYYY'));
     });
 
@@ -201,9 +137,14 @@ $(document).ready(function () {
             content: 'Vodic'
             // Optional: a field 'className', 'style', 'order', [properties]
         },
+
         {
             id: 2,
             content: 'Vozidlo'
+        },
+        {
+            id: 3,
+            content: 'Vykony'
         }
     ];
 

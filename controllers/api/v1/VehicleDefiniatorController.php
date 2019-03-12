@@ -2,24 +2,33 @@
 
 namespace app\controllers\api\v1;
 
+use app\support\Timeline\Intervals\SessionDefinedIntervals;
+use app\support\Timeline\SessionDefinedVehicle;
+use app\support\Timeline\TimeLineIntervalBuilder;
+use app\support\Timeline\TimeLineVehicleBuilder;
+use app\support\Transporter\IntervalParts;
+
 class VehicleDefiniatorController extends \yii\web\Controller
 {
-    const VEHICLE_ID_KEY = 'vehicleId';
-    const TIMELINE_FROM_KEY = 'timelineFrom';
-    const TIMELINE_UNTIL_KEY = 'timelineUntil';
+//    const VEHICLE_ID_KEY = 'vehicleId';
+//    const TIMELINE_FROM_KEY = TimeLineIntervalBuilder::TIMELINE_FROM_KEY;
+//    const TIMELINE_UNTIL_KEY = TimeLineIntervalBuilder::TIMELINE_UNTIL_KEY;
 
     public function actionTimelineModificator()
     {
-        $session = \Yii::$app->session;
 
-        $vehicleId = (int) \Yii::$app->request->post(self::VEHICLE_ID_KEY);
-        $timelineFrom =  \Yii::$app->request->post(self::TIMELINE_FROM_KEY);
-        $timelineUntil =   \Yii::$app->request->post(self::TIMELINE_UNTIL_KEY);
+        $vehicleId      = (int) \Yii::$app->request->post(SessionDefinedVehicle::TIMELINE_VEHICLE_KEY);
+        $timeLineFrom   =  \Yii::$app->request->post(TimeLineIntervalBuilder::TIMELINE_FROM_KEY);
+        $timeLineUntil  =   \Yii::$app->request->post(TimeLineIntervalBuilder::TIMELINE_UNTIL_KEY);
 
-        $session->set(self::VEHICLE_ID_KEY,(int) $vehicleId);
-        $session->set(self::TIMELINE_FROM_KEY, $timelineFrom);
-        $session->set(self::TIMELINE_UNTIL_KEY, $timelineUntil);
+        $sessionDefinedIntervals = new SessionDefinedIntervals();
+        $sessionDefinedIntervals->setIntervalNode(TimeLineIntervalBuilder::TIMELINE_FROM_KEY, $timeLineFrom);
+        $sessionDefinedIntervals->setIntervalNode(TimeLineIntervalBuilder::TIMELINE_UNTIL_KEY, $timeLineUntil);
 
+        new TimeLineIntervalBuilder(new IntervalParts(), $sessionDefinedIntervals);
+
+        $sessionDefinedVehicle = new SessionDefinedVehicle();
+        $sessionDefinedVehicle->defineVehicleId($vehicleId);
 
     }
 

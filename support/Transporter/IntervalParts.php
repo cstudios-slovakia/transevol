@@ -15,12 +15,10 @@ class IntervalParts
 
     public function __construct()
     {
-        $today = Carbon::today();
-        $yesterday = Carbon::yesterday();
+        $today      = Carbon::today();
+        $yesterday  = Carbon::yesterday();
 
         $this->setStart($yesterday);
-
-
         $this->setEnd($today);
     }
 

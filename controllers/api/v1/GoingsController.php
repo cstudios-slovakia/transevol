@@ -83,7 +83,6 @@ class GoingsController extends BaseController
 
             return $this->redirect(Url::toRoute('/transporter/viewer'));
 
-            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
