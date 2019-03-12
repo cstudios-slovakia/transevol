@@ -102,45 +102,45 @@ $this->params['portlet']['title'] = Yii::t('transporter','Main timeline')
             ?>
             <table class="table table-bordered table-secondary">
 
-                <?php foreach ($transporterParts as $tranporterId => $transporterPart): ?>
-                    <?php
-
-                    $filteredLoading = $transporterPart->sortBy('event_time')->filter(function ($transporterPart) {
-                        if ($transporterPart->placeTypes->placetype_name === 'loading') {
-                            return $transporterPart;
-                        }
-                    })->first();
-
-
-                    $filteredUnLoading = $transporterPart->sortBy('event_time')->filter(function ($transporterPart) {
-                        if ($transporterPart->placeTypes->placetype_name === 'unloading') {
-                            return $transporterPart;
-                        }
-                    })->first();
-                    ?>
-                <tr>
-                    <td width="80">
-                        <a class="m-link m-link--state m-link--info"
-                           href="<?= Url::toRoute(['/api/v1/transporter/update', 'id' => $tranporterId]) ?>"><i class="la la-edit "></i>[<?= $tranporterId ?>]</a>
-                    </td>
-                    <td>
-                        <span class="fa fa-angle-double-up"></span> <?= $filteredLoading->places->place_name ?>
-
-                    </td>
-
-                    <td>
-                        <span
-                            class="fa fa-angle-double-down"></span> <?= $filteredUnLoading && $filteredUnLoading->places ? $filteredUnLoading->places->place_name : '---' ?>
-
-                    </td>
-                    <td width="30">
-                        <a class="m-link m-link--state m-link--info"
-                           href="<?= Url::toRoute(['/api/v1/transporter/view', 'id' => $tranporterId]) ?>"><i class="la la-list-ul"></i> </a>
-                    </td>
-
-                </tr>
-
-                <?php endforeach; ?>
+<!--                --><?php //foreach ($transporterParts as $tranporterId => $transporterPart): ?>
+<!--                    --><?php
+//
+//                    $filteredLoading = $transporterPart->sortBy('event_time')->filter(function ($transporterPart) {
+//                        if ($transporterPart->placeTypes->placetype_name === 'loading') {
+//                            return $transporterPart;
+//                        }
+//                    })->first();
+//                 
+//
+//                    $filteredUnLoading = $transporterPart->sortBy('event_time')->filter(function ($transporterPart) {
+//                        if ($transporterPart->placeTypes->placetype_name === 'unloading') {
+//                            return $transporterPart;
+//                        }
+//                    })->first();
+//                    ?>
+<!--                <tr>-->
+<!--                    <td width="80">-->
+<!--                        <a class="m-link m-link--state m-link--info"-->
+<!--                           href="--><?//= Url::toRoute(['/api/v1/transporter/update', 'id' => $tranporterId]) ?><!--"><i class="la la-edit "></i>[--><?//= $tranporterId ?><!--]</a>-->
+<!--                    </td>-->
+<!--                    <td>-->
+<!--                        <span class="fa fa-angle-double-up"></span> --><?//= $filteredLoading->places->place_name ?>
+<!---->
+<!--                    </td>-->
+<!---->
+<!--                    <td>-->
+<!--                        <span-->
+<!--                            class="fa fa-angle-double-down"></span> --><?//= $filteredUnLoading && $filteredUnLoading->places ? $filteredUnLoading->places->place_name : '---' ?>
+<!---->
+<!--                    </td>-->
+<!--                    <td width="30">-->
+<!--                        <a class="m-link m-link--state m-link--info"-->
+<!--                           href="--><?//= Url::toRoute(['/api/v1/transporter/view', 'id' => $tranporterId]) ?><!--"><i class="la la-list-ul"></i> </a>-->
+<!--                    </td>-->
+<!---->
+<!--                </tr>-->
+<!---->
+<!--                --><?php //endforeach; ?>
 
 
             </table>

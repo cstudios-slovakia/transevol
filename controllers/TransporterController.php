@@ -67,8 +67,8 @@ class TransporterController extends BaseController
         $timeLineGoings->setTimeLineUntil($timeLineTo);
         $timeLineGoings->setVehicleId($definedVehicleId);
 //        dd($timeLineGoings,$transporterParts,$timeLineFrom, $timeLineTo);
-
         $goings     = $timeLineGoings->getTimeLineGoingsRecords();
+//        dd($timeLineGoings, $goings);
 
         $tlTransporterPartsCollector = new TimelineTransportCollector();
         $tlTransporterPartsCollector->setTimeLineTransportQuery($transporterParts);
@@ -100,8 +100,8 @@ class TransporterController extends BaseController
 
         $grouppedTimeline = $timelineDriverCollector->collectable()
             ->merge($timelineVehicleCollector->collectable())
-            ->merge($tlGoingsCollector->collectable())
-        ->merge($tlTransporterPartsCollector->collectable());
+            ->merge($tlGoingsCollector->collectable());
+//        ->merge($tlTransporterPartsCollector->collectable());
 
         return $this->render('viewer',[
             'timelineMetaData' => $timelineMetaData,

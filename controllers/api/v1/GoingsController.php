@@ -5,6 +5,7 @@ namespace app\controllers\api\v1;
 use app\controllers\BaseController;
 use app\models\Vehicles;
 use app\support\helpers\LoggedInUserTrait;
+use Carbon\Carbon;
 use Yii;
 use app\models\Goings;
 use yii\data\ActiveDataProvider;
@@ -70,14 +71,26 @@ class GoingsController extends BaseController
 
         $model = new Goings();
 
-        $model->setScenario($model::SCENARIO_START);
 
         $company = LoggedInUserTrait::loggedInUserCompany();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
 
             $vehicleId = Yii::$app->session->get('vehicleId');
             $vehicle = Vehicles::findOne(['id' => $vehicleId]);
+
+
+            if (empty($this->request()->post('Goings')['going_until'])){
+                $untilFormat = 'Y-m-d H:i';
+
+                $from   = $this->request()->post('Goings')['going_from'];
+
+                $until = Carbon::createFromFormat( $untilFormat, $from);
+
+                $model->going_until = $until->addHours(13)->format($untilFormat);
+            }
+
+            $model->save();
 
             $model->link('vehicles',$vehicle);
 
