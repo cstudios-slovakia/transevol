@@ -107,11 +107,17 @@ class TimeLineIntervalBuilder
             throw new \Exception('TimeLineNode is not correctly configure.');
         }
 
+        $timestamp = strtotime($this->{$timeLineKey});
+        // sometimes we dont need time in timeline,
+        // format to only date
+
+        $timeLineInterval = Carbon::createFromTimestamp($timestamp);
+
         if ($withoutTime){
-            return Carbon::createFromFormat('Y-m-d', $this->{$timeLineKey})->format($format);
+            return $timeLineInterval->format($format);
         }
 
-        return $this->{$timeLineKey};
+        return $timeLineInterval->format($format);
 
     }
 }
