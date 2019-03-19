@@ -7,6 +7,7 @@ use app\support\Drivers\Relations\DriverRelationAssistance;
 use Yii;
 use app\models\TimelineDriver;
 use yii\data\ActiveDataProvider;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -80,7 +81,8 @@ class TimelineDriverController extends Controller
 
             $model->link('vehicles', $vehicle);
 
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(Url::toRoute('/transporter/viewer'));
+
         }
 
         $driverSelectOptions = DriverRelationAssistance::ownedDriversSelectOptions();

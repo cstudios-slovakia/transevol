@@ -30,7 +30,6 @@ class TimelineGoingsCollector
        
             $diffInHour     = $start->diffInRealHours($end);
             $diffAddedMinutes   = $start->diff($end)->m;
-//            dd($diffAddedMinutes);
             $tlItemContent = "<span>$record->id</span> ".\Yii::t('timeline/item/goings','Výkon')." ". $diffInHour." h";
 
             return [

@@ -4,9 +4,11 @@ namespace app\controllers\api\v1;
 
 use app\support\Vehicles\Relations\VehicleRelationAssistance;
 use app\support\Vehicles\UseCurrentVehicle;
+
 use Yii;
 use app\models\TimelineVehicle;
 use yii\data\ActiveDataProvider;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -77,7 +79,8 @@ class TimelineVehicleController extends Controller
 
             $model->link('timelineVehicle',$this->getVehicle());
 
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(Url::toRoute('/transporter/viewer'));
+
         }
 
         return $this->render('create', [
@@ -106,7 +109,8 @@ class TimelineVehicleController extends Controller
             $model->link('timelineVehicle',$this->getVehicle());
 
 
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(Url::toRoute('/transporter/viewer'));
+
         }
 
         return $this->render('update', [
