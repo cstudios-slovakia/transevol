@@ -134,19 +134,26 @@ $(document).ready(function () {
     var groups = [
         {
             id: 1,
-            content: 'Výkony'
+            content: 'Výkony',
+            className   : 'group--goings'
         },
         {
             id: 2,
-            content: 'Prepravy'
+            content: 'Prepravy',
+            className   : 'group--transport'
+
         },
         {
             id: 3,
-            content: 'Vozidlo'
+            content: 'Vozidlo',
+            className   : 'group--vehicle'
+
         },
         {
             id: 4,
-            content: 'Vodič'
+            content: 'Vodič',
+            className   : 'group--driver'
+
             // Optional: a field 'className', 'style', 'order', [properties]
         },
 
