@@ -6,6 +6,7 @@ use app\models\TimelineDriver;
 use app\support\Vehicles\UseCurrentVehicle;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use yii\helpers\Url;
 
 class TimelineDriverCollector
 {
@@ -29,23 +30,25 @@ class TimelineDriverCollector
     {
         return $drivers = collect($this->collection())->map(function($timelineDriver){
 
-            $recordUntil = Carbon::createFromFormat('Y-m-d H:i:s',$timelineDriver->driver_record_until);
-            if ($recordUntil->year < 0){
-                $recordUntil = Carbon::today();
-            } else{
-                $recordUntil = $recordUntil;
-            }
+            $recordUntil = $timelineDriver->driver_record_until;
 
-            return [
+            $item =  [
                 'id' => TimelineDriver::TIMELINE_ITEM_ID_PREDIX.$timelineDriver->id,
                 'content' => $timelineDriver->drivers->driver_name,
                 'className' => 'item--driver',
                 'start' => Carbon::createFromFormat('Y-m-d H:i:s',$timelineDriver->driver_record_from)->format('c'),
-                'end' => $recordUntil->format('c'),
-                'group' => TimelineDriver::TIMELINE_ITEM_GROUP_NUMBER
+                'group' => TimelineDriver::TIMELINE_ITEM_GROUP_NUMBER,
+                'href'       => Url::toRoute(['api/v1/timeline-driver/update','id' => $timelineDriver->id])
             ];
 
+            if ($recordUntil){
+                $endsOn = ['end' => Carbon::createFromFormat('Y-m-d H:i:s',$recordUntil)];
+                $item = array_merge($item, $endsOn);
 
+            }
+
+
+            return $item;
         });
     }
 

@@ -9,6 +9,7 @@ use app\support\Timeline\Filter\TimeLineGoings;
 use app\support\Vehicles\UseCurrentVehicle;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use yii\helpers\Url;
 
 class TimelineGoingsCollector
 {
@@ -30,7 +31,7 @@ class TimelineGoingsCollector
        
             $diffInHour     = $start->diffInRealHours($end);
             $diffAddedMinutes   = $start->diff($end)->m;
-            $tlItemContent = "<span>$record->id</span> ".\Yii::t('timeline/item/goings','Výkon')." ". $diffInHour." h";
+            $tlItemContent = \Yii::t('timeline/item/goings','Výkon')." ". $diffInHour." h";
 
             return [
                 'id'        => Goings::TIMELINE_ITEM_ID_PREDIX.$record->id,
@@ -38,7 +39,8 @@ class TimelineGoingsCollector
                 'start'     => $start->format('c'),
                 'end'       => $end->format('c'),
                 'group'     => Goings::TIMELINE_ITEM_GROUP_NUMBER,
-                'className' => 'item--going'
+                'className' => 'item--going',
+                'href'       => Url::toRoute(['api/v1/goings/update','id' => $record->id])
             ];
 
 

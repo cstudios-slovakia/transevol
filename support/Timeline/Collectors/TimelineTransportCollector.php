@@ -10,6 +10,7 @@ use app\support\Timeline\Filter\TimeLineGoings;
 use app\support\Vehicles\UseCurrentVehicle;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use yii\helpers\Url;
 use yii\log\Logger;
 
 class TimelineTransportCollector
@@ -45,11 +46,12 @@ class TimelineTransportCollector
 
                 $elementIdentification = [
                     'id'    => Transporter::TIMELINE_ITEM_ID_PREDIX.$key,
-                    'content'   => '('.$key.') '. $this->buildContentPartial($loading).
+                    'content'   => $this->buildContentPartial($loading).
                         ' - ' .
                         $this->buildContentPartial($unLoading),
                     'group' => Transporter::TIMELINE_ITEM_GROUP_NUMBER,
-                    'className'     => 'item--transporter'
+                    'className'     => 'item--transporter',
+                    'href'       => Url::toRoute(['api/v1/transporter/view','id' => $key])
                 ];
 
                 if ( ! is_null($loading)){

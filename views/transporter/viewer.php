@@ -14,7 +14,26 @@ $this->params['portlet']['title'] = Yii::t('transporter','Main timeline')
 
 ?>
 <?php $this->beginContent('@app/views/layouts/default/common/pages/timeline_view.php' ); ?>
+<script id="timeline-item-template" type="text/x-handlebars-template">
+    <div class="item-inner--container">
+        <div class="item-inner--content">{{content}}</div>
+        <div class="item-inner--edit"><span data-href="{{href}}">&nbsp;<i class="fa fa-edit"></i></span></div>
+    </div>
+</script>
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 
+            </div>
+            <div class="modal-body">
+
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 <div class="m-stack m-stack--ver m-stack--general ">
     <div class="m-stack__item m-stack__item--left">
         <div class="m-form m-form--fit m-form--label-align-right">

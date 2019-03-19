@@ -111,6 +111,14 @@ class TimelineDriverController extends Controller
         }
         $driverSelectOptions = DriverRelationAssistance::ownedDriversSelectOptions();
 
+        if (Yii::$app->request->isAjax){
+            return $this->renderAjax('update', [
+                'model' => $model,
+                'driverSelectOptions'  => $driverSelectOptions
+
+            ]);
+        }
+
         return $this->render('update', [
             'model' => $model,
             'driverSelectOptions'  => $driverSelectOptions

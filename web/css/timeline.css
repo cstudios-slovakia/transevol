@@ -8,10 +8,6 @@
   text-align: right;
 }
 
-.vis-left .vis-label {
-  display: flex;
-}
-
 .vis-left .vis-label.group--vehicle {
   background-color: #0fa95b;
   color: #fff;
@@ -40,7 +36,7 @@
 }
 
 .vis-item .vis-item-overflow {
-  overflow: visible;
+  overflow: visible !important;
 }
 
 .vis-item.item--going {
@@ -68,7 +64,6 @@
 .vis-item.item--going .vis-item-content span {
   font-weight: bold;
   padding: 1px 2px;
-  border: 1px solid #cacaca;
 }
 
 .vis-item.item--vehicle {
@@ -101,22 +96,55 @@
   position: relative;
 }
 
-.vis-item.item--transporter .vis-item-content:before,
-.vis-item.item--transporter .vis-item-content:after {
-  position: absolute;
-  content: "";
-  width: 3px;
-  background-color: #ffb822;
-  -webkit-transform: translate(0px, -25%);
-          transform: translate(0px, -25%);
-  height: 42px;
+.item-inner--container {
+  display: flex;
+  justify-content: space-between;
 }
 
-.vis-item.item--transporter .vis-item-content:before {
-  left: -3px;
+.item-inner--container .item-inner--content {
+  padding-left: 3px;
+  padding-right: 3px;
 }
 
-.vis-item.item--transporter .vis-item-content:after {
-  right: -3px;
+.item-inner--container:hover .item-inner--content .group--goings {
+  background: #2c2e3e;
+  /* The Fallback */
+  background: rgba(44, 46, 62, 0.3);
+}
+
+.group--vehicle .item-inner--container:hover .item-inner--content {
+  background: #0fa95b;
+  /* The Fallback */
+  background: rgba(15, 169, 91, 0.3);
+}
+
+.group--driver .item-inner--container:hover .item-inner--content {
+  background: #36a3f7;
+  /* The Fallback */
+  background: rgba(54, 163, 247, 0.3);
+}
+
+.group--transport .item-inner--container:hover .item-inner--content {
+  background: #ffb822;
+  /* The Fallback */
+  background: rgba(255, 184, 34, 0.3);
+}
+
+.item-inner--container .item-inner--edit span {
+  color: #a1a1a1;
+  cursor: pointer;
+}
+
+.item-inner--container .item-inner--edit span .fa {
+  font-weight: 300;
+  font-size: 12px;
+}
+
+.item-inner--container .item-inner--edit span:hover {
+  text-decoration: none;
+}
+
+.m-portlet__body .modal-dialog {
+  max-width: 95%;
 }
 

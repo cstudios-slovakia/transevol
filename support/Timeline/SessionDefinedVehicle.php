@@ -41,11 +41,11 @@ class SessionDefinedVehicle
      */
     public function getDefinedVehicleId() : ?int
     {
-        if( ! $this->check(self::TIMELINE_VEHICLE_KEY)){
+        if( ! $this->check($key = self::TIMELINE_VEHICLE_KEY)){
             return null;
         }
 
-        return $this->vehicleId;
+        return $this->vehicleId = $this->session->get($key);
     }
 
     /**
@@ -53,7 +53,9 @@ class SessionDefinedVehicle
      */
     public function defineVehicleId(int $id)
     {
-        $this->vehicleId = $this->session->set(self::TIMELINE_VEHICLE_KEY, $id);
+        $this->session->set(self::TIMELINE_VEHICLE_KEY, $id);
+
+        $this->vehicleId = $id;
     }
 
 

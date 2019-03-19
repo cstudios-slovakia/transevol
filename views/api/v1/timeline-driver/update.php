@@ -1,10 +1,10 @@
 <?php
 
 use yii\helpers\Html;
-
+use app\assets\DateTimePicker;
 /* @var $this yii\web\View */
 /* @var $model app\models\TimelineDriver */
-
+DateTimePicker::register($this);
 $this->title = Yii::t('app', 'Update Timeline Driver: ' . $model->id, [
     'nameAttribute' => '' . $model->id,
 ]);
@@ -14,7 +14,6 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
 <div class="timeline-driver-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
         'model' => $model,

@@ -7,6 +7,7 @@ use app\models\TimelineVehicle;
 use app\support\Vehicles\UseCurrentVehicle;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use yii\helpers\Url;
 
 class TimelineVehicleCollector
 {
@@ -28,23 +29,29 @@ class TimelineVehicleCollector
     {
         return $collectable = collect($this->collection())->map(function($timelineVehicle){
 
-            $recordUntil = Carbon::createFromFormat('Y-m-d H:i:s',$timelineVehicle->vehicle_record_until);
-            if ($recordUntil->year < 0){
-                $recordUntil = Carbon::today();
-            } else{
-                $recordUntil = $recordUntil;
-            }
-
-            return [
+            $item   = [
                 'id' => TimelineVehicle::TIMELINE_ITEM_ID_PREDIX.$timelineVehicle->id,
                 'content' => $timelineVehicle->vehicle->ecv,
-
                 'start' => Carbon::createFromFormat('Y-m-d H:i:s',$timelineVehicle->vehicle_record_from)->format('c'),
-                'end' => $recordUntil->format('c'),
                 'group' => TimelineVehicle::TIMELINE_ITEM_GROUP_NUMBER,
-                'className' => 'item--vehicle'
+                'className' => 'item--vehicle',
+                'href'       => Url::toRoute(['api/v1/timeline-vehicle/update','id' => $timelineVehicle->id])
+
             ];
 
+            // sometimes we does not have defined end datetime
+            $recordUntil = $timelineVehicle->vehicle_record_until;
+
+            if($recordUntil){
+                $endsOn     = [
+                    'end'   => $recordUntil = Carbon::createFromFormat('Y-m-d H:i:s', $recordUntil)
+                ];
+
+                // item 'end' should be defined only with correct datetime
+                $item = array_merge($item, $endsOn);
+            }
+
+            return $item;
 
         });
     }

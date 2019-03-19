@@ -40,13 +40,17 @@ class TransporterController extends BaseController
         // collect every owned vehicles, used in time line
         $vehicleSelectOptions = VehicleRelationAssistance::ownedVehicles();
 
+        // session must have defined vehicleID
+        $sessionDefinedVehicle  = new SessionDefinedVehicle();
+
         // we check vehicleId in first time too,
         // first vehicle should be used
         $definedVehicleId = array_first(array_keys($vehicleSelectOptions));
 
-        // session must have defined vehicleID
-        $sessionDefinedVehicle  = new SessionDefinedVehicle();
-        $sessionDefinedVehicle->defineVehicleId($definedVehicleId);
+        if ( ! $sessionDefinedVehicle->getDefinedVehicleId()){
+            $sessionDefinedVehicle->defineVehicleId($definedVehicleId);
+        }
+//        dd( $sessionDefinedVehicle->getDefinedVehicleId());
 
         // for timeline define start and end date/datetime
         // if session does not contains timeline interval data, last 2 days should be used
@@ -99,7 +103,7 @@ class TransporterController extends BaseController
             'timeLineNodes' => $timeLineNodes
         ];
 //
-
+//        dd($timelineMetaData);
 
         $grouppedTimeline = $timelineDriverCollector->collectable()
             ->merge($timelineVehicleCollector->collectable())

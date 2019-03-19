@@ -50,9 +50,15 @@ $(document).ready(function () {
             data.timeLineFrom   = this.getTimelineInterval().getTimelineFrom();
             data.timeLineUntil  = this.getTimelineInterval().getTimelineUntil();
 
-            console.log('timelineBuilder sent data',data);
+            // console.log('timelineBuilder sent data',data);
 
-            $.post(this.uri,data);
+            $.post(this.uri,data, function (response) {
+
+                console.log('timelineBuilder sent data',response);
+                // window.location.reload(false);
+
+
+            });
         }
 
     };
@@ -62,10 +68,8 @@ $(document).ready(function () {
     Daterange selector
      */
 
-    console.log('timeLineFrom',timeLineFrom);
-    console.log('timeLineUntil',timeLineUntil);
     dateRangeSelector.val( timeLineFrom + ' - ' + timeLineUntil );
-    console.log('dateRangeSelector',dateRangeSelector.val());
+
     // input group and left alignment setup
     dp =  dateRangeSelector.daterangepicker(dateTimePickerOptions, function(start, end, label) {
         dateRangeSelector.val( start.format('DD.MM.YYYY') + ' --- ' + end.format('DD.MM.YYYY'));
@@ -82,14 +86,12 @@ $(document).ready(function () {
     });
 
     vehiclesSelector.on('change',function(){
+        console.log('selector changed');
         var selected    = selectedVehicle();
         var vehicleId   = getSelectedVehicleId(selected);
 
         timelineBuilder.timelineVehicleId = vehicleId;
         timelineBuilder.defineTimeline();
-        // defineVehicleId(vehicleId);
-
-        // addVehicleParameterToUrl('',vehicleId);
 
         window.location.reload(false);
     });
@@ -111,18 +113,18 @@ $(document).ready(function () {
     timelineBuilder.setTimelineInterval(timelineInterval);
     timelineBuilder.timelineVehicleId = getSelectedVehicleId(selectedVehicle());
     timelineBuilder.defineTimeline();
-    console.log('timelineBuilder',timelineBuilder);
+
     var x  = JSON.parse(driversData);
 
 
-    function transform(item){
-
-        return [
-            item[0],
-            item[1],
-            item[2]
-        ];
-    }
+    // function transform(item){
+    //
+    //     return [
+    //         item[0],
+    //         item[1],
+    //         item[2]
+    //     ];
+    // }
     var c = new Array();
 
     for(var i = 0; i < x .length; i++){
@@ -166,17 +168,8 @@ $(document).ready(function () {
 
     var items = new vis.DataSet(x);
 
-
-    // Create a DataSet (allows two way data-binding)
-    // var items = new vis.DataSet([
-    //     {id: 1, content: 'item 1', start: '2014-04-20'},
-    //     {id: 2, content: 'item 2', start: '2014-04-14'},
-    //     {id: 3, content: 'item 3', start: '2014-04-18'},
-    //     {id: 4, content: 'item 4', start: '2014-04-16', end: '2014-04-19'},
-    //     {id: 5, content: 'item 5', start: '2014-04-25'},
-    //     {id: 6, content: 'item 6', start: '2014-04-27', type: 'point'}
-    // ]);
-
+    var source   = document.getElementById("timeline-item-template").innerHTML;
+    var itemTemplate = Handlebars.compile(source);
 
     // Configuration for the Timeline
     var options = {
@@ -184,16 +177,33 @@ $(document).ready(function () {
         zoomable                : false,
         // horizontalscroll        : false,
         moveable                : false,
-        maxHeight : '600px',
+        maxHeight : '800px',
         stack : true,
         stackSubgroups : true,
         start : timeLineNodeStart,
         end : timeLineNodeEnd,
+        template : itemTemplate
     };
-    console.log('items',items);
+
     // Create a Timeline
     var timeline = new vis.Timeline(container, items, options);
     timeline.setGroups(groups);
+
+    $('#visualization').on('click','.item-inner--edit span',function () {
+        var url  = $(this).data('href');
+        var data = {
+            _csrf : $('meta[name="csrf-token"]').attr("content")
+        };
+
+        $.get(url,data,function (response) {
+            console.log('response from edit');
+
+            $('#myModal').modal();
+            $('#myModal .modal-body').html('');
+            $('#myModal .modal-body').html(response);
+        });
+
+    });
 
     /*
     Helper Functions
