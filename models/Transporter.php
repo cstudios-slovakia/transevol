@@ -21,6 +21,10 @@ use Yii;
  */
 class Transporter extends \yii\db\ActiveRecord
 {
+    CONST TIMELINE_ITEM_GROUP_NUMBER = 2;
+    CONST TIMELINE_ITEM_ID_PREDIX = 't_';
+
+
     /**
      * {@inheritdoc}
      */

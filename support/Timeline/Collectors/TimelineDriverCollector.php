@@ -37,12 +37,12 @@ class TimelineDriverCollector
             }
 
             return [
-                'id' => $timelineDriver->id,
+                'id' => TimelineDriver::TIMELINE_ITEM_ID_PREDIX.$timelineDriver->id,
                 'content' => $timelineDriver->drivers->driver_name,
                 'className' => 'item--driver',
                 'start' => Carbon::createFromFormat('Y-m-d H:i:s',$timelineDriver->driver_record_from)->format('c'),
                 'end' => $recordUntil->format('c'),
-                'group' => 3
+                'group' => TimelineDriver::TIMELINE_ITEM_GROUP_NUMBER
             ];
 
 

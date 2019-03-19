@@ -21,6 +21,9 @@ use Yii;
  */
 class TimelineVehicle extends \yii\db\ActiveRecord
 {
+    CONST TIMELINE_ITEM_GROUP_NUMBER = 3;
+    CONST TIMELINE_ITEM_ID_PREDIX = 'v_';
+
     /**
      * {@inheritdoc}
      */

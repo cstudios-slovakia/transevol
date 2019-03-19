@@ -21,7 +21,8 @@ class TimelineDriver extends \yii\db\ActiveRecord
 {
     const SCENARIO_START = 'start';
     const SCENARIO_FINNISH = 'finnish';
-
+    CONST TIMELINE_ITEM_GROUP_NUMBER = 4;
+    CONST TIMELINE_ITEM_ID_PREDIX = 'd_';
     /**
      * {@inheritdoc}
      */

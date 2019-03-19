@@ -55,6 +55,10 @@ class TransporterController extends BaseController
         $timeLineTo     =  $timeLineIntervalDetector->getTimeLineInterval($timeLineIntervalDetector::TIMELINE_UNTIL_KEY,true);
 
 
+        $timeLineNodes = [
+            'start' => Carbon::createFromFormat('Y-m-d', $timeLineFrom)->subDay()->format('c'),
+            'end'   => Carbon::createFromFormat('Y-m-d', $timeLineTo)->addDay()->format('c'),
+        ];
 
         $tlTransporterParts = new TimeLineTrasporterParts();
         $tlTransporterParts->setTimeLineFrom($timeLineFrom);
@@ -86,22 +90,22 @@ class TransporterController extends BaseController
         $vehicles   = $timelineVehicleCollector->collection();
 
         $timelineMetaData = [
-//            'timeLineFrom' => $timeLineIntervalDetector->getTimeLineInterval($timeLineIntervalDetector::TIMELINE_FROM_KEY,true, 'd.m.Y'),
-//            'timeLineTo' =>$timeLineIntervalDetector->getTimeLineInterval($timeLineIntervalDetector::TIMELINE_UNTIL_KEY,true, 'd.m.Y'),,
             'vehicleSelectOptions' => $vehicleSelectOptions,
             'selectedVehicleId' => $sessionDefinedVehicle->getDefinedVehicleId(),
             'DateTime'  => [
                 'from'  =>  $timeLineIntervalDetector->getTimeLineInterval($timeLineIntervalDetector::TIMELINE_FROM_KEY,true, 'd.m.Y'),
                 'to'    => $timeLineIntervalDetector->getTimeLineInterval($timeLineIntervalDetector::TIMELINE_UNTIL_KEY,true, 'd.m.Y')
-            ]
+            ],
+            'timeLineNodes' => $timeLineNodes
         ];
 //
 
 
         $grouppedTimeline = $timelineDriverCollector->collectable()
             ->merge($timelineVehicleCollector->collectable())
-            ->merge($tlGoingsCollector->collectable());
-//        ->merge($tlTransporterPartsCollector->collectable());
+            ->merge($tlGoingsCollector->collectable())
+//            ;
+        ->merge($tlTransporterPartsCollector->collectable());
 
         return $this->render('viewer',[
             'timelineMetaData' => $timelineMetaData,

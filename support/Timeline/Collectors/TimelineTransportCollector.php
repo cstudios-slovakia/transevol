@@ -10,6 +10,7 @@ use app\support\Timeline\Filter\TimeLineGoings;
 use app\support\Vehicles\UseCurrentVehicle;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use yii\log\Logger;
 
 class TimelineTransportCollector
 {
@@ -24,66 +25,72 @@ class TimelineTransportCollector
 
     public function collectable() : Collection
     {
-        $collectable = collect($this->collection())->map(function ($transporterPart) {
+        $dataset  = collect($this->collection())
+            ->groupBy(function($part){
 
-            $placeType = $transporterPart->placeTypes->placetype_name;
-            if ($placeType === 'loading' || $placeType === 'unloading'){
-                return [
-                    'id'    => $transporterPart->transporter[0]->id,
-                    'content'   => $transporterPart->places->place_name,
-                    'type'  => $placeType,
-                    'event_time' => $transporterPart->event_time
+                return $part->transporter->id;
+            })
+            ->pipe(function(Collection $collection){
+                return $collection->map(function ($collectedById){
+                    return $collectedById->keyBy(function ($parts){
+                        return $parts->placeTypes->placetype_name;
+                    });
+                });
+            })
+            ->transform(function (Collection $partsCollection, $key){
+                /** @var TransporterParts $loading */
+                /** @var TransporterParts $unloading */
+                $loading = $partsCollection->has('loading') ? $partsCollection->get('loading') : null;
+                $unLoading = $partsCollection->has('unloading') ? $partsCollection->get('unloading') : null;
+
+                $elementIdentification = [
+                    'id'    => Transporter::TIMELINE_ITEM_ID_PREDIX.$key,
+                    'content'   => '('.$key.') '. $this->buildContentPartial($loading).
+                        ' - ' .
+                        $this->buildContentPartial($unLoading),
+                    'group' => Transporter::TIMELINE_ITEM_GROUP_NUMBER,
+                    'className'     => 'item--transporter'
                 ];
-            }
 
-        });
-        $x = $collectable->groupBy('id')->map(function($transports){
-            $load = $transports->filter(function ($transportPart){
-                if ($transportPart['type'] === 'loading'){
-                    return $transportPart;
+                if ( ! is_null($loading)){
+                    $elementIdentification = array_merge($elementIdentification, [
+                        'start'     => Carbon::createFromFormat('Y-m-d H:i:s',$loading->event_time)->format('c')
+                    ]);
                 }
-            })->first();
 
-            $unload = $transports->filter(function ($transportPart){
-                if ($transportPart['type'] === 'unloading'){
-                    return $transportPart;
+
+                if ( ! is_null($unLoading)){
+                    $elementIdentification = array_merge($elementIdentification, [
+                        'end'        =>  Carbon::createFromFormat('Y-m-d H:i:s',$unLoading->event_time)->format('c')
+                    ]);
                 }
-            })->first();
 
-            return [
-                'id'    => $load['id'],
-                'content'   => $load['content'] .' - '. $unload['content'],
-                'start' => $load['event_time'],
-                'end'   => $unload['event_time'],
-                'group' => 4
-            ];
-        });
-
-        return $x;
-        dd($x);
-        return $collectable = collect($this->collection())->groupBy(function($transporterPart){
-            dd($transporterPart);
-           return $transporterPart->transporter[0]->id;
-        })->map(function($record){
-//            dd($record);
-//            $recordUntil = Carbon::createFromFormat('Y-m-d H:i:s',$timelineVehicle->vehicle_record_until);
-//            if ($recordUntil->year < 0){
-//                $recordUntil = Carbon::today();
-//            } else{
-//                $recordUntil = $recordUntil;
-//            }
-
-            return [
-                'id' => $record->id,
-                'content' => "$record->id",
-
-                'start' => Carbon::createFromFormat('Y-m-d H:i:s',$record->event_time)->format('c'),
-                'end' => Carbon::createFromFormat('Y-m-d H:i:s',$record->event_time)->format('c'),
-                'group' => 3
-            ];
+                return $elementIdentification;
 
 
-        });
+            })
+            ->filter(function ($elementData){
+
+                if (array_key_exists('start', $elementData)){
+                    return $elementData;
+                }
+            });
+
+        return $dataset;
+
+    }
+
+    protected function buildContentPartial($model)
+    {
+        $default ='[undefined]';
+        if (is_null($model)){
+            return $default;
+        }
+
+        if (is_null($model->places))
+            return $default;
+
+        return $model->places->place_name;
     }
 
     public function mapToJson()

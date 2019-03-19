@@ -36,12 +36,12 @@ class TimelineVehicleCollector
             }
 
             return [
-                'id' => $timelineVehicle->id,
+                'id' => TimelineVehicle::TIMELINE_ITEM_ID_PREDIX.$timelineVehicle->id,
                 'content' => $timelineVehicle->vehicle->ecv,
 
                 'start' => Carbon::createFromFormat('Y-m-d H:i:s',$timelineVehicle->vehicle_record_from)->format('c'),
                 'end' => $recordUntil->format('c'),
-                'group' => 2,
+                'group' => TimelineVehicle::TIMELINE_ITEM_GROUP_NUMBER,
                 'className' => 'item--vehicle'
             ];
 

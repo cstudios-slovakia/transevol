@@ -2,13 +2,14 @@
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
-//dd($timelineData['groupped']);
+//dd($timelineMetaData);
 
 $this->registerJsVar('driversData',$timelineData['groupped']);
 $this->registerJsVar('timeLineFrom',$timelineMetaData['DateTime']['from']);
 $this->registerJsVar('timeLineUntil',$timelineMetaData['DateTime']['to']);
 $this->registerJsVar('modificatorUrl',Url::toRoute('/api/v1/vehicle-definiator/timeline-modificator'));
-
+$this->registerJsVar('timeLineNodeStart', $timelineMetaData['timeLineNodes']['start']);
+$this->registerJsVar('timeLineNodeEnd', $timelineMetaData['timeLineNodes']['end']);
 $this->params['portlet']['title'] = Yii::t('transporter','Main timeline')
 
 ?>
@@ -68,182 +69,6 @@ $this->params['portlet']['title'] = Yii::t('transporter','Main timeline')
 
     <div id="visualization"></div>
 
-
-    <div class="m-form">
-        <div class="m-form__section m-form__section--first">
-            <p><span class="m--font-transform-u"><?= Yii::t('transporter', 'Výkony') ?></span></p>
-
-            <table class="table table-bordered table-secondary">
-            <?php foreach ($goings as $going): ?>
-                <tr>
-                    <td width="80">
-                        <a class="m-link m-link--state m-link--info"
-                           href="<?= Url::toRoute(['/api/v1/goings/update', 'id' => $going->id]) ?>"><i class="la la-edit "></i>[<?= $going->id ?>]</a>
-                    </td>
-                    <td><span class="la la-hourglass-start"></span> <?= $going->going_from ?></td>
-                    <td><span
-                            class="h4"><?= $going->getSpentHours() ?></span></td>
-                    <td><span
-                            class="la la-hourglass-end"></span> <?= $going->going_until ? $going->going_until : '---' ?></td>
-                </tr>
-
-
-            <?php endforeach; ?>
-            </table>
-        </div>
-        <div class="m-form__seperator m-form__seperator--dashed"></div>
-
-        <div class="m-form__section ">
-            <p><span class="m--font-transform-u"><?= Yii::t('transporter', 'Prepravy') ?></span></p>
-            <?php
-            $transporterParts = collect($transporterParts)->groupBy(function ($transporterPart) {
-                return $transporterPart->transporter[0]->id;
-            });
-            ?>
-            <table class="table table-bordered table-secondary">
-
-<!--                --><?php //foreach ($transporterParts as $tranporterId => $transporterPart): ?>
-<!--                    --><?php
-//
-//                    $filteredLoading = $transporterPart->sortBy('event_time')->filter(function ($transporterPart) {
-//                        if ($transporterPart->placeTypes->placetype_name === 'loading') {
-//                            return $transporterPart;
-//                        }
-//                    })->first();
-//
-//
-//                    $filteredUnLoading = $transporterPart->sortBy('event_time')->filter(function ($transporterPart) {
-//                        if ($transporterPart->placeTypes->placetype_name === 'unloading') {
-//                            return $transporterPart;
-//                        }
-//                    })->first();
-//                    ?>
-<!--                <tr>-->
-<!--                    <td width="80">-->
-<!--                        <a class="m-link m-link--state m-link--info"-->
-<!--                           href="--><?//= Url::toRoute(['/api/v1/transporter/update', 'id' => $tranporterId]) ?><!--"><i class="la la-edit "></i>[--><?//= $tranporterId ?><!--]</a>-->
-<!--                    </td>-->
-<!--                    <td>-->
-<!--                        <span class="fa fa-angle-double-up"></span> --><?//= $filteredLoading->places->place_name ?>
-<!---->
-<!--                    </td>-->
-<!---->
-<!--                    <td>-->
-<!--                        <span-->
-<!--                            class="fa fa-angle-double-down"></span> --><?//= $filteredUnLoading && $filteredUnLoading->places ? $filteredUnLoading->places->place_name : '---' ?>
-<!---->
-<!--                    </td>-->
-<!--                    <td width="30">-->
-<!--                        <a class="m-link m-link--state m-link--info"-->
-<!--                           href="--><?//= Url::toRoute(['/api/v1/transporter/view', 'id' => $tranporterId]) ?><!--"><i class="la la-list-ul"></i> </a>-->
-<!--                    </td>-->
-<!---->
-<!--                </tr>-->
-<!---->
-<!--                --><?php //endforeach; ?>
-
-
-            </table>
-        </div>
-
-        <div class="m-form__seperator m-form__seperator--dashed"></div>
-
-        <div class="m-form__section">
-            <p><span class="m--font-transform-u"><?= Yii::t('transporter', 'Vozidlá') ?></span></p>
-            <table class="table table-bordered table-secondary">
-                <?php foreach ($vehicles as $vehicle): ?>
-                    <tr>
-                        <td width="80">
-                            <a class="m-link m-link--state m-link--info"
-                               href="<?= Url::toRoute(['/api/v1/timeline-vehicle/update', 'id' => $vehicle->id]) ?>"><i class="la la-edit "></i>[<?=  $vehicle->id ?>]</a>
-                        </td>
-                        <td>
-                            <?= $vehicle->vehicle->ecv ?>
-
-                        </td>
-                        <td>
-                            <span class="la la-hourglass-start"></span> <?= $vehicle->vehicle_record_from ?>
-                        </td>
-                        <td>
-                            <span class="la la-hourglass-end"></span>
-                            <?= $vehicle->vehicle_record_until ? $vehicle->vehicle_record_until : '---' ?>
-
-                        </td>
-                    </tr>
-
-
-                <?php endforeach; ?>
-            </table>
-
-        </div>
-        <div class="m-form__seperator m-form__seperator--dashed"></div>
-
-        <div class="m-form__section m-form__section--last">
-            <p><span class="m--font-transform-u"><?= Yii::t('transporter', 'Vodiči') ?></span></p>
-            <table class="table table-bordered table-secondary">
-            <?php foreach ($drivers as $driver): ?>
-                <tr>
-                    <td width="80">
-                        <a class="m-link m-link--state m-link--info"
-                           href="<?= Url::toRoute(['/api/v1/timeline-driver/update', 'id' => $driver->id]) ?>"><i class="la la-edit "></i>[<?=  $driver->id ?>]</a>
-                    </td>
-                    <td>
-                        <?= $driver->drivers->driver_name ?>
-                    </td>
-                    <td>
-                        <span class="la la-hourglass-start"></span> <?= $driver->driver_record_from ?>
-                    </td>
-                    <td>
-                        <?= $driver->driver_record_until ? $driver->driver_record_until : '---' ?>
-                        <span class="la la-hourglass-end"></span>
-                    </td>
-                    <td>
-
-                    </td>
-                </tr>
-                <div>
-
-
-
-
-                </div>
-
-            <?php endforeach; ?>
-            </table>
-
-        </div>
-
-
-    </div>
-
-    <div class="modal fade" id="m_modal_4" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="recipient-name" class="form-control-label">Recipient:</label>
-                            <input type="text" class="form-control" id="recipient-name">
-                        </div>
-                        <div class="form-group">
-                            <label for="message-text" class="form-control-label">Message:</label>
-                            <textarea class="form-control" id="message-text"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Send message</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
 </div>

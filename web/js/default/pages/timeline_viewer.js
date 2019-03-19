@@ -138,10 +138,14 @@ $(document).ready(function () {
         },
         {
             id: 2,
-            content: 'Vozidlo'
+            content: 'Prepravy'
         },
         {
             id: 3,
+            content: 'Vozidlo'
+        },
+        {
+            id: 4,
             content: 'Vodič'
             // Optional: a field 'className', 'style', 'order', [properties]
         },
@@ -176,6 +180,8 @@ $(document).ready(function () {
         maxHeight : '600px',
         stack : true,
         stackSubgroups : true,
+        start : timeLineNodeStart,
+        end : timeLineNodeEnd,
     };
     console.log('items',items);
     // Create a Timeline

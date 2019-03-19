@@ -2,6 +2,7 @@
 
 namespace app\support\Timeline\Collectors;
 
+use app\models\Goings;
 use app\models\TimelineDriver;
 use app\models\TimelineVehicle;
 use app\support\Timeline\Filter\TimeLineGoings;
@@ -26,16 +27,18 @@ class TimelineGoingsCollector
 
             $start  = Carbon::createFromFormat('Y-m-d H:i:s',$record->going_from);
             $end    = Carbon::createFromFormat('Y-m-d H:i:s',$record->going_until);
-
-            $diffInHour     = $start->diff($end);
-            $tlItemContent = "<span>$record->id</span> ".\Yii::t('timeline/item/goings','Výkon')." ". $diffInHour->format('%h:%i')." h";
+       
+            $diffInHour     = $start->diffInRealHours($end);
+            $diffAddedMinutes   = $start->diff($end)->m;
+//            dd($diffAddedMinutes);
+            $tlItemContent = "<span>$record->id</span> ".\Yii::t('timeline/item/goings','Výkon')." ". $diffInHour." h";
 
             return [
-                'id'        => $record->id,
+                'id'        => Goings::TIMELINE_ITEM_ID_PREDIX.$record->id,
                 'content'   => $tlItemContent,
                 'start'     => $start->format('c'),
                 'end'       => $end->format('c'),
-                'group'     => 1,
+                'group'     => Goings::TIMELINE_ITEM_GROUP_NUMBER,
                 'className' => 'item--going'
             ];
 

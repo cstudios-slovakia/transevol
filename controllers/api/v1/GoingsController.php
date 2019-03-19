@@ -71,6 +71,7 @@ class GoingsController extends BaseController
 
         $model = new Goings();
 
+        $model->setScenario(Goings::SCENARIO_START);
 
         $company = LoggedInUserTrait::loggedInUserCompany();
 
@@ -78,6 +79,7 @@ class GoingsController extends BaseController
 
             $vehicleId = Yii::$app->session->get('vehicleId');
             $vehicle = Vehicles::findOne(['id' => $vehicleId]);
+
 
 
             if (empty($this->request()->post('Goings')['going_until'])){
@@ -89,7 +91,7 @@ class GoingsController extends BaseController
 
                 $model->going_until = $until->addHours(13)->format($untilFormat);
             }
-
+//            dd($model);
             $model->save();
 
             $model->link('vehicles',$vehicle);

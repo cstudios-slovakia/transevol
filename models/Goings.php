@@ -22,6 +22,8 @@ class Goings extends AppBasedActiveRecord
 {
     const SCENARIO_START = 'start';
     const SCENARIO_FINNISH = 'finnish';
+    CONST TIMELINE_ITEM_GROUP_NUMBER = 1;
+    CONST TIMELINE_ITEM_ID_PREDIX = 'g_';
 
     /**
      * {@inheritdoc}
@@ -30,17 +32,17 @@ class Goings extends AppBasedActiveRecord
     {
         return 'goings';
     }
-//
-//    /**
-//     * {@inheritdoc}
-//     */
-//    public function scenarios()
-//    {
-//        return [
-//            self::SCENARIO_START => ['going_from','companies_id'],
-//            self::SCENARIO_FINNISH => ['going_until','companies_id'],
-//        ];
-//    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function scenarios()
+    {
+        return [
+            self::SCENARIO_START => ['going_from','companies_id'],
+            self::SCENARIO_FINNISH => ['going_until','companies_id'],
+        ];
+    }
 
     /**
      * {@inheritdoc}
