@@ -98,7 +98,65 @@ $(document).ready(function () {
 
 
     ////////////////
-    ///////////////
+
+    /*
+    Begin - Calculation Interval Selector
+    */
+
+    var calcRangeGenerator = {
+        start   : moment().startOf('hour'),
+        end     : moment().startOf('hour').add(32, 'hour'),
+        uri     : window.rangeCalculatorUrl
+    };
+    var calculationRange = $('#calculation_interval');
+
+    // reuse some default options
+    // and modify another for calculatorRangePicker
+    dateTimePickerOptions.timePicker            = true;
+    dateTimePickerOptions.showDropdowns         = true;
+    dateTimePickerOptions.linkedCalendars       = false;
+    dateTimePickerOptions.locale = {
+        format: 'DD.MM.YYYY HH:mm'
+    };
+    dateTimePickerOptions.startDate             = calcRangeGenerator.start;
+    dateTimePickerOptions.endDate               = calcRangeGenerator.end;
+    dateTimePickerOptions.timePicker24Hour      = true;
+
+    // init picker
+    var calcRangeSelector  = calculationRange.daterangepicker(dateTimePickerOptions, function(start, end, label) {
+        calculationRange.val( start.format('YYYY-MM-DD HH:mm') +  ' - ' + end.format('YYYY-MM-DD HH:mm'));
+    });
+
+    // when datetime changes on calculater, set on global object for storing
+    calcRangeSelector.on('apply.daterangepicker',function (e,picker) {
+        calcRangeGenerator.start = picker.startDate;
+        calcRangeGenerator.end = picker.endDate;
+
+        var calcFrom        = calcRangeGenerator.start.format('YYYY-MM-DD HH:mm');
+        var calcUntil       = calcRangeGenerator.end.format('YYYY-MM-DD HH:mm');
+        var data = {
+            _csrf : $('meta[name="csrf-token"]').attr("content")
+        };
+
+        // data which is sent for calculating
+        data.vehicleId          = timelineBuilder.timelineVehicleId;
+        data.calcFrom           = calcFrom;
+        data.calcUntil          = calcUntil;
+
+        $.post(calcRangeGenerator.uri,data, function (response) {
+
+            console.log('calcRangeGenerator sent data',response);
+            // window.location.reload(false);
+
+
+        });
+    });
+
+    /*
+    End - Calculation Interval Selector
+    */
+
+
     //////////////////////
 
 

@@ -8,6 +8,7 @@ $this->registerJsVar('driversData',$timelineData['groupped']);
 $this->registerJsVar('timeLineFrom',$timelineMetaData['DateTime']['from']);
 $this->registerJsVar('timeLineUntil',$timelineMetaData['DateTime']['to']);
 $this->registerJsVar('modificatorUrl',Url::toRoute('/api/v1/vehicle-definiator/timeline-modificator'));
+$this->registerJsVar('rangeCalculatorUrl',Url::toRoute('/api/v1/vehicle-definiator/calculator'));
 $this->registerJsVar('timeLineNodeStart', $timelineMetaData['timeLineNodes']['start']);
 $this->registerJsVar('timeLineNodeEnd', $timelineMetaData['timeLineNodes']['end']);
 $this->params['portlet']['title'] = Yii::t('transporter','Main timeline')
@@ -55,6 +56,14 @@ $this->params['portlet']['title'] = Yii::t('transporter','Main timeline')
     </div>
     <div class="m-stack__item m-stack__item--center">
         <div>
+            <div class='input-group' id='calculation_interval_group'>
+                <input type='text' id="calculation_interval" class="form-control m-input" readonly placeholder="Select date range" />
+                <div class="input-group-append">
+                    <span class="input-group-text">
+                        <i class="la la-calendar-check-o"></i>
+                    </span>
+                </div>
+            </div>
         </div>
     </div>
     <div class="m-stack__item m-stack__item--right">

@@ -16,34 +16,44 @@ class VehicleDefiniatorController extends \yii\web\Controller
 
     public function actionTimelineModificator()
     {
-        if (\Yii::$app->request->isAjax){
-            $vehicleId      = (int) \Yii::$app->request->post(SessionDefinedVehicle::TIMELINE_VEHICLE_KEY);
-            $timeLineFrom   =  \Yii::$app->request->post(TimeLineIntervalBuilder::TIMELINE_FROM_KEY);
-            $timeLineUntil  =   \Yii::$app->request->post(TimeLineIntervalBuilder::TIMELINE_UNTIL_KEY);
+        $this->checkIsAjaxRequest();
 
-            $sessionDefinedIntervals = new SessionDefinedIntervals();
-            $sessionDefinedIntervals->setIntervalNode(TimeLineIntervalBuilder::TIMELINE_FROM_KEY, $timeLineFrom);
-            $sessionDefinedIntervals->setIntervalNode(TimeLineIntervalBuilder::TIMELINE_UNTIL_KEY, $timeLineUntil);
+        $vehicleId      = (int) \Yii::$app->request->post(SessionDefinedVehicle::TIMELINE_VEHICLE_KEY);
+        $timeLineFrom   =  \Yii::$app->request->post(TimeLineIntervalBuilder::TIMELINE_FROM_KEY);
+        $timeLineUntil  =   \Yii::$app->request->post(TimeLineIntervalBuilder::TIMELINE_UNTIL_KEY);
 
-            new TimeLineIntervalBuilder(new IntervalParts(), $sessionDefinedIntervals);
+        $sessionDefinedIntervals = new SessionDefinedIntervals();
+        $sessionDefinedIntervals->setIntervalNode(TimeLineIntervalBuilder::TIMELINE_FROM_KEY, $timeLineFrom);
+        $sessionDefinedIntervals->setIntervalNode(TimeLineIntervalBuilder::TIMELINE_UNTIL_KEY, $timeLineUntil);
 
-            $sessionDefinedVehicle = new SessionDefinedVehicle();
-            $sessionDefinedVehicle->defineVehicleId($vehicleId);
-//            var_dump($sessionDefinedVehicle);
-            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        new TimeLineIntervalBuilder(new IntervalParts(), $sessionDefinedIntervals);
 
-            return [
-                'vehicleId'     => $sessionDefinedVehicle->getDefinedVehicleId(),
-                'timeLineFrom'  => $sessionDefinedIntervals->getIntervalNodeFrom(),
-                'timeLineUntil'  => $sessionDefinedIntervals->getIntervalNodeTo(),
-            ];
+        $sessionDefinedVehicle = new SessionDefinedVehicle();
+        $sessionDefinedVehicle->defineVehicleId($vehicleId);
+
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        return [
+            'vehicleId'     => $sessionDefinedVehicle->getDefinedVehicleId(),
+            'timeLineFrom'  => $sessionDefinedIntervals->getIntervalNodeFrom(),
+            'timeLineUntil'  => $sessionDefinedIntervals->getIntervalNodeTo(),
+        ];
+
+    }
+
+    public function actionCalculator()
+    {
+        $this->checkIsAjaxRequest();
 
 
+
+    }
+
+    protected function checkIsAjaxRequest()
+    {
+        if ( ! \Yii::$app->request->isAjax){
+            throw new HttpException(403, 'Action not allowed.');
         }
-
-        throw new HttpException(403, 'Action not allowed.');
-
-
     }
 
 }
