@@ -25,14 +25,14 @@ class SessionDefinedIntervals
         return $this->session->get($key);
     }
 
-    public function getIntervalNodeFrom() : ?string
+    public function getIntervalNodeFrom(string $fromKey = TimeLineIntervalBuilder::TIMELINE_FROM_KEY) : ?string
     {
-        return $this->getIntervalNode(TimeLineIntervalBuilder::TIMELINE_FROM_KEY);
+        return $this->getIntervalNode($fromKey);
     }
 
-    public function getIntervalNodeTo() : ?string
+    public function getIntervalNodeTo(string $untilKey = TimeLineIntervalBuilder::TIMELINE_UNTIL_KEY) : ?string
     {
-        return $this->getIntervalNode(TimeLineIntervalBuilder::TIMELINE_UNTIL_KEY);
+        return $this->getIntervalNode($untilKey);
     }
 
     public function setIntervalNode(string $timeLineNodeKey, string $value)

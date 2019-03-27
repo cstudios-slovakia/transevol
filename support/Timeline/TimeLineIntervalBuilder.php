@@ -8,7 +8,7 @@ use Carbon\Carbon;
  * Class TimeLineIntervalBuilder
  * @package app\support\Timeline
  */
-class TimeLineIntervalBuilder
+class TimeLineIntervalBuilder implements IntervalBuilderInterface
 {
     /**
      *
@@ -64,10 +64,7 @@ class TimeLineIntervalBuilder
         return $this;
     }
 
-    /**
-     * @return TimeLineIntervalBuilder
-     */
-    protected function buildIntervalStart() : self
+    public function buildIntervalStart() : IntervalBuilderInterface
     {
         $from   = $this->definedIntervals->getIntervalNodeFrom();
 
@@ -78,10 +75,8 @@ class TimeLineIntervalBuilder
         return $this;
     }
 
-    /**
-     * @return TimeLineIntervalBuilder
-     */
-    protected function buildIntervalEnd() : self
+
+    public function buildIntervalEnd() : IntervalBuilderInterface
     {
         $end = $this->definedIntervals->getIntervalNodeTo();
 

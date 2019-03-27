@@ -129,8 +129,8 @@ $(document).ready(function () {
 
     // when datetime changes on calculater, set on global object for storing
     calcRangeSelector.on('apply.daterangepicker',function (e,picker) {
-        calcRangeGenerator.start = picker.startDate;
-        calcRangeGenerator.end = picker.endDate;
+        calcRangeGenerator.start    = picker.startDate;
+        calcRangeGenerator.end      = picker.endDate;
 
         var calcFrom        = calcRangeGenerator.start.format('YYYY-MM-DD HH:mm');
         var calcUntil       = calcRangeGenerator.end.format('YYYY-MM-DD HH:mm');
@@ -140,8 +140,8 @@ $(document).ready(function () {
 
         // data which is sent for calculating
         data.vehicleId          = timelineBuilder.timelineVehicleId;
-        data.calcFrom           = calcFrom;
-        data.calcUntil          = calcUntil;
+        data.calculationFrom           = calcFrom;
+        data.calculationUntil          = calcUntil;
 
         $.post(calcRangeGenerator.uri,data, function (response) {
 
