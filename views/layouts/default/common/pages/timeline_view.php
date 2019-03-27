@@ -34,7 +34,16 @@ $cancelUrl  = isset($cancelUrl) ? $cancelUrl : Url::toRoute('/'.$sectionName.'/i
                 </h3>
             </div>
         </div>
+        <div class="m-portlet__head-tools">
+            <ul class="m-portlet__nav">
+                <li class="m-portlet__nav-item">
+                    <button type="button" class="m-portlet__nav-link btn btn-success m-btn m-btn--air text-uppercase">
+                        Kalkulácia
+                    </button>
+                </li>
 
+            </ul>
+        </div>
     </div>
     <div class="m-portlet__body">
         <div class="m-widget13">
