@@ -54,7 +54,7 @@ class VehicleDefiniatorController extends \yii\web\Controller
         $sessionDefinedIntervals->setIntervalNode(CalculationIntervalBuilder::TIMELINE_FROM_KEY, $calculateFrom);
         $sessionDefinedIntervals->setIntervalNode(CalculationIntervalBuilder::TIMELINE_UNTIL_KEY, $calculateUntil);
 
-        $intervalBuilder = new CalculationIntervalBuilder(new IntervalParts(), $sessionDefinedIntervals);
+        new CalculationIntervalBuilder(new IntervalParts(), $sessionDefinedIntervals);
 
         $sessionDefinedVehicle = new SessionDefinedVehicle();
         $sessionDefinedVehicle->defineVehicleId($vehicleId);
