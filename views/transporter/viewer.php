@@ -11,6 +11,8 @@ $this->registerJsVar('modificatorUrl',Url::toRoute('/api/v1/vehicle-definiator/t
 $this->registerJsVar('rangeCalculatorUrl',Url::toRoute('/api/v1/vehicle-definiator/calculator'));
 $this->registerJsVar('timeLineNodeStart', $timelineMetaData['timeLineNodes']['start']);
 $this->registerJsVar('timeLineNodeEnd', $timelineMetaData['timeLineNodes']['end']);
+$this->registerJsVar('calculationFrom', $timelineMetaData['Calculation']['interval']['from']);
+$this->registerJsVar('calculationUntil', $timelineMetaData['Calculation']['interval']['until']);
 $this->params['portlet']['title'] = Yii::t('transporter','Main timeline')
 
 ?>

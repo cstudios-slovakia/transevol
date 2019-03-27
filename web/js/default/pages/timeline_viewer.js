@@ -104,8 +104,8 @@ $(document).ready(function () {
     */
 
     var calcRangeGenerator = {
-        start   : moment().startOf('hour'),
-        end     : moment().startOf('hour').add(32, 'hour'),
+        start   : moment(calculationFrom, 'YYYY-MM-DD HH:mm'),
+        end     : moment(calculationUntil, 'YYYY-MM-DD HH:mm'),
         uri     : window.rangeCalculatorUrl
     };
     var calculationRange = $('#calculation_interval');

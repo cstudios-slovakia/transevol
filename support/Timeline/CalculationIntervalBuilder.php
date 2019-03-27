@@ -20,15 +20,23 @@ class CalculationIntervalBuilder extends TimeLineIntervalBuilder
     const TIMELINE_UNTIL_KEY = 'calculationUntil';
 
     /**
+     * @var
+     */
+    protected $calculationFrom;
+    /**
+     * @var
+     */
+    protected $calculationUntil;
+    /**
      * {@inheritdoc}
      */
     public function buildIntervalStart() : IntervalBuilderInterface
     {
         $from   = $this->definedIntervals->getIntervalNodeFrom(self::TIMELINE_FROM_KEY);
 
-        $this->timeLineFrom = $from ?: $this->intervalParts->getStart();
+        $this->calculationFrom = $from ?: $this->intervalParts->getStart();
 
-        $this->definedIntervals->setIntervalNode(self::TIMELINE_FROM_KEY, $this->timeLineFrom);
+        $this->definedIntervals->setIntervalNode(self::TIMELINE_FROM_KEY, $this->calculationFrom);
 
         return $this;
     }
@@ -40,9 +48,9 @@ class CalculationIntervalBuilder extends TimeLineIntervalBuilder
     {
         $end = $this->definedIntervals->getIntervalNodeTo(self::TIMELINE_UNTIL_KEY);
 
-        $this->timeLineUntil = $end ?: $this->intervalParts->getEnd();
+        $this->calculationUntil = $end ?: $this->intervalParts->getEnd();
 
-        $this->definedIntervals->setIntervalNode(self::TIMELINE_UNTIL_KEY, $this->timeLineUntil);
+        $this->definedIntervals->setIntervalNode(self::TIMELINE_UNTIL_KEY, $this->calculationUntil);
 
         return $this;
     }

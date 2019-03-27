@@ -8,6 +8,7 @@ use app\models\TimelineDriver;
 use app\models\TimelineVehicle;
 use app\models\Transporter;
 use app\models\TransporterParts;
+use app\support\Timeline\CalculationIntervalBuilder;
 use app\support\Timeline\Collectors\TimelineDriverCollector;
 use app\support\Timeline\Collectors\TimelineGoingsCollector;
 use app\support\Timeline\Collectors\TimelineTransportCollector;
@@ -58,6 +59,9 @@ class TransporterController extends BaseController
         $timeLineFrom   = $timeLineIntervalDetector->getTimeLineInterval($timeLineIntervalDetector::TIMELINE_FROM_KEY,true);
         $timeLineTo     =  $timeLineIntervalDetector->getTimeLineInterval($timeLineIntervalDetector::TIMELINE_UNTIL_KEY,true);
 
+        $calculationIntervalDetector = new CalculationIntervalBuilder(new IntervalParts(), new SessionDefinedIntervals());
+        $calculationFrom    = $calculationIntervalDetector->getTimeLineInterval(CalculationIntervalBuilder::TIMELINE_FROM_KEY, false, 'Y-m-d H:i');
+        $calculationUntil    = $calculationIntervalDetector->getTimeLineInterval(CalculationIntervalBuilder::TIMELINE_UNTIL_KEY, false, 'Y-m-d H:i');
 
         $timeLineNodes = [
             'start' => Carbon::createFromFormat('Y-m-d', $timeLineFrom)->subDay()->format('c'),
@@ -100,10 +104,15 @@ class TransporterController extends BaseController
                 'from'  =>  $timeLineIntervalDetector->getTimeLineInterval($timeLineIntervalDetector::TIMELINE_FROM_KEY,true, 'd.m.Y'),
                 'to'    => $timeLineIntervalDetector->getTimeLineInterval($timeLineIntervalDetector::TIMELINE_UNTIL_KEY,true, 'd.m.Y')
             ],
+            'Calculation'   => [
+                'interval'  => [
+                    'from'  => $calculationFrom,
+                    'until' => $calculationUntil
+                ]
+            ],
             'timeLineNodes' => $timeLineNodes
         ];
-//
-//        dd($timelineMetaData);
+
 
         $grouppedTimeline = $timelineDriverCollector->collectable()
             ->merge($timelineVehicleCollector->collectable())

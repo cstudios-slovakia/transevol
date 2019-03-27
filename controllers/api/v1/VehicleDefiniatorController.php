@@ -62,9 +62,9 @@ class VehicleDefiniatorController extends \yii\web\Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
         return [
-            'vehicleId'     => $sessionDefinedVehicle->getDefinedVehicleId(),
-            'calculateFrom'  => $sessionDefinedIntervals->getIntervalNodeFrom(CalculationIntervalBuilder::TIMELINE_FROM_KEY),
-            'calculateUntil'  => $sessionDefinedIntervals->getIntervalNodeTo(CalculationIntervalBuilder::TIMELINE_UNTIL_KEY),
+            'vehicleId'         => $sessionDefinedVehicle->getDefinedVehicleId(),
+            'calculateFrom'     => $sessionDefinedIntervals->getIntervalNodeFrom(CalculationIntervalBuilder::TIMELINE_FROM_KEY),
+            'calculateUntil'    => $sessionDefinedIntervals->getIntervalNodeTo(CalculationIntervalBuilder::TIMELINE_UNTIL_KEY),
         ];
 
     }
