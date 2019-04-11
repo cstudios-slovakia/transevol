@@ -129,8 +129,11 @@ class TimeLineIntervalBuilder implements IntervalBuilderInterface
             return $timeLineInterval->format($format);
         }
 
-        return $timeLineInterval->format($format . ' H:i');
+        if (!$withoutTime && $format === 'Y-m-d'){
+            return $timeLineInterval->format($format . ' H:i');
+        }
 
+        return $timeLineInterval->format($format);
     }
 
     /**

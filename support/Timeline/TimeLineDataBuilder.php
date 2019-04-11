@@ -1,5 +1,6 @@
 <?php namespace app\support\Timeline;
 
+use app\models\Drivers;
 use app\support\Vehicles\Relations\VehicleRelationAssistance;
 use app\support\Transporter\IntervalParts;
 use app\support\Timeline\SessionDefinedVehicle;
@@ -40,20 +41,21 @@ class TimeLineDataBuilder
 //        $timeLineFrom   = $timeLineIntervalDetector->getViewportEndPoints($timeLineIntervalDetector::NODE_DEFINITIONS[0],'Y-m-d');
 //        $timeLineTo     =  $timeLineIntervalDetector->getViewportEndPoints($timeLineIntervalDetector::NODE_DEFINITIONS[1],'Y-m-d');
 
-        $calculationIntervalDetector = new CalculationIntervalBuilder(new IntervalParts(), new SessionDefinedIntervals());
-        $calculationFrom    = $calculationIntervalDetector->getTimeLineInterval(CalculationIntervalBuilder::TIMELINE_FROM_KEY, false, 'Y-m-d H:i');
-        $calculationUntil    = $calculationIntervalDetector->getTimeLineInterval(CalculationIntervalBuilder::TIMELINE_UNTIL_KEY, false, 'Y-m-d H:i');
 
         $timeLineNodes = [
             'start' => $timeLineIntervalDetector->getViewportEndPoints($timeLineIntervalDetector::NODE_DEFINITIONS[0],'c'),
             'end'   => $timeLineIntervalDetector->getViewportEndPoints($timeLineIntervalDetector::NODE_DEFINITIONS[1],'c'),
-//            'start' => Carbon::createFromFormat('Y-m-d', $timeLineFrom)->subDay()->format('c'),
-//            'end'   => Carbon::createFromFormat('Y-m-d', $timeLineTo)->addDay()->format('c'),
         ];
 
+        $calculationIntervalDetector = new CalculationIntervalBuilder(new IntervalParts(), new SessionDefinedIntervals());
+        $calculationFrom    = $calculationIntervalDetector->getTimeLineInterval(CalculationIntervalBuilder::TIMELINE_FROM_KEY, false, 'Y-m-d H:i');
+        $calculationUntil    = $calculationIntervalDetector->getTimeLineInterval(CalculationIntervalBuilder::TIMELINE_UNTIL_KEY, false, 'Y-m-d H:i');
+
+
+
         $tlTransporterParts = new TimeLineTrasporterParts();
-        $tlTransporterParts->setTimeLineFrom($timeLineFrom);
-        $tlTransporterParts->setTimeLineUntil($timeLineTo);
+        $tlTransporterParts->setTimeLineFrom($timeLineIntervalDetector->getViewportEndPoints($timeLineIntervalDetector::NODE_DEFINITIONS[0],'Y-m-d'));
+        $tlTransporterParts->setTimeLineUntil($timeLineIntervalDetector->getViewportEndPoints($timeLineIntervalDetector::NODE_DEFINITIONS[1],'Y-m-d'));
 
         $transporterParts = $tlTransporterParts->getTransporterRecords();
 
@@ -108,6 +110,7 @@ class TimeLineDataBuilder
             'start'         => $calculationFrom,
             'end'           => $calculationUntil,
             'type'          => 'background',
+//            'group'         => TimelineVehicle::TIMELINE_ITEM_GROUP_NUMBER
         ];
 //        dd($timeLineSection);
 
