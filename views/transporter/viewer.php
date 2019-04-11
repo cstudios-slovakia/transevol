@@ -13,6 +13,9 @@ $this->registerJsVar('timeLineNodeStart', $timelineMetaData['timeLineNodes']['st
 $this->registerJsVar('timeLineNodeEnd', $timelineMetaData['timeLineNodes']['end']);
 $this->registerJsVar('calculationFrom', $timelineMetaData['Calculation']['interval']['from']);
 $this->registerJsVar('calculationUntil', $timelineMetaData['Calculation']['interval']['until']);
+$this->registerJsVar('timeLineSectionCalculatorUrl',Url::toRoute('/api/v1/vehicle-definiator/calculator'));
+$this->registerJsVar('timeLineDataBuilderUrl',Url::toRoute('/api/v1/time-line/renderable-data'));
+
 $this->params['portlet']['title'] = Yii::t('transporter','Main timeline')
 
 ?>
@@ -22,6 +25,19 @@ $this->params['portlet']['title'] = Yii::t('transporter','Main timeline')
         <div class="item-inner--content">{{content}}</div>
         <div class="item-inner--edit"><span data-href="{{href}}">&nbsp;<i class="fa fa-edit"></i></span></div>
     </div>
+</script>
+<script id="calculations--cumulative-table" type="text/x-handlebars-template">
+    <table>
+
+        {{#each rows}}
+        <tr>
+            <td>{{value}}</td>
+            <td></td>
+            <td></td>
+        </tr>
+        {{/each}}
+    </table>
+
 </script>
 <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -92,18 +108,27 @@ $this->params['portlet']['title'] = Yii::t('transporter','Main timeline')
 
 
 
-<div>
-<!--    <button type="button" data-toggle="modal" data-target="#m_modal_4">MODAL</button>-->
+<div id="timeline-container">
 
-<!--    <div id="timeline" ></div>-->
-
+    <?=
+    $this->render('/layouts/default/common/addons/loader.php')
+    ?>
     <div id="visualization"></div>
 
 
 
 </div>
+<div id="calculation-view">
+    <div class="calculation-view--actions">
+        <button type="button" class="btn btn-sm close-btn">X</button>
+    </div>
+    <div class="calculation-view--body">
+
+    </div>
 
 
+</div>
+<div id="myPieChart"></div>
 
 <?php $this->beginBlock('actionButtonRow') ?>
 <div class="m-stack m-stack--ver m-stack--general ">
@@ -116,25 +141,6 @@ $this->params['portlet']['title'] = Yii::t('transporter','Main timeline')
 
         </div>
     </div>
-<!--    <div class="m-stack__item m-stack__item--center">-->
-<!--        <a href="--><?//= Url::toRoute('/api/v1/transporter/create')?><!--"  class="btn btn-accent">--><?//= Yii::t('transporter','Pridať prepravu') ?><!-- </a>-->
-<!---->
-<!--    </div>-->
-<!--    <div class="m-stack__item m-stack__item--right">-->
-<!--        <div class="row">-->
-<!--            <div class="col-md-6">-->
-<!--                <div class="btn-group m-btn-group" role="group" aria-label="...">-->
-<!--                    <a  href="--><?//= Url::toRoute('/api/v1/timeline-vehicle/create')?><!--" class="btn btn-metal">--><?//= Yii::t('transporter','Vozidlo') ?><!--</a>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="col-md-6">-->
-<!--                <div class="btn-group m-btn-group" role="group" aria-label="...">-->
-<!--                    <a  href="--><?//= Url::toRoute('/api/v1/timeline-driver/create')?><!--" class="btn btn-metal">--><?//= Yii::t('transporter','Vodič') ?><!--</a>-->
-<!--                </div>-->
-<!---->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
 </div>
 <?php $this->endBlock() ?>
 

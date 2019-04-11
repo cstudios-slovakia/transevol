@@ -35,7 +35,7 @@ class TimelineGoingsCollector
 
             return [
                 'id'        => Goings::TIMELINE_ITEM_ID_PREDIX.$record->id,
-                'content'   => $tlItemContent,
+                'content'   => $tlItemContent . '['.$record->id.']',
                 'start'     => $start->format('c'),
                 'end'       => $end->format('c'),
                 'group'     => Goings::TIMELINE_ITEM_GROUP_NUMBER,

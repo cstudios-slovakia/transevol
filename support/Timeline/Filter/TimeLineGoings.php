@@ -59,5 +59,29 @@ class TimeLineGoings
         $this->vehicleId = $vehicleId;
     }
 
+    /**
+     * @return string
+     */
+    public function getTimeLineFrom(): string
+    {
+        return $this->timeLineFrom;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTimeLineUntil(): string
+    {
+        return $this->timeLineUntil;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVehicleId(): int
+    {
+        return $this->vehicleId;
+    }
+
 
 }

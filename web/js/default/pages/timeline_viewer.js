@@ -27,7 +27,7 @@ $(document).ready(function () {
             format: 'DD.MM.YYYY'
         }
     };
-
+    var calculationView = $('#calculation-view');
     /*
     Timeline Builder
      */
@@ -76,12 +76,14 @@ $(document).ready(function () {
     });
 
     dp.on('apply.daterangepicker',function (e,picker) {
+        turnLoaderOn();
         timelineInterval.setTimelineFrom(picker.startDate.format('YYYY-MM-DD'));
         timelineInterval.setTimelineUntil(picker.endDate.format('YYYY-MM-DD'));
 
         timelineBuilder.defineTimeline();
 
-        window.location.reload(false);
+        drawDataIntoTimeLine();
+        // window.location.reload(false);
 
     });
 
@@ -129,6 +131,7 @@ $(document).ready(function () {
 
     // when datetime changes on calculater, set on global object for storing
     calcRangeSelector.on('apply.daterangepicker',function (e,picker) {
+        turnLoaderOn();
         calcRangeGenerator.start    = picker.startDate;
         calcRangeGenerator.end      = picker.endDate;
 
@@ -146,10 +149,44 @@ $(document).ready(function () {
         $.post(calcRangeGenerator.uri,data, function (response) {
 
             console.log('calcRangeGenerator sent data',response);
-            // window.location.reload(false);
+           drawDataIntoTimeLine();
 
 
         });
+    });
+
+    var btnTimeLineCalculate    = $('#calculate-timeline-section-btn');
+
+    btnTimeLineCalculate.on('click', function (e) {
+        e.preventDefault();
+
+        var calcFrom        = calcRangeGenerator.start.format('YYYY-MM-DD HH:mm');
+        var calcUntil       = calcRangeGenerator.end.format('YYYY-MM-DD HH:mm');
+
+        var data = {
+            _csrf : $('meta[name="csrf-token"]').attr("content")
+        };
+        // data which is sent for calculating
+        data.vehicleId          = timelineBuilder.timelineVehicleId;
+        data.calculationFrom           = calcFrom;
+        data.calculationUntil          = calcUntil;
+
+        $.post(timeLineSectionCalculatorUrl,data, function (response) {
+            hideTimeLine();
+
+            console.log('btnTimeLineCalculate sent data',response);
+
+            cumulativeTableHtml     = cumulativeTableTemplate({rows: JSON.parse(response.calculations.cumulative.hourlyCosts)});
+            calculationView.find('.calculation-view--body').html(cumulativeTableHtml);
+
+
+            showCalculationView();
+
+            drawChart(response.calculations.cumulative.hourlyCosts);
+
+
+        });
+
     });
 
     /*
@@ -172,24 +209,8 @@ $(document).ready(function () {
     timelineBuilder.timelineVehicleId = getSelectedVehicleId(selectedVehicle());
     timelineBuilder.defineTimeline();
 
-    var x  = JSON.parse(driversData);
-
-
-    // function transform(item){
-    //
-    //     return [
-    //         item[0],
-    //         item[1],
-    //         item[2]
-    //     ];
-    // }
-    var c = new Array();
-
-    for(var i = 0; i < x .length; i++){
-        // console.log(driversData);
-        c.push(x);
-    }
-    console.log('x',x);
+    // var x  = JSON.parse(driversData);
+    // console.log('DataSet',x);
 
     var groups = [
         {
@@ -215,17 +236,14 @@ $(document).ready(function () {
             className   : 'group--driver'
 
             // Optional: a field 'className', 'style', 'order', [properties]
-        },
-
-
-
+        }
     ];
 
     // DOM element where the Timeline will be attached
     var container = document.getElementById('visualization');
 
-    var items = new vis.DataSet(x);
 
+    // var items;
     var source   = document.getElementById("timeline-item-template").innerHTML;
     var itemTemplate = Handlebars.compile(source);
 
@@ -243,7 +261,8 @@ $(document).ready(function () {
         template : itemTemplate
     };
 
-    // Create a Timeline
+    // var items;
+    var items = new vis.DataSet(options);
     var timeline = new vis.Timeline(container, items, options);
     timeline.setGroups(groups);
 
@@ -263,6 +282,82 @@ $(document).ready(function () {
 
     });
 
+    var timeLineData = {
+        data : {
+            _csrf : $('meta[name="csrf-token"]').attr("content")
+        },
+        getTimeLineData : function getTimeLineData() {
+            return $.post(timeLineDataBuilderUrl,this.data,function (response) {
+
+                // return response;
+            });
+        }
+    };
+
+    var loader = $('.loader');
+    function drawDataIntoTimeLine() {
+        return $.when(  timeLineData.getTimeLineData() ).then(function( data, textStatus, jqXHR ) {
+            console.log('loaded data', data);
+            if (jqXHR.status === 200){
+                items.clear();
+                items.add(JSON.parse(data.timelineData.groupped));
+                console.log(items);
+                timeline.setItems(items);
+                timeline.redraw();
+
+                turnLoaderOff();
+
+            }
+        });
+
+    }
+
+    drawDataIntoTimeLine();
+
+
+    /*
+    Calculations from timeline
+     */
+
+    var cumulativeTableLayoutSource   = document.getElementById("calculations--cumulative-table").innerHTML;
+    var cumulativeTableTemplate = Handlebars.compile(cumulativeTableLayoutSource);
+
+
+    /*
+    Graphs
+     */
+
+    google.charts.load('current', {packages: ['corechart']});
+    // google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart(rows) {
+        // Define the chart to be drawn.
+        var data = new google.visualization.DataTable();
+        data.addColumn('number', 'Hour');
+        data.addColumn('number', 'Value');
+        rows = JSON.parse(rows);
+        console.log(rows);
+
+        $.each(rows,function (i, row) {
+            console.log(row);
+            data.addRow([row.id,row.value]);
+        });
+        // console.log(rows);
+        // data.addRows(rows);
+
+        // Instantiate and draw the chart.
+        var chart = new google.visualization.LineChart(document.getElementById('myPieChart'));
+        chart.draw(data, null);
+    }
+
+
+
+    var closeCalculationViewBtn = $('.close-btn');
+    closeCalculationViewBtn.click(function () {
+        closeCalcultionView();
+        showTimeLine();
+    });
+
     /*
     Helper Functions
      */
@@ -275,8 +370,27 @@ $(document).ready(function () {
         return parseInt($(option).val());
     }
 
-    // MODAL
+    function turnLoaderOn() {
+        loader.removeClass('hide');
+    }
 
+    function turnLoaderOff() {
+        loader.addClass('hide');
+    }
 
+    function hideTimeLine() {
+        $('#visualization').slideUp();
+    }
 
+    function showTimeLine() {
+        $('#visualization').slideDown();
+    }
+
+    function showCalculationView() {
+        calculationView.slideDown(700);
+    }
+
+    function closeCalcultionView() {
+        calculationView.hide();
+    }
 });

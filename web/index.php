@@ -18,3 +18,5 @@ $config = require __DIR__ . '/../config/web.php';
 
 (new yii\web\Application($config))->run();
 
+Yii::$container->set(\app\support\Timeline\SessionDefinedVehicle::class);
+

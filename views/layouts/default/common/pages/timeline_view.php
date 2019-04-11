@@ -37,7 +37,7 @@ $cancelUrl  = isset($cancelUrl) ? $cancelUrl : Url::toRoute('/'.$sectionName.'/i
         <div class="m-portlet__head-tools">
             <ul class="m-portlet__nav">
                 <li class="m-portlet__nav-item">
-                    <button type="button" class="m-portlet__nav-link btn btn-success m-btn m-btn--air text-uppercase">
+                    <button id="calculate-timeline-section-btn" type="button" class="m-portlet__nav-link btn btn-success m-btn m-btn--air text-uppercase">
                         Kalkulácia
                     </button>
                 </li>

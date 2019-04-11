@@ -27,7 +27,6 @@ class TimeLineTrasporterParts
             ->with('places')
             ->andWhere(['between','event_time', $this->timeLineFrom .' 00:00:00', $this->timeLineUntil.' 23:59:59'])
             ->orderBy('event_time')
-//            ->groupBy(['transporter.id','transporter_parts.id'])
             ;
     }
 

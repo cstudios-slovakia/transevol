@@ -504,10 +504,10 @@ class VehiclesController extends BaseController
         return $this->render('statistics/index', $providers);
     }
 
-    public function actionStatistics(int $id)
+    public function actionStatistics(int $id,array $options = [])
     {
 
-        return $this->render('statistics/show',$this->oneVehicleStatistics($id));
+        return  $this->oneVehicleStatistics($id, null, $options);
 
     }
 

@@ -19,6 +19,7 @@ class TimeLineIntervalBuilder implements IntervalBuilderInterface
      */
     const TIMELINE_UNTIL_KEY = 'timeLineUntil';
 
+    const NODE_DEFINITIONS = ['startsAt','endsAt'];
     /**
      * @var IntervalParts
      */
@@ -36,6 +37,9 @@ class TimeLineIntervalBuilder implements IntervalBuilderInterface
      * @var
      */
     protected $timeLineUntil;
+
+    protected $timeLineViewportStartsAt;
+    protected $timeLineViewportEndsAt;
 
     /**
      * TimeLineIntervalBuilder constructor.
@@ -87,6 +91,27 @@ class TimeLineIntervalBuilder implements IntervalBuilderInterface
         return $this;
     }
 
+    /**
+     * Get timeline endpoint by its key.
+     *
+     * @param string $timeLineKey
+     * @return Carbon
+     * @throws \Exception
+     */
+    public function getTimeLineIntervalEndPoint(string $timeLineKey) : Carbon
+    {
+        if ( ! isset($this->{$timeLineKey})){
+            throw new \Exception('TimeLineNode is not correctly configure.');
+        }
+
+        $timestamp = strtotime($this->{$timeLineKey});
+        // sometimes we dont need time in timeline,
+        // format to only date
+
+        $timeLineInterval = Carbon::createFromTimestamp($timestamp);
+
+        return $timeLineInterval;
+    }
 
     /**
      * @param string $timeLineKey
@@ -98,21 +123,37 @@ class TimeLineIntervalBuilder implements IntervalBuilderInterface
     public function getTimeLineInterval(string $timeLineKey, bool $withoutTime = true, string $format = 'Y-m-d') : string
     {
 
-        if ( ! isset($this->{$timeLineKey})){
-            throw new \Exception('TimeLineNode is not correctly configure.');
-        }
-
-        $timestamp = strtotime($this->{$timeLineKey});
-        // sometimes we dont need time in timeline,
-        // format to only date
-
-        $timeLineInterval = Carbon::createFromTimestamp($timestamp);
+        $timeLineInterval = $this->getTimeLineIntervalEndPoint($timeLineKey);
 
         if ($withoutTime){
             return $timeLineInterval->format($format);
         }
 
-        return $timeLineInterval->format($format);
+        return $timeLineInterval->format($format . ' H:i');
 
+    }
+
+    /**
+     * Defines timeline viewport nodes, or node.
+     *
+     * @param string $nodeDefinition
+     * @param string $format
+     * @return array|string
+     */
+    public function getViewportEndPoints(string $nodeDefinition = '', string $format = 'Y-m-d')
+    {
+        $starts     = $this->getTimeLineIntervalEndPoint(self::TIMELINE_FROM_KEY)->subDay()->format($format);
+        $ends       = $this->getTimeLineIntervalEndPoint(self::TIMELINE_UNTIL_KEY)->addDay()->format($format);
+
+        $nodes      = [
+            self::NODE_DEFINITIONS[0] => $starts,
+            self::NODE_DEFINITIONS[1] => $ends,
+        ];
+
+        if ( ! empty($nodeDefinition) && in_array($nodeDefinition, self::NODE_DEFINITIONS, true)){
+            return $nodes[$nodeDefinition];
+        }
+
+        return $nodes;
     }
 }
