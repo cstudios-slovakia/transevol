@@ -40,7 +40,8 @@ class TimeLineDataBuilder
         $timeLineFrom   = $timeLineIntervalDetector->getTimeLineInterval($timeLineIntervalDetector::TIMELINE_FROM_KEY,true);
 //        $timeLineFrom   = $timeLineIntervalDetector->getViewportEndPoints($timeLineIntervalDetector::NODE_DEFINITIONS[0],'Y-m-d');
 //        $timeLineTo     =  $timeLineIntervalDetector->getViewportEndPoints($timeLineIntervalDetector::NODE_DEFINITIONS[1],'Y-m-d');
-
+        $timeLineViewportStartsAt = $timeLineIntervalDetector->getViewportEndPoints($timeLineIntervalDetector::NODE_DEFINITIONS[0],'Y-m-d');
+        $timeLineViewportEndsAt = $timeLineIntervalDetector->getViewportEndPoints($timeLineIntervalDetector::NODE_DEFINITIONS[1],'Y-m-d');
 
         $timeLineNodes = [
             'start' => $timeLineIntervalDetector->getViewportEndPoints($timeLineIntervalDetector::NODE_DEFINITIONS[0],'c'),
@@ -54,14 +55,14 @@ class TimeLineDataBuilder
 
 
         $tlTransporterParts = new TimeLineTrasporterParts();
-        $tlTransporterParts->setTimeLineFrom($timeLineIntervalDetector->getViewportEndPoints($timeLineIntervalDetector::NODE_DEFINITIONS[0],'Y-m-d'));
-        $tlTransporterParts->setTimeLineUntil($timeLineIntervalDetector->getViewportEndPoints($timeLineIntervalDetector::NODE_DEFINITIONS[1],'Y-m-d'));
+        $tlTransporterParts->setTimeLineFrom($timeLineViewportStartsAt);
+        $tlTransporterParts->setTimeLineUntil($timeLineViewportEndsAt);
 
         $transporterParts = $tlTransporterParts->getTransporterRecords();
 
         $timeLineGoings = new TimeLineGoings();
-        $timeLineGoings->setTimeLineFrom($timeLineFrom);
-        $timeLineGoings->setTimeLineUntil($timeLineTo);
+        $timeLineGoings->setTimeLineFrom($timeLineViewportStartsAt);
+        $timeLineGoings->setTimeLineUntil($timeLineViewportEndsAt);
         $timeLineGoings->setVehicleId($definedVehicleId);
 //        dd($timeLineGoings,$transporterParts,$timeLineFrom, $timeLineTo);
         $goings     = $timeLineGoings->getTimeLineGoingsRecords();
@@ -75,11 +76,14 @@ class TimeLineDataBuilder
 
 
         $timelineDriverCollector = new TimelineDriverCollector();
+        $timelineDriverCollector->setTimeLineViewportStartsAt($timeLineViewportStartsAt);
+        $timelineDriverCollector->setTimeLineViewportEndsAt($timeLineViewportEndsAt);
 
         $drivers   = $timelineDriverCollector->collection();
 
         $timelineVehicleCollector   = new TimelineVehicleCollector();
-
+        $timelineVehicleCollector->setTimeLineViewportStartsAt($timeLineViewportStartsAt);
+        $timelineVehicleCollector->setTimeLineViewportEndsAt($timeLineViewportEndsAt);
         $vehicles   = $timelineVehicleCollector->collection();
 
         $timelineMetaData = [

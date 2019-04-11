@@ -12,6 +12,9 @@ class TimelineDriverCollector
 {
     use UseCurrentVehicle;
 
+    protected $timeLineViewportStartsAt;
+    protected $timeLineViewportEndsAt;
+
     public function collection()
     {
         $drivers = TimelineDriver::find()
@@ -21,6 +24,8 @@ class TimelineDriverCollector
                 }
             ])
             ->with(['drivers'])
+            ->where(['between','driver_record_from',$this->timeLineViewportStartsAt,$this->timeLineViewportEndsAt])
+            ->orWhere(['between','driver_record_until',$this->timeLineViewportStartsAt,$this->timeLineViewportEndsAt])
             ->all();
 
         return $drivers;
@@ -57,5 +62,21 @@ class TimelineDriverCollector
         $drivers = $this->collectable();
 
         return $drivers->toJson();
+    }
+
+    /**
+     * @param mixed $timeLineViewportStartsAt
+     */
+    public function setTimeLineViewportStartsAt($timeLineViewportStartsAt)
+    {
+        $this->timeLineViewportStartsAt = $timeLineViewportStartsAt;
+    }
+
+    /**
+     * @param mixed $timeLineViewportEndsAt
+     */
+    public function setTimeLineViewportEndsAt($timeLineViewportEndsAt)
+    {
+        $this->timeLineViewportEndsAt = $timeLineViewportEndsAt;
     }
 }

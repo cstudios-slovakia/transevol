@@ -13,6 +13,9 @@ class TimelineVehicleCollector
 {
     use UseCurrentVehicle;
 
+    protected $timeLineViewportStartsAt;
+    protected $timeLineViewportEndsAt;
+
     public function collection()
     {
         $selectedVehicleId  = $this->getVehicle()->id;
@@ -20,7 +23,11 @@ class TimelineVehicleCollector
             'vehicle' => function($query) use ($selectedVehicleId){
                 $query->andWhere(['vehicles.id' => $selectedVehicleId]);
             }
-        ])->all();
+        ])
+            ->where(['between','vehicle_record_from',$this->timeLineViewportStartsAt,$this->timeLineViewportEndsAt])
+            ->orWhere(['between','vehicle_record_until',$this->timeLineViewportStartsAt,$this->timeLineViewportEndsAt])
+
+            ->all();
 
         return $vehicles;
     }
@@ -61,5 +68,21 @@ class TimelineVehicleCollector
         $collectable = $this->collectable();
 
         return $collectable->toJson();
+    }
+
+    /**
+     * @param mixed $timeLineViewportStartsAt
+     */
+    public function setTimeLineViewportStartsAt($timeLineViewportStartsAt)
+    {
+        $this->timeLineViewportStartsAt = $timeLineViewportStartsAt;
+    }
+
+    /**
+     * @param mixed $timeLineViewportEndsAt
+     */
+    public function setTimeLineViewportEndsAt($timeLineViewportEndsAt)
+    {
+        $this->timeLineViewportEndsAt = $timeLineViewportEndsAt;
     }
 }
