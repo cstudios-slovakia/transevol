@@ -226,7 +226,7 @@ $(document).ready(function () {
         },
         {
             id: 3,
-            content: 'Vozidlo',
+            content: 'Náves-Príves',
             className   : 'group--vehicle'
 
         },

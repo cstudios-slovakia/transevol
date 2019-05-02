@@ -1,34 +1,36 @@
 <?php namespace app\support\Timeline\Calculations;
 
+use Carbon\CarbonPeriod;
+
 class CumulativeCalculation
 {
-    public $length;
+    /** @var CarbonPeriod */
+    public $period;
 
-    public $amount;
+    public $cost;
 
     public $result;
 
-    public static function make($length, $amount) : self
+    public static function make($period, $cost) : self
     {
         $calculation = new self();
 
-        $calculation->length = $length;
-        $calculation->amount = $amount;
+        $calculation->period = $period;
+        $calculation->cost = $cost;
 
         return $calculation;
     }
 
     public function calculate()
     {
-        $amount = $this->amount;
-        for ($i = 1; $i <= $this->length; $i++){
-            $this->result[]   = [
-                'value' => $amount,
-                'id'    => $i
-            ];
-            $amount += $this->amount;
+        $cost = $this->cost;
+        foreach ($this->period as $date){
+
+            $this->result[$date->format('Y-m-d H:i')]   = $cost;
+
+            $cost+= $this->cost;
         }
 
-        return json_encode($this->result);
+        return collect($this->result);
     }
 }

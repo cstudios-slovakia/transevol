@@ -25,7 +25,8 @@
         "symfony/dotenv": "^4.1",
         "illuminate/support": "^5.7",
         "nesbot/carbon" : "2.4 as 1.26.3",
-        "scotthuangzl/yii2-google-chart": "dev-master"
+        "scotthuangzl/yii2-google-chart": "dev-master",
+        "spatie/period": "^1.4"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

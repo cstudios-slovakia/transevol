@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1d2ed111e9c5bf8fc2aab637052a0725",
+    "content-hash": "dfb93765868210c00b2613142057f023",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -847,6 +847,54 @@
                 "yii2"
             ],
             "time": "2015-06-11T12:13:00+00:00"
+        },
+        {
+            "name": "spatie/period",
+            "version": "1.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/period.git",
+                "reference": "a56ba7865efdb05a93895479a0bd60ca8523245b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/period/zipball/a56ba7865efdb05a93895479a0bd60ca8523245b",
+                "reference": "a56ba7865efdb05a93895479a0bd60ca8523245b",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1"
+            },
+            "require-dev": {
+                "larapack/dd": "^1.0",
+                "nesbot/carbon": "^2.6",
+                "phpunit/phpunit": "^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\Period\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Brent Roose",
+                    "email": "brent@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Complex period comparisons",
+            "homepage": "https://github.com/spatie/period",
+            "keywords": [
+                "period",
+                "spatie"
+            ],
+            "time": "2019-04-23T13:54:18+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
