@@ -63,7 +63,6 @@ $(document).ready(function () {
 
     };
 
-
     /*
     Daterange selector
      */
@@ -97,7 +96,6 @@ $(document).ready(function () {
 
         window.location.reload(false);
     });
-
 
     ////////////////
 
@@ -157,7 +155,19 @@ $(document).ready(function () {
 
     var btnTimeLineCalculate    = $('#calculate-timeline-section-btn');
 
+    var resContainer = document.getElementById('resultVisual');
+    var resOptions = {
+        selectable              : false,
+        zoomable                : false,
+        // horizontalscroll        : false,
+        moveable                : false,
+    };
+    var resItems = new vis.DataSet(resOptions);
+
     btnTimeLineCalculate.on('click', function (e) {
+
+
+
         e.preventDefault();
 
         var calcFrom        = calcRangeGenerator.start.format('YYYY-MM-DD HH:mm');
@@ -173,17 +183,37 @@ $(document).ready(function () {
 
         $.post(timeLineSectionCalculatorUrl,data, function (response) {
             hideTimeLine();
-
+            //
             console.log('btnTimeLineCalculate sent data',response);
 
-            cumulativeTableHtml     = cumulativeTableTemplate({rows: JSON.parse(response.calculations.cumulative.hourlyCosts)});
-            calculationView.find('.calculation-view--body').html(cumulativeTableHtml);
 
 
-            showCalculationView();
+            // Create a DataSet (allows two way data-binding)
+            // var resItems = new vis.DataSet(JSON.parse(response.calc.unusedVehiclesSchema));
 
-            drawChart(response.calculations.cumulative.hourlyCosts);
+            // Configuration for the Timeline
+            resItems.clear();
+            resItems.add(JSON.parse(response.calc.tickersData.timeLine));
+            // Create a Timeline
+            var resTimeline = new vis.Timeline(resContainer, resItems, resOptions);
 
+            //
+            // console.log('btnTimeLineCalculate sent data',response);
+            //
+            // cumulativeTableHtml     = cumulativeTableTemplate({rows: JSON.parse(response.calculations.cumulative.hourlyCosts)});
+            // calculationView.find('.calculation-view--body').html(cumulativeTableHtml);
+            //
+            //
+            // showCalculationView();
+            //
+            // drawChart(JSON.parse(response.calc.tickersData.chart),'myPieChart');
+            // drawChart(JSON.parse(response.calc.tickersData.chart1),'myPieChart1');
+            // drawChart(JSON.parse(response.calc.tickersData.chart2),'myPieChart2');
+            // drawChart(JSON.parse(response.calc.tickersData.chart3),'myPieChart3');
+            // canvasData.concat( JSON.parse(response.calc.tickersData.chart));
+
+
+            drawCanvasChart(JSON.parse(response.calc.tickersData.chart));
 
         });
 
@@ -193,17 +223,13 @@ $(document).ready(function () {
     End - Calculation Interval Selector
     */
 
-
     //////////////////////
-
-
 
     /*
     Defaults
      */
     timelineInterval.setTimelineFrom(dp.data('daterangepicker').startDate.format('YYYY-MM-DD'));
     timelineInterval.setTimelineUntil(dp.data('daterangepicker').endDate.format('YYYY-MM-DD'));
-
 
     timelineBuilder.setTimelineInterval(timelineInterval);
     timelineBuilder.timelineVehicleId = getSelectedVehicleId(selectedVehicle());
@@ -241,7 +267,6 @@ $(document).ready(function () {
 
     // DOM element where the Timeline will be attached
     var container = document.getElementById('visualization');
-
 
     // var items;
     var source   = document.getElementById("timeline-item-template").innerHTML;
@@ -300,20 +325,18 @@ $(document).ready(function () {
             console.log('loaded data', data);
             if (jqXHR.status === 200){
                 items.clear();
+                console.log(JSON.parse(data.timelineData.groupped));
                 items.add(JSON.parse(data.timelineData.groupped));
                 console.log(items);
                 timeline.setItems(items);
                 timeline.redraw();
 
                 turnLoaderOff();
-
             }
         });
-
     }
 
     drawDataIntoTimeLine();
-
 
     /*
     Calculations from timeline
@@ -322,7 +345,6 @@ $(document).ready(function () {
     var cumulativeTableLayoutSource   = document.getElementById("calculations--cumulative-table").innerHTML;
     var cumulativeTableTemplate = Handlebars.compile(cumulativeTableLayoutSource);
 
-
     /*
     Graphs
      */
@@ -330,27 +352,82 @@ $(document).ready(function () {
     google.charts.load('current', {packages: ['corechart']});
     // google.charts.setOnLoadCallback(drawChart);
 
-    function drawChart(rows) {
-        // Define the chart to be drawn.
-        var data = new google.visualization.DataTable();
-        data.addColumn('number', 'Hour');
-        data.addColumn('number', 'Value');
-        rows = JSON.parse(rows);
-        console.log(rows);
+    var chartOptions = {
+        // width: 900,
+        // height: 500,
+        legend: {position: 'none'},
+        enableInteractivity: true,
+        chartArea: {
+            width: '95%'
+        },
+        animation:{
+            duration: 1000,
+            easing: 'out',
+        },
+        hAxis: {
+            // viewWindow: {
+            //     min: new Date(2014, 11, 31, 18),
+            //     max: new Date(2015, 0, 3, 1)
+            // },
+            gridlines: {
+                count: -1,
+                units: {
+                    days: {format: ['MMM dd']},
+                    hours: {format: ['HH:mm', 'ha']},
+                },
+                color: '#333'
+            },
+            minorGridlines: {
+                units: {
+                    hours: {format: ['hh:mm:ss a', 'ha']},
+                    minutes: {format: ['HH:mm a Z', ':mm']}
+                }
+            }
+        }
+    };
 
-        $.each(rows,function (i, row) {
+    function drawCanvasChart(data) {
+        // chart.addTo('data',data);
+        console.log(data);
+        // canvasData = [];
+        $.each(data, function(key, row){
+            $.each(row.dataPoints, function(key, value){
+                value.x     = new Date(value.x);
+
+
+            });
+
             console.log(row);
-            data.addRow([row.id,row.value]);
+            canvasData.push(row);
         });
-        // console.log(rows);
-        // data.addRows(rows);
-
-        // Instantiate and draw the chart.
-        var chart = new google.visualization.LineChart(document.getElementById('myPieChart'));
-        chart.draw(data, null);
+        chart.render();
     }
 
+    function drawChart(rows,element) {
+        // Define the chart to be drawn.
+        var data = new google.visualization.DataTable();
+        data.addColumn('date', 'dateTime');
+        data.addColumn('number', 'total');
+        data.addColumn('number', 'costPerVehicle');
+        data.addColumn('number', 'vehicleStaticCostsCalculator');
+        data.addColumn('number', 'unusedVehicleStaticCostsCalculator');
 
+        $.each(rows,function (i, row) {
+            data.addRow([
+                new Date(row.dateTime),
+                row.total,
+                row.costPerVehicle,
+                row.vehicleStaticCostsCalculator,
+                row.unusedVehicleStaticCostsCalculator
+            ]);
+        });
+
+
+
+        // Instantiate and draw the chart.
+        var chart = new google.visualization.LineChart(document.getElementById(element));
+        chart.draw(data, chartOptions);
+    }
 
     var closeCalculationViewBtn = $('.close-btn');
     closeCalculationViewBtn.click(function () {
@@ -393,4 +470,97 @@ $(document).ready(function () {
     function closeCalcultionView() {
         calculationView.hide();
     }
+    var canvasData = [];
+
+    var chart;
+
+
+    chart = new CanvasJS.Chart("myPieChart3", {
+        animationEnabled: true,
+        theme: "light2",
+        title:{
+            text: "Cost for vehicles"
+        },
+        axisX:{
+            valueFormatString: "HH:mm",
+            crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+            }
+        },
+        axisY: {
+            title: "Costs in €",
+            crosshair: {
+                enabled: true
+            }
+        },
+        toolTip:{
+            shared:true
+        },
+        legend:{
+            cursor:"pointer",
+            verticalAlign: "bottom",
+            horizontalAlign: "left",
+            dockInsidePlotArea: true,
+            itemclick: toogleDataSeries
+        },
+        data : canvasData
+        // data: [{
+        //     type: "line",
+        //     showInLegend: true,
+        //     name: "Total Visit",
+        //     markerType: "square",
+        //     xValueFormatString: "DD MMM, YYYY",
+        //     color: "#F08080",
+        //     dataPoints: [
+        //         { x: new Date(2017, 0, 3), y: 650 },
+        //         { x: new Date(2017, 0, 4), y: 700 },
+        //         { x: new Date(2017, 0, 5), y: 710 },
+        //         { x: new Date(2017, 0, 6), y: 658 },
+        //         { x: new Date(2017, 0, 7), y: 734 },
+        //         { x: new Date(2017, 0, 8), y: 963 },
+        //         { x: new Date(2017, 0, 9), y: 847 },
+        //         { x: new Date(2017, 0, 10), y: 853 },
+        //         { x: new Date(2017, 0, 11), y: 869 },
+        //         { x: new Date(2017, 0, 12), y: 943 },
+        //         { x: new Date(2017, 0, 13), y: 970 },
+        //         { x: new Date(2017, 0, 14), y: 869 },
+        //         { x: new Date(2017, 0, 15), y: 890 },
+        //         { x: new Date(2017, 0, 16), y: 930 }
+        //     ]
+        // },
+        //     {
+        //         type: "line",
+        //         showInLegend: true,
+        //         name: "Unique Visit",
+        //         lineDashType: "dash",
+        //         dataPoints: [
+        //             { x: new Date(2017, 0, 3), y: 510 },
+        //             { x: new Date(2017, 0, 4), y: 560 },
+        //             { x: new Date(2017, 0, 5), y: 540 },
+        //             { x: new Date(2017, 0, 6), y: 558 },
+        //             { x: new Date(2017, 0, 7), y: 544 },
+        //             { x: new Date(2017, 0, 8), y: 693 },
+        //             { x: new Date(2017, 0, 9), y: 657 },
+        //             { x: new Date(2017, 0, 10), y: 663 },
+        //             { x: new Date(2017, 0, 11), y: 639 },
+        //             { x: new Date(2017, 0, 12), y: 673 },
+        //             { x: new Date(2017, 0, 13), y: 660 },
+        //             { x: new Date(2017, 0, 14), y: 562 },
+        //             { x: new Date(2017, 0, 15), y: 643 },
+        //             { x: new Date(2017, 0, 16), y: 570 }
+        //         ]
+        //     }]
+        //
+    });
+
+    function toogleDataSeries(e){
+        if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+            e.dataSeries.visible = false;
+        } else{
+            e.dataSeries.visible = true;
+        }
+        chart.render();
+    }
 });
+

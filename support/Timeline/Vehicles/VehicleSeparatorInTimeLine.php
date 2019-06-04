@@ -1,6 +1,8 @@
 <?php namespace app\support\Timeline\Vehicles;
 
 use app\models\Vehicles;
+use app\models\VehicleTypes;
+use app\support\Timeline\Intervals\TimeLineElementOverInterval;
 use Illuminate\Support\Collection;
 
 class VehicleSeparatorInTimeLine
@@ -29,21 +31,31 @@ class VehicleSeparatorInTimeLine
 
     protected function searchForUnusedVehicles() : self
     {
-        $usedVehicleIds     =  $this->vehiclesDetector->detect(true,function ($vehicleTimeLineElements){
-            return $vehicleTimeLineElements->pluck('vehicle_id')->unique();
+
+        $notMainVehiclesOverInterval    = $this->vehiclesDetector->getElementsOverInterval()->filter(function(TimeLineElementOverInterval $elementOverInterval){
+            if ($elementOverInterval->getElement()->type_shortly !== VehicleTypes::MAIN_VEHICLE_SHORT_NAME){
+                return $elementOverInterval;
+            }
         });
 
-        $this->unusedVehiclesDetector   = (new UnusedVehiclesInInterval($usedVehicleIds->toArray()));
+        $unUsedDetector     = new UnusedVehiclesInInterval($notMainVehiclesOverInterval);
+
+
+        $this->unusedVehiclesDetector   = $unUsedDetector;
 
         return $this;
     }
 
 
-    public function getUnusedVehicleIds() : Collection
+    public function getUnusedVehiclesData() : Collection
     {
-        return $this->searchForUnusedVehicles()->unusedVehiclesDetector->detect(function ($vehicles){
-            return $vehicles->pluck('id');
-        });
+        $this->searchForUnusedVehicles();
+
+        if ( ! $this->unusedVehiclesDetector){
+            throw new \Exception('Unused vehicles are not set for detection.');
+        }
+
+        return $this->unusedVehiclesDetector->unUsedIntervals();
     }
 
     /**

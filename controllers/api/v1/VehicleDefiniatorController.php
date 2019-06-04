@@ -61,11 +61,12 @@ class VehicleDefiniatorController extends BaseAjaxController
         $sessionDefinedVehicle  = new SessionDefinedVehicle();
         $sessionDefinedVehicle->defineVehicleId($vehicleId);
 
-        $statistics             = \Yii::$app->runAction('/vehicles/statistics',['id' => $vehicleId = $sessionDefinedVehicle->getDefinedVehicleId()]);
+//        $statistics             = \Yii::$app->runAction('/vehicles/statistics',['id' => $vehicleId = $sessionDefinedVehicle->getDefinedVehicleId()]);
+        $calc             = \Yii::$app->runAction('/transporter/dev');
 
-        $calculationIntervalInHours     = $calculationIntervalBuilder->getIntervalIn('hours');
+//        $calculationIntervalInHours     = $calculationIntervalBuilder->getIntervalIn('hours');
 
-        $cumulatioveHourlyCosts     = CumulativeCalculation::make($calculationIntervalInHours, $statistics['statistics']['hourly_abs_costs']);
+//        $cumulatioveHourlyCosts     = CumulativeCalculation::make($calculationIntervalInHours, $statistics['statistics']['hourly_abs_costs']);
 
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
@@ -73,16 +74,17 @@ class VehicleDefiniatorController extends BaseAjaxController
             'vehicleId'         => $sessionDefinedVehicle->getDefinedVehicleId(),
             'calculateFrom'     => $sessionDefinedIntervals->getIntervalNodeFrom(CalculationIntervalBuilder::TIMELINE_FROM_KEY),
             'calculateUntil'    => $sessionDefinedIntervals->getIntervalNodeTo(CalculationIntervalBuilder::TIMELINE_UNTIL_KEY),
-            'statistics'        => $statistics,
-            'calculations'      => [
-                'interval'  => [
-                    'inMinutes' => $calculationIntervalBuilder->getIntervalIn('minutes'),
-                    'inHours' => $calculationIntervalInHours
-                ],
-                'cumulative'    => [
-                    'hourlyCosts'   => $cumulatioveHourlyCosts->calculate()
-                ]
-            ]
+//            'statistics'        => $statistics,
+//            'calculations'      => [
+//                'interval'  => [
+//                    'inMinutes' => $calculationIntervalBuilder->getIntervalIn('minutes'),
+//                    'inHours' => $calculationIntervalInHours
+//                ],
+//                'cumulative'    => [
+//                    'hourlyCosts'   => $cumulatioveHourlyCosts->calculate()
+//                ]
+//            ]
+            'calc'      => $calc
         ];
 
     }

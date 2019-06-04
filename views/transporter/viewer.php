@@ -116,7 +116,7 @@ $this->params['portlet']['title'] = Yii::t('transporter','Main timeline')
     <div id="visualization"></div>
 
 
-
+    <div id="resultVisual"></div>
 </div>
 <div id="calculation-view">
     <div class="calculation-view--actions">
@@ -129,6 +129,11 @@ $this->params['portlet']['title'] = Yii::t('transporter','Main timeline')
 
 </div>
 <div id="myPieChart"></div>
+<div id="myPieChart1"></div>
+<div id="myPieChart2"></div>
+<div id="myPieChart3"></div>
+
+
 
 <?php $this->beginBlock('actionButtonRow') ?>
 <div class="m-stack m-stack--ver m-stack--general ">

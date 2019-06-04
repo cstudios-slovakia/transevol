@@ -4,8 +4,10 @@ use app\support\StaticCostsCalculators\CompanyStaticCostsSummarizer;
 use app\support\Timeline\Vehicles\DetectVehiclesInInterval;
 use yii\base\Model;
 
-class CostPerVehicle extends Model
+class CostPerVehicle
 {
+    public static $isLeapYear = false;
+    public static $usedTimeUnit     = 'hour';
     /**
      * @var CompanyStaticCostsSummarizer
      */
@@ -22,7 +24,39 @@ class CostPerVehicle extends Model
             return 0;
         }
 
-        return $this->companyStaticCost->getCompanySummarizedCosts()['minutely_costs_sum'] / $vehiclesAmount;
+        $costs  = $this->companyStaticCost->summarizedModelCosts();
+
+        return $costs->{$this->unitToUse()} / $vehiclesAmount;
+    }
+
+    protected function unitToUse() : string
+    {
+        $unit   = self::$usedTimeUnit;
+
+        $year   = self::$isLeapYear ? 'leap' : 'standard';
+
+        return $unit .'_'.$year;
+    }
+
+    public function setLeap()
+    {
+        self::$isLeapYear = true;
+
+        return $this;
+    }
+
+    public function setMinute()
+    {
+        self::$usedTimeUnit = 'minute';
+
+        return $this;
+    }
+
+    public function setHour()
+    {
+        self::$usedTimeUnit = 'hour';
+
+        return $this;
     }
 
     /**

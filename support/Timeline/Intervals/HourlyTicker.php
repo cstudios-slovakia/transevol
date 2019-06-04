@@ -3,11 +3,12 @@
 use Carbon\CarbonInterval;
 use Carbon\CarbonPeriod;
 
-class HourlyTicker extends DailyTicker
+class HourlyTicker extends IntervalTimeUnitTicker
 {
-    protected function period()
+
+    public function periods() : CarbonPeriod
     {
-        return $this->period = CarbonPeriod::create($this->intervalStarts, $this->intervalEnds)
-            ->setDateInterval(CarbonInterval::hour(1));
+        return CarbonPeriod::create($this->intervalStarts, $this->intervalEnds)->setDateInterval(CarbonInterval::hour(1));
     }
+
 }

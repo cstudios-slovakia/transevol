@@ -4,10 +4,9 @@ use app\support\Timeline\Intervals\Knot;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
 
-class CumulativeCalculation implements SteppedCalculationContract
+class PerpetualCalculation implements SteppedCalculationContract
 {
     use StepHasDefinitions;
-
     /** @var CarbonPeriod */
     public $period;
 
@@ -24,25 +23,24 @@ class CumulativeCalculation implements SteppedCalculationContract
     /**
      * @var Collection
      */
-    public $result;
-
+    public  $result;
 
     /** @var string */
     public $position;
+
+
 
     public function __construct()
     {
         $this->result = collect([]);
     }
 
-    public static function make($period,float $cost = 0) : SteppedCalculationContract
+    public static function make($period, float $cost = 0) : SteppedCalculationContract
     {
         $calculation = new self();
 
         $calculation->period = $period;
         $calculation->incrementCost = $cost;
-
-
         return $calculation;
     }
 
@@ -52,7 +50,9 @@ class CumulativeCalculation implements SteppedCalculationContract
 
         $this->defineStepType();
 
+        $minutesToHour  = $this->period->count() - 1;
 
+        $cost = $this->position !== 'middle' ? $this->incrementCost / $minutesToHour : $this->incrementCost ;
         foreach ($this->period as $step){
 
             $knot   = new Knot();
@@ -62,7 +62,9 @@ class CumulativeCalculation implements SteppedCalculationContract
 
             $this->result->put($step->format('Y-m-d H:i'),$knot);
 
-            $cost+= $this->incrementCost;
+
+
+
         }
 
         return $this->result;
@@ -75,7 +77,6 @@ class CumulativeCalculation implements SteppedCalculationContract
     {
         return $this->result;
     }
-
 
 
 }

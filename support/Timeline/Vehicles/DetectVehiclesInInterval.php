@@ -4,6 +4,8 @@ use app\models\Calculations\TimeLine\VehicleTimeLineElement;
 use app\models\TimelineVehicle;
 use app\models\Vehicles;
 use app\models\VehicleTypes;
+use app\support\Timeline\Intervals\IntervalBuilder;
+use app\support\Timeline\Intervals\TimeLineElementOverInterval;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use yii\base\Model;
@@ -27,9 +29,14 @@ class DetectVehiclesInInterval
      */
     protected $detectedVehicles;
 
+    /** @var Collection */
+    protected $elementsOverInterval;
+
     public function __construct()
     {
 //        $this->detectedVehicles = collect([]);
+
+        $this->elementsOverInterval = collect([]);
     }
 
     protected function query() : array
@@ -140,11 +147,19 @@ ON vehicles.vehicle_types_id = vehicle_types.id
 
         $models     = [];
 
+        $intervalBuilder = new IntervalBuilder($this->intervalStart, $this->intervalEnd);
+
+
         foreach ($this->query() as $record){
 
             $vehicleTimeLineElement = new VehicleTimeLineElement();
             $vehicleTimeLineElement->load($record,'');
             $models[]   = $vehicleTimeLineElement;
+
+            $elementOverInterval    = new TimeLineElementOverInterval($intervalBuilder, $vehicleTimeLineElement);
+
+
+            $this->elementsOverInterval->push($elementOverInterval);
         }
 
         $this->detectedVehicles     = $models = collect($models);
@@ -220,6 +235,14 @@ ON vehicles.vehicle_types_id = vehicle_types.id
     public function getDetectedVehicles(): Collection
     {
         return $this->detectedVehicles;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getElementsOverInterval(): Collection
+    {
+        return $this->elementsOverInterval;
     }
 
 

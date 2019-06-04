@@ -5,6 +5,7 @@ use app\models\VehicleStaticCosts;
 use Carbon\Carbon;
 use yii\base\Model;
 use yii\db\Expression;
+use yii\db\mssql\PDO;
 use yii\db\mysql\QueryBuilder;
 use yii\db\Query;
 
@@ -29,28 +30,61 @@ class VehicleStaticCostsSummarizer
 
 
     /**
-     * @return Query
+     * @return array
      * @throws \Exception
      */
-    protected function query() : Query
+    protected function query() : array
     {
         if ( ! isset($this->vehicleId)){
             throw new \Exception('Vehicle is not defined.');
         }
 
-        $minutes    = $this->minutesInCurrentYear();
+        $rawQuery = "SELECT
+  costs_table.vehicles_id 
+  ,sum(costs_table.cost_for_year_standard / 525600) AS minute_standard
+  ,sum(costs_table.cost_for_year_leap / 527040 ) AS minute_leap
+  ,sum(costs_table.cost_for_year_standard / 8760 ) AS hour_standard
+  ,sum(costs_table.cost_for_year_leap / 8784  ) AS hour_leap
+  ,sum(costs_table.cost_for_year_standard / 365 ) AS day_standard
+  ,sum(costs_table.cost_for_year_leap / 366  ) AS day_leap
+  ,sum(costs_table.cost_for_year_standard) AS year_standard
+  ,sum(costs_table.cost_for_year_leap) AS year_leap
+FROM (
+        SELECT
+          vehicle_static_costs.vehicles_id
+          ,vehicle_static_costs.frequency_datas_id
+          ,vehicle_static_costs.id
+          ,CASE
+           WHEN frequency_datas.frequency_name = 'monthly' THEN vehicle_static_costs.value * 12
+           WHEN frequency_datas.frequency_name = 'yearly' THEN vehicle_static_costs.value
+           WHEN frequency_datas.frequency_name = 'daily' THEN vehicle_static_costs.value * 365
+           END
 
-        $query = (new Query())->from('vehicle_static_costs')
-            ->select([
-                'vehicle_static_costs.vehicles_id',
-                new Expression('SUM(vehicle_static_costs.value / '.$minutes.') AS '.self::TIME_UNIT['minute']),
-                new Expression('SUM((vehicle_static_costs.value / '.$minutes.') * 60) AS '.self::TIME_UNIT['hour']),
-                new Expression('SUM((vehicle_static_costs.value / '.$minutes.') * 60 * 24) AS '.self::TIME_UNIT['day']),
-            ])
-            ->join('LEFT JOIN','frequency_datas','vehicle_static_costs.frequency_datas_id = frequency_datas.id')
-            ->where(['vehicle_static_costs.vehicles_id' => (int) $this->vehicleId]);
+          AS cost_for_year_standard
+          ,CASE
+           WHEN frequency_datas.frequency_name = 'monthly' THEN vehicle_static_costs.value * 12
+           WHEN frequency_datas.frequency_name = 'yearly' THEN vehicle_static_costs.value
+           WHEN frequency_datas.frequency_name = 'daily' THEN vehicle_static_costs.value * 366
+           END
 
-        return $query;
+          AS cost_for_year_leap
+        FROM
+          vehicle_static_costs
+        JOIN frequency_datas
+          ON vehicle_static_costs.frequency_datas_id = frequency_datas.id
+
+     ) AS costs_table
+
+
+WHERE vehicles_id = :vehicles_id";
+
+        $dbCommand = \Yii::$app->db->createCommand($rawQuery);
+        $dbCommand->bindParam(":vehicles_id", $this->vehicleId, PDO::PARAM_STR);
+
+        return $dbCommand->queryOne();
+
+
+
     }
 
 
@@ -79,7 +113,7 @@ class VehicleStaticCostsSummarizer
      */
     public function getVehicleSummarizedCosts() : array
     {
-        return $this->query()->one();
+        return $this->query();
     }
 
     /**

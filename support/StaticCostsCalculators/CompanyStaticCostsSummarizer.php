@@ -6,6 +6,7 @@ use app\models\VehicleStaticCosts;
 use Carbon\Carbon;
 use yii\base\Model;
 use yii\db\Expression;
+use yii\db\mssql\PDO;
 use yii\db\mysql\QueryBuilder;
 use yii\db\Query;
 
@@ -30,28 +31,59 @@ class CompanyStaticCostsSummarizer
 
 
     /**
-     * @return Query
+     * @return array
      * @throws \Exception
      */
-    protected function query() : Query
+    protected function query() : array
     {
         if ( ! isset($this->companyId)){
             throw new \Exception('Vehicle is not defined.');
         }
 
-        $minutes    = $this->minutesInCurrentYear();
+        $rawQuery = "SELECT
+  costs_table.companies_id AS company_id
+  ,sum(costs_table.cost_for_year_standard / 525600) AS minute_standard
+  ,sum(costs_table.cost_for_year_leap / 527040 ) AS minute_leap
+  ,sum(costs_table.cost_for_year_standard / 8760 ) AS hour_standard
+  ,sum(costs_table.cost_for_year_leap / 8784  ) AS hour_leap
+  ,sum(costs_table.cost_for_year_standard / 365 ) AS day_standard
+  ,sum(costs_table.cost_for_year_leap / 366  ) AS day_leap
+  ,sum(costs_table.cost_for_year_standard) AS year_standard
+  ,sum(costs_table.cost_for_year_leap) AS year_leap
+FROM (
+        SELECT
+           company_cost_datas.companies_id
+          ,company_cost_datas.frequency_datas_id
+          ,company_cost_datas.id
+          ,CASE
+           WHEN frequency_datas.frequency_name = 'monthly' THEN company_cost_datas.value * 12
+           WHEN frequency_datas.frequency_name = 'yearly' THEN company_cost_datas.value
+           WHEN frequency_datas.frequency_name = 'daily' THEN company_cost_datas.value * 365
+           END
+          AS cost_for_year_standard
+          ,CASE
+           WHEN frequency_datas.frequency_name = 'monthly' THEN company_cost_datas.value * 12
+           WHEN frequency_datas.frequency_name = 'yearly' THEN company_cost_datas.value
+           WHEN frequency_datas.frequency_name = 'daily' THEN company_cost_datas.value * 366
+           END
+          AS cost_for_year_leap
+        FROM
+          company_cost_datas
+        JOIN frequency_datas
+          ON company_cost_datas.frequency_datas_id = frequency_datas.id
 
-        $query = (new Query())->from('company_cost_datas')
-            ->select([
-                'company_cost_datas.companies_id',
-                new Expression('SUM(company_cost_datas.value / '.$minutes.') AS '.self::TIME_UNIT['minute']),
-                new Expression('SUM((company_cost_datas.value / '.$minutes.') * 60) AS '.self::TIME_UNIT['hour']),
-                new Expression('SUM((company_cost_datas.value / '.$minutes.') * 60 * 24) AS '.self::TIME_UNIT['day']),
-            ])
-            ->join('LEFT JOIN','frequency_datas','company_cost_datas.frequency_datas_id = frequency_datas.id')
-            ->where(['company_cost_datas.companies_id' => (int) $this->companyId]);
+     ) AS costs_table
 
-        return $query;
+
+WHERE companies_id = :companies_id";
+
+
+        $dbCommand = \Yii::$app->db->createCommand($rawQuery);
+        $dbCommand->bindParam(":companies_id", $this->companyId, PDO::PARAM_STR);
+
+        return $dbCommand->queryOne();
+
+
     }
 
 
@@ -69,9 +101,8 @@ class CompanyStaticCostsSummarizer
         $model = new CompanyStaticCostsSummarizerModel();
 
         $summarizedCosts    = $this->getCompanySummarizedCosts();
+
         $model->load($summarizedCosts,'');
-        // we use in quert companies_id, but company_id is needed in model
-        $model->company_id = $summarizedCosts['companies_id'];
 
         return $model;
     }
@@ -83,7 +114,7 @@ class CompanyStaticCostsSummarizer
      */
     public function getCompanySummarizedCosts() : array
     {
-        return $this->query()->one();
+        return $this->query();
     }
 
     /**
