@@ -13,6 +13,7 @@ use app\support\Schemas\Charts\CanvasDataPoint;
 use app\support\StaticCostsCalculators\CompanyStaticCostsSummarizer;
 use app\support\StaticCostsCalculators\VehicleStaticCostsSummarizer;
 use app\support\Timeline\Calculations\CumulativeCalculation;
+use app\support\Timeline\Calculations\EfficiencyBaseCalculator;
 use app\support\Timeline\Collectors\TickerCollector;
 use app\support\Timeline\Collectors\VehiclesStaticCostsIntervalSummarizer;
 use app\support\Timeline\Intervals\DailyTicker;
@@ -139,15 +140,24 @@ class TransporterController extends BaseAjaxController
 
         });
 
+        $tickableSchemas = $tickerSchemaBuilder->buildTickerSchema();
 
-//        dd($tickerSchemaBuilder->buildTickerSchema());
+        /** @var TickerCollector $tickerController */
+        $tickerCollector   = $tickerSchemaBuilder->collectors()->get('tickerCollector');
 
-//        $pervehicleCollection   = new TickerCollector();
-//        $pervehicleCollection->setTickers($vehicleByTimeUnit);
+        $efficiencyCalculator =    EfficiencyBaseCalculator::make($tickerCollector->getMaxValue(), $intervalTickerBuilder);
+
+        $baseEfficiency     = $efficiencyCalculator->getBaseEfficiencyValue();
+        $usedTime           = $efficiencyCalculator->getUsedTime();
+
 
         return [
 //            'perVehicleSchema' => [],
-            'tickersData' => $tickerSchemaBuilder->buildTickerSchema(),
+            'tickersData' => $tickableSchemas,
+            'helpers'   => [
+                'baseEfficiency'    => $baseEfficiency,
+                'usedTime'          => $usedTime
+            ]
 //            'unusedVehicleSchema'   => $tickerCollection->mapToJson()
         ];
         dd($vehicleByTimeUnit);

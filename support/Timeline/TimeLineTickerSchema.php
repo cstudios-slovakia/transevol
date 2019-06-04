@@ -15,9 +15,13 @@ class TimeLineTickerSchema
      */
     protected $steps;
 
+    /** @var Collection */
+    protected $collectors;
+
     public function __construct()
     {
         $this->steps = collect([]);
+        $this->collectors = collect([]);
     }
 
     public function makeSteps(Collection $tickers)
@@ -51,7 +55,9 @@ class TimeLineTickerSchema
 
         });
 
+        $tickerCollector    = (new TickerCollector())->setTickers($this->getSteps());
 
+        $this->collectors->put('tickerCollector', $tickerCollector);
     }
 
     protected function tickerKnotFromResults(SteppedCalculationContract $ticker) : Knot
@@ -72,14 +78,22 @@ class TimeLineTickerSchema
         $this->steps->push($step);
     }
 
+
+    public function collectors() : Collection
+    {
+        return $this->collectors;
+    }
+
     public function buildTickerSchema() : array
     {
-        $chartable  = $this->getSteps()->groupBy('stepType');
-//        dd($chartable);
-//        dd($chartable->get('app\models\Calculations\Vehicle\CostPerVehicle'));
+
+
         return [
-            'timeLine'  => (new TickerCollector())->setTickers($this->getSteps())->mapToJson(),
+            'timeLine'  => $this->collectors->get('tickerCollector')->collectable()->toJson(),
             'chart'     => (new ChartDataCollector())->setTickers($this->getSteps())->mapToArray(),
+//            'attributes'   => [
+//                'maxValue'      => $this->collectors->get('tickerCollector')->getMaxValue()
+//            ]
 //            'chart1'     => (new ChartDataCollector())->setTickers($chartable->get('app\models\Calculations\Vehicle\CostPerVehicle'))->mapToArray(),
 //            'chart2'     => (new ChartDataCollector())->setTickers($chartable->get('app\support\Vehicles\VehicleStaticCostsCalculator'))->mapToArray(),
 //            'chart3'     => (new ChartDataCollector())->setTickers($chartable->get('app\support\Vehicles\UnusedVehicleStaticCostsCalculator'))->mapToArray(),

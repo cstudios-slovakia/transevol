@@ -57,4 +57,11 @@ trait IntervalHasParts
     {
         return $this->intervalParts;
     }
+
+    public function usedTimeLength() : float
+    {
+        return $this->intervalParts->sum(function (IntervalTimeUnitTicker $ticker){
+            return $ticker->differenceInHours();
+        });
+    }
 }

@@ -11,4 +11,9 @@ class IntervalTimeUnitTicker implements TickerContract
         $this->setIntervalStarts($intervalStarts);
         $this->setIntervalEnds($intervalEnds);
     }
+
+    public function differenceInHours() : float
+    {
+        return $this->intervalDifference()->totalHours;
+    }
 }

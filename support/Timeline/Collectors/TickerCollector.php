@@ -9,18 +9,21 @@ class TickerCollector
     /** @var Collection */
     protected $tickers;
 
+    /** @var float */
+    protected $maxValue = 0;
+
     public function collectable() : Collection
     {
 
-//        $x  = $this->tickers->groupBy(function(TickerStep $tickerStep){
-//            return $tickerStep->getKnot()->getPosition()->format('Y-m-d H:i');
-//        });
+//        $byPosition = $this->groupByPosition($this->tickers);
 //
-//        dd($x);
-
+//        dd($byPosition);
         return $this->tickers->groupBy(function(TickerStep $tickerStep){
             return $tickerStep->getKnot()->getPosition()->timestamp;
         })->map(function (Collection $collection){
+//            dd($collection);
+
+
 
             $valueSum   = $collection->sum(function (TickerStep $ticker){
                 return $ticker->getStepValue(true);
@@ -28,14 +31,29 @@ class TickerCollector
 
             $ticker     = $collection->last();
 
+            if ($valueSum > $this->maxValue){
+                $this->maxValue     = $valueSum;
+            }
+
             return $item =  [
                 'id' => $ticker->getKnot()->getPosition()->timestamp,
                 'content' => (string) $this->tickMoney($valueSum),
                 'className' => 'item--tick',
                 'start' => $ticker->getStepDate()->format('c'),
+                'valueSum'  => $valueSum,
+                'attributes'    => [
+                    'position'  => $ticker->getPartPosition()
+                ]
             ];
         })->values();
 
+    }
+
+    public function groupByPosition(Collection $tickers) : Collection
+    {
+        return $tickers->groupBy(function(TickerStep $tickerStep){
+            return $tickerStep->getPartPosition();
+        });
     }
 
     protected function tickMoney($value, string $currency = '€') : string
@@ -64,6 +82,8 @@ class TickerCollector
     public function mapToJson()
     {
         $drivers = $this->collectable();
+
+
         return $drivers->toJson();
     }
 
@@ -76,6 +96,14 @@ class TickerCollector
         $this->tickers = $tickers;
 
         return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getMaxValue(): float
+    {
+        return $this->maxValue;
     }
 
 
