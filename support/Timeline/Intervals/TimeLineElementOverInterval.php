@@ -2,6 +2,7 @@
 
 use app\models\Calculations\TimeLine\VehicleTimeLineElement;
 use app\support\Timeline\IntervalBuilderInterface;
+use app\support\Timeline\Units\TimeLineElementContract;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 
@@ -13,7 +14,7 @@ class TimeLineElementOverInterval
     const POSITION_THROUGH = 'throughers';
 
     /**
-     * @var VehicleTimeLineElement
+     * @var TimeLineElementContract
      */
     protected $element;
 
@@ -26,11 +27,11 @@ class TimeLineElementOverInterval
     /** @var IntervalTickersBuilder */
     protected $elementTicker;
 
-    public function __construct(IntervalBuilderContract $intervalBuilder, VehicleTimeLineElement $element)
+    public function __construct(IntervalBuilderContract $intervalBuilder, TimeLineElementContract $element)
     {
         $this->interval     = $intervalBuilder;
         $this->element      = $element;
-
+//        dd($this);
         $this->makeElementsPosition($this->element->position_status);
     }
 
@@ -39,15 +40,15 @@ class TimeLineElementOverInterval
     {
         switch ($elementPosition){
             case self::POSITION_BEGIN:
-                $overElementInterval    = new OverElementInterval(self::carbonize($this->element->vehicle_record_from), $this->interval->getIntervalEnds());
+                $overElementInterval    = new OverElementInterval(self::carbonize($this->element->startAttribute()), $this->interval->getIntervalEnds());
                 break;
 
             case self::POSITION_IN:
-                $overElementInterval    = new OverElementInterval(self::carbonize($this->element->vehicle_record_from),self::carbonize($this->element->vehicle_record_until));
+                $overElementInterval    = new OverElementInterval(self::carbonize($this->element->startAttribute()),self::carbonize($this->element->endAttribute()));
                 break;
 
             case self::POSITION_END:
-                $overElementInterval    = new OverElementInterval($this->interval->getIntervalStarts(), self::carbonize($this->element->vehicle_record_until));
+                $overElementInterval    = new OverElementInterval($this->interval->getIntervalStarts(), self::carbonize($this->element->endAttribute()));
                 break;
 
             case self::POSITION_THROUGH:
@@ -66,13 +67,14 @@ class TimeLineElementOverInterval
 
     protected static function carbonize(string $dateTime, string $format = 'Y-m-d H:i:s')
     {
+
         return Carbon::createFromFormat($format, $dateTime);
     }
 
     /**
-     * @return VehicleTimeLineElement
+     * @return TimeLineElementContract
      */
-    public function getElement(): VehicleTimeLineElement
+    public function getElement(): TimeLineElementContract
     {
         return $this->element;
     }

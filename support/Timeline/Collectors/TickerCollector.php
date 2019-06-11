@@ -1,5 +1,6 @@
 <?php namespace app\support\Timeline\Collectors;
 
+use app\support\StaticCostsCalculators\GoingsBaseCostCalculator;
 use app\support\Timeline\TickerStep;
 
 use Illuminate\Support\Collection;
@@ -15,9 +16,9 @@ class TickerCollector
     public function collectable() : Collection
     {
 
-//        $byPosition = $this->groupByPosition($this->tickers);
-//
-//        dd($byPosition);
+
+
+
         return $this->tickers->groupBy(function(TickerStep $tickerStep){
             return $tickerStep->getKnot()->getPosition()->timestamp;
         })->map(function (Collection $collection){
@@ -29,21 +30,26 @@ class TickerCollector
                 return $ticker->getStepValue(true);
             });
 
+            /** @var TickerStep $ticker */
             $ticker     = $collection->last();
 
             if ($valueSum > $this->maxValue){
                 $this->maxValue     = $valueSum;
             }
 
+
+            $groupId    = $ticker->stepType === GoingsBaseCostCalculator::class ? 2 : 1;
+
             return $item =  [
-                'id' => $ticker->getKnot()->getPosition()->timestamp,
+                'id' => $ticker->getKnot()->getPosition()->timestamp .'--'.$groupId,
                 'content' => (string) $this->tickMoney($valueSum),
                 'className' => 'item--tick',
                 'start' => $ticker->getStepDate()->format('c'),
                 'valueSum'  => $valueSum,
                 'attributes'    => [
                     'position'  => $ticker->getPartPosition()
-                ]
+                ],
+                'group' => $groupId
             ];
         })->values();
 

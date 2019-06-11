@@ -7,4 +7,6 @@ class CanvasDataOptions{
     public $markerType = 'square';
     public $xValueFormatString = "DD.MM HH:mm";
     public $color = "#F08080";
+    public $lineDashType = 'solid';
+    public $lineThickness = 2;
 }

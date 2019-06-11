@@ -16,6 +16,9 @@ class IntervalTicker
     /** @var Collection */
     protected $tickers;
 
+    /** @var float */
+    protected $lastKnotValue;
+
     public function tick() : self
     {
         $this->tickers = collect([]);
@@ -37,7 +40,7 @@ class IntervalTicker
 
             $cumulateLeft = $this->makeCalculation($costPerMinute, 'left', $chainedValue);
 
-            $chainedValue = $cumulateLeft->result->last()->getValue();
+            $this->lastKnotValue = $chainedValue = $cumulateLeft->result->last()->getValue();
 
             $this->tickers->put('left', $cumulateLeft);
         }
@@ -50,7 +53,7 @@ class IntervalTicker
 
             $cumulateMiddle    = $this->makeCalculation($costPerHour, 'middle', $chainedValue);
 
-            $chainedValue = $cumulateMiddle->result->last()->getValue();
+            $this->lastKnotValue = $chainedValue = $cumulateMiddle->result->last()->getValue();
 
             $this->tickers->put('middle', $cumulateMiddle);
 
@@ -63,6 +66,8 @@ class IntervalTicker
             $costPerHour    = $this->costCalculator->cost();
 
             $cumulateRight = $this->makeCalculation($costPerHour, 'right', $chainedValue);
+
+            $this->lastKnotValue = $chainedValue = $cumulateRight->result->last()->getValue();
 
             $this->tickers->put('right', $cumulateRight);
 
@@ -104,6 +109,8 @@ class IntervalTicker
      */
     protected function makeCalculation($costPerHour, $position, $chainedValue):\app\support\Timeline\Calculations\SteppedCalculationContract
     {
+
+
         $calculation = CumulativeCalculation::make($this->getPart($position)->periods(), $costPerHour);
         $calculation->calculator = $this->costCalculator;
         $calculation->position = $position;
@@ -111,6 +118,14 @@ class IntervalTicker
 
         $calculation->calculate();
         return $calculation;
+    }
+
+    /**
+     * @return float
+     */
+    public function getLastKnotValue(): float
+    {
+        return $this->lastKnotValue;
     }
 
 

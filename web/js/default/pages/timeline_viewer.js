@@ -161,9 +161,24 @@ $(document).ready(function () {
         zoomable                : false,
         // horizontalscroll        : false,
         moveable                : false,
+        stack : true,
+        stackSubgroups : true,
     };
     var resItems = new vis.DataSet(resOptions);
+    var resGroups =  [
+        {
+            id: 1,
+            content: 'Nakl. cas abs',
+            className   : 'group--result-abs'
+        },
+        {
+            id: 2,
+            content: 'Nakl. cas vykon',
+            className   : 'group--result-going'
 
+        }
+
+    ];
     btnTimeLineCalculate.on('click', function (e) {
 
 
@@ -194,9 +209,10 @@ $(document).ready(function () {
             // Configuration for the Timeline
             resItems.clear();
             resItems.add(JSON.parse(response.calc.tickersData.timeLine));
+            resItems.add(JSON.parse(response.calc.tickersData.going));
             // Create a Timeline
             var resTimeline = new vis.Timeline(resContainer, resItems, resOptions);
-
+            resTimeline.setGroups(resGroups);
             //
             // console.log('btnTimeLineCalculate sent data',response);
             //
@@ -492,6 +508,10 @@ $(document).ready(function () {
             title: "Costs in €",
             crosshair: {
                 enabled: true
+            },
+            includeZero: false,
+            scaleBreaks: {
+                autoCalculate: true
             }
         },
         toolTip:{

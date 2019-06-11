@@ -86,11 +86,11 @@ class TimeLineTickerSchema
 
     public function buildTickerSchema() : array
     {
-
+        $chart  = (new ChartDataCollector())->setTickers($this->getSteps());
 
         return [
             'timeLine'  => $this->collectors->get('tickerCollector')->collectable()->toJson(),
-            'chart'     => (new ChartDataCollector())->setTickers($this->getSteps())->mapToArray(),
+            'chart'     => $chart->collectable(),
 //            'attributes'   => [
 //                'maxValue'      => $this->collectors->get('tickerCollector')->getMaxValue()
 //            ]

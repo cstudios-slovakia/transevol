@@ -5,6 +5,7 @@ use app\support\Schemas\Charts\CanvasData;
 use app\support\Schemas\Charts\CanvasDataOptions;
 use app\support\Schemas\Charts\CanvasDataPoint;
 use app\support\Schemas\Charts\LineChart;
+use app\support\StaticCostsCalculators\GoingsBaseCostCalculator;
 use app\support\Timeline\TickerStep;
 use app\support\Vehicles\UnusedVehicleStaticCostsCalculator;
 use app\support\Vehicles\VehicleStaticCostsCalculator;
@@ -19,25 +20,37 @@ class ChartDataCollector extends TickerCollector
         $canvasVehicleStaticCostsData    = new CanvasData();
         $canvasUnusedVehicleStaticCostsData    = new CanvasData();
 
+        $canvasGoingData    = new CanvasData();
+
         $totalDataOptions   = new CanvasDataOptions();
         $totalDataOptions->name = 'Total';
         $totalDataOptions->color = '#5867dd';
+        $totalDataOptions->lineThickness = 5;
         $canvasTotalData->setOptions($totalDataOptions);
 
         $costPerVehicleOptions   = new CanvasDataOptions();
         $costPerVehicleOptions->name = 'CostPerVehicle';
         $costPerVehicleOptions->color = '#ffb822';
+        $costPerVehicleOptions->lineDashType = 'dot';
         $canvasCostPerVehicleData->setOptions($costPerVehicleOptions);
 
         $vehiclesStaticCostOptions   = new CanvasDataOptions();
         $vehiclesStaticCostOptions->name = 'VehicleStaticCost';
         $vehiclesStaticCostOptions->color = '#34bfa3';
+        $vehiclesStaticCostOptions->lineDashType = 'dot';
         $canvasVehicleStaticCostsData->setOptions($vehiclesStaticCostOptions);
 
         $unusedVehiclesDataOptions   = new CanvasDataOptions();
         $unusedVehiclesDataOptions->name = 'UnusedVehicles';
         $unusedVehiclesDataOptions->color = '#9816f4';
+        $unusedVehiclesDataOptions->lineDashType = 'dashDot';
         $canvasUnusedVehicleStaticCostsData->setOptions($unusedVehiclesDataOptions);
+
+        $goingDataOptions   = new CanvasDataOptions();
+        $goingDataOptions->name = 'Vykon';
+        $goingDataOptions->color = 'red';
+        $goingDataOptions->lineThickness = 5;
+        $canvasGoingData->setOptions($goingDataOptions);
 
         $data = $this->tickers->sortBy(function (TickerStep $tickerStep){
             return $tickerStep->getKnot()->getPosition()->timestamp;
@@ -49,7 +62,7 @@ class ChartDataCollector extends TickerCollector
 //            return $tickerStep->getKnot()->getPosition()->timestamp;
 //        })
 
-            $data->transform(function ($collection) use ($canvasTotalData, $canvasCostPerVehicleData, $canvasVehicleStaticCostsData, $canvasUnusedVehicleStaticCostsData){
+            $data->transform(function ($collection) use ($canvasGoingData, $canvasTotalData, $canvasCostPerVehicleData, $canvasVehicleStaticCostsData, $canvasUnusedVehicleStaticCostsData){
 
             $valueSum   = $collection->sum(function ($ticker){
                 return $ticker->getStepValue(true);
@@ -86,9 +99,13 @@ class ChartDataCollector extends TickerCollector
             $canvasUnusedVehicleStaticCostsDataPoint    = new CanvasDataPoint(['x' => $xCommonAxis, 'y' => $x->get(UnusedVehicleStaticCostsCalculator::class, null)]);
             $canvasUnusedVehicleStaticCostsData->addDataPoints($canvasUnusedVehicleStaticCostsDataPoint);
 
+            $canvasGoingDataPoint    = new CanvasDataPoint(['x' => $xCommonAxis, 'y' => $x->get(GoingsBaseCostCalculator::class, null)]);
+            $canvasGoingData->addDataPoints($canvasGoingDataPoint);
+
         });
 
         $collected  = collect([
+            $canvasGoingData->schemaInArray(),
             $canvasTotalData->schemaInArray(),
             $canvasCostPerVehicleData->schemaInArray(),
             $canvasVehicleStaticCostsData->schemaInArray(),

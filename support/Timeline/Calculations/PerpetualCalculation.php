@@ -18,7 +18,7 @@ class PerpetualCalculation implements SteppedCalculationContract
     /**
      * @var float
      */
-    public $startCost = 0;
+    public $startCost;
 
     /**
      * @var Collection
@@ -46,13 +46,17 @@ class PerpetualCalculation implements SteppedCalculationContract
 
     public function calculate() : Collection
     {
-        $cost   = $this->startCost;
+
 
         $this->defineStepType();
 
         $minutesToHour  = $this->period->count() - 1;
 
         $cost = $this->position !== 'middle' ? $this->incrementCost / $minutesToHour : $this->incrementCost ;
+
+        if (isset($this->startCost)){
+            $cost = $this->startCost;
+        }
         foreach ($this->period as $step){
 
             $knot   = new Knot();

@@ -5,6 +5,8 @@ use Carbon\CarbonInterval;
 
 trait IntervalHasDifference
 {
+
+
     /** @var Carbon */
     protected $intervalStarts;
 
@@ -48,5 +50,27 @@ trait IntervalHasDifference
         $this->intervalEnds = $intervalEnds;
     }
 
+
+    /**
+     * @param string $intervalPoint
+     * @param string $format
+     * @return string
+     * @throws \Exception
+     */
+    public function formatted(string $intervalPoint, string $format = 'Y-m-d H:i') : string
+    {
+
+        if (! method_exists($this,$intervalPoint)){
+            throw new \Exception('Method does not exists.');
+        }
+        // call function to return carbon formatted datetime
+        $called = call_user_func([$this, $intervalPoint]);
+
+        if (! $called instanceof Carbon && is_string($called)){
+            $called     = Carbon::createFromFormat('Y-m-d H:i:s', $called);
+        }
+
+        return $called->format($format);
+    }
 
 }

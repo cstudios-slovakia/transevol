@@ -38,7 +38,9 @@ class Goings extends AppBasedActiveRecord
      */
     public function scenarios()
     {
-        return [
+        $scenarios = parent::scenarios();
+
+        return $scenarios + [
             self::SCENARIO_START => ['going_from','companies_id'],
             self::SCENARIO_FINNISH => ['going_until','companies_id'],
         ];
